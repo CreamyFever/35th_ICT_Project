@@ -1,0 +1,41 @@
+﻿SQL 문 
+
+테이블 제거 
+drop table members;
+
+시퀀스 제거
+drop sequence members_seq;
+
+=============================================================
+
+*회원정보
+테이블 이름 : members
+
+create table members(
+idno number primary key,
+id varchar(20) not null unique,
+password varchar(20) not null,
+email varchar(30) not null,
+nickname varchar(20) not null,
+gender varchar(2) not null,
+age number not null,
+filename varchar(30) not null,
+nationality varchar(10) not null 
+);
+
+- 회원 고유 번호(기본 키)	number
+- ID(unique, not null)		varchar2(20)
+- 비밀번호 (not null)	varchar2(20)
+- 이메일			varchar2(30)
+- 닉네임	(not null)		varchar2(20)
+- 성별	(not null)		varchar2(2)  (남자 'M', 여자 'F')
+- 나이	(not null)		number
+- 이미지(파일 이름)	varchar2(30)
+- 국가(국가코드) (notnull) varchar2(10)
+
+=======================================================
+
+*회원 시퀀스
+시퀀스 이름 : member_seq
+
+create sequence members_seq;
