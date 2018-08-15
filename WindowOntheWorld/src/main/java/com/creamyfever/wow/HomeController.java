@@ -1,12 +1,15 @@
 package com.creamyfever.wow;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -28,10 +31,13 @@ public class HomeController {
 	
 	@RequestMapping(value = "/pythonTest", method = RequestMethod.GET)
 	public String pythonTest() {
-		String pythonExe = "C:\\Users\\Creamy\\PycharmProjects\\untitled\\venv\\Scripts\\python.exe";
-		String pythonPath = "C:\\Users\\Creamy\\.PyCharmCE2018.2\\config\\scratches\\parser.py";
-				
-		ProcessBuilder pb = new ProcessBuilder(Arrays.asList(pythonExe, pythonPath));
+		String pythonExe = "C:/Users/Creamy/Anaconda3/python.exe";
+		String pythonRes = "python/parser.py";
+
+		String pythonPath = this.getClass().getClassLoader().getResource(pythonRes).getPath();
+		String realPath = pythonPath.substring(1);	// 앞에 "/" 제거
+		
+		ProcessBuilder pb = new ProcessBuilder(Arrays.asList(pythonExe, realPath));
 		try {
 			Process p = pb.start();
 			BufferedReader bfr = new BufferedReader(new InputStreamReader(p.getInputStream()));
