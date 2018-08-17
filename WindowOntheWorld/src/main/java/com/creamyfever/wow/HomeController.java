@@ -44,12 +44,17 @@ public class HomeController {
 			
             String line = "";
             System.out.println("Running Python starts: " + line);
+            
             int exitCode = p.waitFor();
             System.out.println("Exit Code : "+ exitCode);
             line = bfr.readLine();
             System.out.println("First Line: " + line);
             while ((line = bfr.readLine()) != null){
                 System.out.println("Python Output: " + line);
+            }
+            
+            if(exitCode == 0) {
+            	p.destroy();
             }
 		} catch (Exception e) {
 			e.printStackTrace();
