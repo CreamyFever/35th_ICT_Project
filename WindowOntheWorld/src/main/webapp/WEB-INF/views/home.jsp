@@ -12,5 +12,7 @@
 </h1>
 
 <a href="/wow/pythonTest">Test</a>
+<a href="/wow/insertArticle">INSERT</a>
+<a href="/wow/selectAllArticle">ShowAll</a>
 </body>
 </html>

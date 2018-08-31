@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.creamyfever.wow.dao.ArticleMapper">
+	
+	<resultMap id="getArticle" type="Article">
+		<result property="articleid" column="ARTICLEID" javaType="java.lang.String" jdbcType="VARCHAR"/>
+		<result property="articlename" column="ARTICLENAME" javaType="java.lang.String" jdbcType="VARCHAR"/>
+		<result property="articlecontent" column="ARTICLECONTENT" javaType="java.lang.String" jdbcType="CLOB"/>
+		<result property="articledate" column="ARTICLEDATE" />
+		<result property="presscompany" column="PRESSCOMPANY" javaType="java.lang.String" jdbcType="VARCHAR"/>
+		<result property="area" column="AREA" javaType="java.lang.String" jdbcType="VARCHAR"/>
+		<result property="url" column="URL" javaType="java.lang.String" jdbcType="VARCHAR"/>
+		<result property="senti_pos" column="SENTI_POS" javaType="java.lang.Double" jdbcType="DOUBLE"/>
+		<result property="senti_neg" column="SENTI_NEG" javaType="java.lang.Double" jdbcType="DOUBLE"/>
+	</resultMap>
+
+	<insert id="insert" parameterType="Article">
+		insert into articles (
+			articleid
+			, articlename
+			, articlecontent
+			, articledate
+			, presscompany
+			, area
+			, url
+			, continent
+		)
+		values (
+			#{articleid}
+			, #{articlename}
+			, #{articlecontent}
+			, TO_DATE(#{articledate}, 'yyyy/mm/dd')
+			, #{presscompany}
+			, #{area}
+			, #{url}
+			, #{continent, jdbcType=VARCHAR}
+		) 
+	</insert>
+	
+	<insert id="insertFromList" parameterType="java.util.List">
+		insert all
+		<foreach collection="list" item="element" index="index">
+	        into articles (
+				articleid
+				, articlename
+				, articlecontent
+				, articledate
+				, presscompany
+				, area
+				, url
+				, continent
+			)
+			values (
+				#{element.articleid}
+				, #{element.articlename}
+				, #{element.articlecontent}
+				, TO_DATE(#{element.articledate}, 'yyyy/mm/dd')
+				, #{element.presscompany}
+				, #{element.area}
+				, #{element.url}
+				, #{element.continent}
+			) 
+	    </foreach>
+		select * from dual
+	</insert>
+
+	<select id="selectAll" resultMap="getArticle">
+		select
+			articleid
+			, articlename
+			, articlecontent
+			, TO_CHAR(articledate, 'yyyymmdd') as articledate
+			, presscompany
+			, area
+			, url
+			, continent
+			, senti_pos
+			, senti_neg
+		from articles
+		order by articleid desc
+	</select>
+	
+	<select id="selectOne" parameterType="String" resultMap="getArticle">
+		select
+			articleid
+			, articlename
+			, articlecontent
+			, TO_CHAR(articledate, 'yyyymmdd') as articledate
+			, presscompany
+			, area
+			, url
+			, continent
+			, senti_pos
+			, senti_neg
+		from articles
+		where articleid = #{id}
+		order by articleid desc
+	</select>
+</mapper>
