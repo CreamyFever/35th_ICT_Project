@@ -6,29 +6,27 @@ public class Article {
 	private String articlecontent; // 기사 내용
 	private String articledate; // 기사 날짜
 	private String presscompany; // 언론사
-	private String area; // 분야(정치, 경제, 스포츠, IT 등...)
+	private String field; // 분야(정치, 경제, 스포츠, IT 등...)
 	private String url; // URL
-	private String continent;	// 대륙(아시아, 유럽, 아메리카, 아프리카...(null일 경우 DB에는 아시아로 등록)
-	private double senti_pos; // 긍정적 반응 비율(0~100)
-	private double senti_neg; // 부정적 반응 비율(0~100)
+	private String continent; // 대륙(아시아, 유럽, 아메리카, 아프리카...(null일 경우 DB에는 아시아로 등록)
+	private double sentiment; // 긍정적 반응 비율(0~100)
 
 	public Article() {
 		super();
-	}	
+	}
 
 	public Article(String articleid, String articlename, String articlecontent, String articledate, String presscompany,
-			String area, String url, String continent, double senti_pos, double senti_neg) {
+			String field, String url, String continent, double sentiment) {
 		super();
 		this.articleid = articleid;
 		this.articlename = articlename;
 		this.articlecontent = articlecontent;
 		this.articledate = articledate;
 		this.presscompany = presscompany;
-		this.area = area;
+		this.field = field;
 		this.url = url;
 		this.continent = continent;
-		this.senti_pos = senti_pos;
-		this.senti_neg = senti_neg;
+		this.sentiment = sentiment;
 	}
 
 	public String getArticleid() {
@@ -71,12 +69,12 @@ public class Article {
 		this.presscompany = presscompany;
 	}
 
-	public String getArea() {
-		return area;
+	public String getField() {
+		return field;
 	}
 
-	public void setArea(String area) {
-		this.area = area;
+	public void setField(String field) {
+		this.field = field;
 	}
 
 	public String getUrl() {
@@ -87,26 +85,26 @@ public class Article {
 		this.url = url;
 	}
 
-	public double getSenti_pos() {
-		return senti_pos;
+	public String getContinent() {
+		return continent;
 	}
 
-	public void setSenti_pos(double senti_pos) {
-		this.senti_pos = senti_pos;
+	public void setContinent(String continent) {
+		this.continent = continent;
 	}
 
-	public double getSenti_neg() {
-		return senti_neg;
+	public double getSentiment() {
+		return sentiment;
 	}
 
-	public void setSenti_neg(double senti_neg) {
-		this.senti_neg = senti_neg;
+	public void setSentiment(double sentiment) {
+		this.sentiment = sentiment;
 	}
 
 	@Override
 	public String toString() {
 		return "Article [articleid=" + articleid + ", articlename=" + articlename + ", articlecontent=" + articlecontent
-				+ ", articledate=" + articledate + ", presscompany=" + presscompany + ", area=" + area + ", url=" + url
-				+ ", continent=" + continent + ", senti_pos=" + senti_pos + ", senti_neg=" + senti_neg + "]";
+				+ ", articledate=" + articledate + ", presscompany=" + presscompany + ", field=" + field + ", url="
+				+ url + ", continent=" + continent + ", sentiment=" + sentiment + "]";
 	}
 }

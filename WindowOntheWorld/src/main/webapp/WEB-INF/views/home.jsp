@@ -11,8 +11,8 @@
 	Hello world!  
 </h1>
 
-<a href="/wow/pythonTest">Test</a>
-<a href="/wow/insertArticle">INSERT</a>
-<a href="/wow/selectAllArticle">ShowAll</a>
+<a href="/wow/pythonTest">Test</a><!-- 파일 읽어오기 테스트 -->
+<a href="/wow/insertArticle">INSERT</a><!-- DB에 데이터 insert -->
+<a href="/wow/selectAllArticle">ShowAll</a><!-- DB에 들어간 데이터 출력 -->
 </body>
 </html>
