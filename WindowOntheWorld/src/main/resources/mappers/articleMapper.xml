@@ -11,10 +11,10 @@
 		<result property="articlecontent" column="ARTICLECONTENT" javaType="java.lang.String" jdbcType="CLOB"/>
 		<result property="articledate" column="ARTICLEDATE" />
 		<result property="presscompany" column="PRESSCOMPANY" javaType="java.lang.String" jdbcType="VARCHAR"/>
-		<result property="area" column="AREA" javaType="java.lang.String" jdbcType="VARCHAR"/>
+		<result property="field" column="FIELD" javaType="java.lang.String" jdbcType="VARCHAR"/>
+		<result property="continent" column="CONTINENT" javaType="java.lang.String" jdbcType="VARCHAR"/>
 		<result property="url" column="URL" javaType="java.lang.String" jdbcType="VARCHAR"/>
-		<result property="senti_pos" column="SENTI_POS" javaType="java.lang.Double" jdbcType="DOUBLE"/>
-		<result property="senti_neg" column="SENTI_NEG" javaType="java.lang.Double" jdbcType="DOUBLE"/>
+		<result property="sentiment" column="SENTIMENT" javaType="java.lang.Double" jdbcType="DOUBLE"/>
 	</resultMap>
 
 	<insert id="insert" parameterType="Article">
@@ -24,19 +24,23 @@
 			, articlecontent
 			, articledate
 			, presscompany
-			, area
+			, field
 			, url
+			<if test="continent != null">
 			, continent
+			</if>
 		)
 		values (
 			#{articleid}
 			, #{articlename}
 			, #{articlecontent}
-			, TO_DATE(#{articledate}, 'yyyy/mm/dd')
+			, TO_DATE(#{articledate}, 'YYYY/MM/DD')
 			, #{presscompany}
-			, #{area}
+			, #{field}
 			, #{url}
+			<if test="continent != null">
 			, #{continent, jdbcType=VARCHAR}
+			</if>
 		) 
 	</insert>
 	
@@ -49,7 +53,7 @@
 				, articlecontent
 				, articledate
 				, presscompany
-				, area
+				, field
 				, url
 				, continent
 			)
@@ -57,11 +61,11 @@
 				#{element.articleid}
 				, #{element.articlename}
 				, #{element.articlecontent}
-				, TO_DATE(#{element.articledate}, 'yyyy/mm/dd')
+				, TO_DATE(#{element.articledate}, 'YYYY/MM/DD')
 				, #{element.presscompany}
-				, #{element.area}
+				, #{element.field}
 				, #{element.url}
-				, #{element.continent}
+				, #{element.continent, jdbcType=VARCHAR}
 			) 
 	    </foreach>
 		select * from dual
@@ -69,32 +73,30 @@
 
 	<select id="selectAll" resultMap="getArticle">
 		select
-			articleid
-			, articlename
-			, articlecontent
-			, TO_CHAR(articledate, 'yyyymmdd') as articledate
-			, presscompany
-			, area
-			, url
-			, continent
-			, senti_pos
-			, senti_neg
+		    articleid
+		    , articlename
+		    , articlecontent
+		    , TO_CHAR(articledate, 'yyyymmdd') as articledate
+		    , presscompany
+		    , field
+		    , url
+		    , nvl(continent,'Asia') as continent
+		    , sentiment
 		from articles
 		order by articleid desc
 	</select>
 	
 	<select id="selectOne" parameterType="String" resultMap="getArticle">
 		select
-			articleid
-			, articlename
-			, articlecontent
-			, TO_CHAR(articledate, 'yyyymmdd') as articledate
-			, presscompany
-			, area
-			, url
-			, continent
-			, senti_pos
-			, senti_neg
+		    articleid
+		    , articlename
+		    , articlecontent
+		    , TO_CHAR(articledate, 'yyyymmdd') as articledate
+		    , presscompany
+		    , field
+		    , url
+		    , nvl(continent,'Asia') as continent
+		    , sentiment
 		from articles
 		where articleid = #{id}
 		order by articleid desc

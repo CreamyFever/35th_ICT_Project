@@ -25,8 +25,8 @@ public class ArticleController {
 
 	@RequestMapping(value = "pythonTest", method = RequestMethod.GET)
 	public String pythonTest() {
-		parseJson("C:/Users/Creamy/Documents/PythonScripts/naverList.json");
-		parseJson("C:/Users/Creamy/Documents/PythonScripts/yahooJpList.json");
+		parseJson("C:/Users/Creamy/Documents/GitKrakenRep/35th_ICT_Project/35th_ICT_Project/WindowOntheWorld/src/main/resources/naverListS.json");
+		parseJson("C:/Users/Creamy/Documents/GitKrakenRep/35th_ICT_Project/35th_ICT_Project/WindowOntheWorld/src/main/resources/yahooJpListS.json");
 		return "home";
 	}
 	
@@ -65,8 +65,11 @@ public class ArticleController {
 				article.setArticlecontent(node.get("content").asText());
 				article.setArticledate(node.get("publishedAt").asText());
 				article.setPresscompany(node.get("author").asText());
-				article.setArea(node.get("area").asText());
+				article.setField(node.get("area").asText());
 				article.setUrl(node.get("url").asText());
+				
+				if(node.get("continent") != null)
+					article.setContinent(node.get("continent").asText());
 
 				articleList.add(article);
 			}
