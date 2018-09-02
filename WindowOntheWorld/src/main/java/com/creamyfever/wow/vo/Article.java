@@ -1,7 +1,8 @@
 package com.creamyfever.wow.vo;
 
 public class Article {
-	private String articleid; // 기사 고유번호
+	private int articlenum; // 기사 번호
+	private String articleid; // 기사 ID
 	private String articlename; // 기사 제목
 	private String articlecontent; // 기사 내용
 	private String articledate; // 기사 날짜
@@ -15,9 +16,10 @@ public class Article {
 		super();
 	}
 
-	public Article(String articleid, String articlename, String articlecontent, String articledate, String presscompany,
-			String field, String url, String continent, double sentiment) {
+	public Article(int articlenum, String articleid, String articlename, String articlecontent, String articledate,
+			String presscompany, String field, String url, String continent, double sentiment) {
 		super();
+		this.articlenum = articlenum;
 		this.articleid = articleid;
 		this.articlename = articlename;
 		this.articlecontent = articlecontent;
@@ -27,6 +29,14 @@ public class Article {
 		this.url = url;
 		this.continent = continent;
 		this.sentiment = sentiment;
+	}
+
+	public int getArticlenum() {
+		return articlenum;
+	}
+
+	public void setArticlenum(int articlenum) {
+		this.articlenum = articlenum;
 	}
 
 	public String getArticleid() {
@@ -103,8 +113,9 @@ public class Article {
 
 	@Override
 	public String toString() {
-		return "Article [articleid=" + articleid + ", articlename=" + articlename + ", articlecontent=" + articlecontent
-				+ ", articledate=" + articledate + ", presscompany=" + presscompany + ", field=" + field + ", url="
-				+ url + ", continent=" + continent + ", sentiment=" + sentiment + "]";
+		return "Article [articlenum=" + articlenum + ", articleid=" + articleid + ", articlename=" + articlename
+				+ ", articlecontent=" + articlecontent + ", articledate=" + articledate + ", presscompany="
+				+ presscompany + ", field=" + field + ", url=" + url + ", continent=" + continent + ", sentiment="
+				+ sentiment + "]";
 	}
 }

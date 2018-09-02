@@ -6,6 +6,7 @@
 <mapper namespace="com.creamyfever.wow.dao.ArticleMapper">
 	
 	<resultMap id="getArticle" type="Article">
+		<result property="articlenum" column="ARTICLENUM" javaType="java.lang.Integer" jdbcType="INTEGER"/>
 		<result property="articleid" column="ARTICLEID" javaType="java.lang.String" jdbcType="VARCHAR"/>
 		<result property="articlename" column="ARTICLENAME" javaType="java.lang.String" jdbcType="VARCHAR"/>
 		<result property="articlecontent" column="ARTICLECONTENT" javaType="java.lang.String" jdbcType="CLOB"/>
@@ -19,7 +20,8 @@
 
 	<insert id="insert" parameterType="Article">
 		insert into articles (
-			articleid
+			articlenum
+			, articleid
 			, articlename
 			, articlecontent
 			, articledate
@@ -31,7 +33,8 @@
 			</if>
 		)
 		values (
-			#{articleid}
+			articlenum.nextVal
+			, #{articleid}
 			, #{articlename}
 			, #{articlecontent}
 			, TO_DATE(#{articledate}, 'YYYY/MM/DD')
@@ -73,29 +76,30 @@
 
 	<select id="selectAll" resultMap="getArticle">
 		select
-		    articleid
+		    articlenum
+		    , articleid
 		    , articlename
 		    , articlecontent
 		    , TO_CHAR(articledate, 'yyyymmdd') as articledate
 		    , presscompany
 		    , field
 		    , url
-		    , nvl(continent,'Asia') as continent
+		    , continent
 		    , sentiment
 		from articles
-		order by articleid desc
 	</select>
 	
 	<select id="selectOne" parameterType="String" resultMap="getArticle">
 		select
-		    articleid
+		     articlenum
+		    , articleid
 		    , articlename
 		    , articlecontent
 		    , TO_CHAR(articledate, 'yyyymmdd') as articledate
 		    , presscompany
 		    , field
 		    , url
-		    , nvl(continent,'Asia') as continent
+		    , continent
 		    , sentiment
 		from articles
 		where articleid = #{id}
