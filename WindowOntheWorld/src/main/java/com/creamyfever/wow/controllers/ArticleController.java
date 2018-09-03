@@ -25,6 +25,7 @@ public class ArticleController {
 
 	@RequestMapping(value = "pythonTest", method = RequestMethod.GET)
 	public String pythonTest() {
+		parseJson("C:/Users/Creamy/Documents/GitKrakenRep/35th_ICT_Project/35th_ICT_Project/WindowOntheWorld/src/main/resources/bbcList.json");
 		parseJson("C:/Users/Creamy/Documents/GitKrakenRep/35th_ICT_Project/35th_ICT_Project/WindowOntheWorld/src/main/resources/naverListS.json");
 		parseJson("C:/Users/Creamy/Documents/GitKrakenRep/35th_ICT_Project/35th_ICT_Project/WindowOntheWorld/src/main/resources/yahooJpListS.json");
 		return "home";
