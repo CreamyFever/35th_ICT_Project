@@ -12,7 +12,6 @@
 		<result property="articlecontent" column="ARTICLECONTENT" javaType="java.lang.String" jdbcType="CLOB"/>
 		<result property="articledate" column="ARTICLEDATE" />
 		<result property="presscompany" column="PRESSCOMPANY" javaType="java.lang.String" jdbcType="VARCHAR"/>
-		<result property="field" column="FIELD" javaType="java.lang.String" jdbcType="VARCHAR"/>
 		<result property="continent" column="CONTINENT" javaType="java.lang.String" jdbcType="VARCHAR"/>
 		<result property="url" column="URL" javaType="java.lang.String" jdbcType="VARCHAR"/>
 		<result property="sentiment" column="SENTIMENT" javaType="java.lang.Double" jdbcType="DOUBLE"/>
@@ -26,7 +25,6 @@
 			, articlecontent
 			, articledate
 			, presscompany
-			, field
 			, url
 			<if test="continent != null">
 			, continent
@@ -39,7 +37,6 @@
 			, #{articlecontent}
 			, TO_DATE(#{articledate}, 'YYYY/MM/DD')
 			, #{presscompany}
-			, #{field}
 			, #{url}
 			<if test="continent != null">
 			, #{continent, jdbcType=VARCHAR}
@@ -56,7 +53,6 @@
 				, articlecontent
 				, articledate
 				, presscompany
-				, field
 				, url
 				, continent
 			)
@@ -66,7 +62,6 @@
 				, #{element.articlecontent}
 				, TO_DATE(#{element.articledate}, 'YYYY/MM/DD')
 				, #{element.presscompany}
-				, #{element.field}
 				, #{element.url}
 				, #{element.continent, jdbcType=VARCHAR}
 			) 
@@ -82,7 +77,6 @@
 		    , articlecontent
 		    , TO_CHAR(articledate, 'yyyymmdd') as articledate
 		    , presscompany
-		    , field
 		    , url
 		    , continent
 		    , sentiment
@@ -97,7 +91,6 @@
 		    , articlecontent
 		    , TO_CHAR(articledate, 'yyyymmdd') as articledate
 		    , presscompany
-		    , field
 		    , url
 		    , continent
 		    , sentiment
