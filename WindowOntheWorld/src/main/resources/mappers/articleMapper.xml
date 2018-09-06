@@ -6,12 +6,12 @@
 <mapper namespace="com.creamyfever.wow.dao.ArticleMapper">
 	
 	<resultMap id="getArticle" type="Article">
-		<result property="articlenum" column="ARTICLENUM" javaType="java.lang.Integer" jdbcType="INTEGER"/>
 		<result property="articleid" column="ARTICLEID" javaType="java.lang.String" jdbcType="VARCHAR"/>
 		<result property="articlename" column="ARTICLENAME" javaType="java.lang.String" jdbcType="VARCHAR"/>
 		<result property="articlecontent" column="ARTICLECONTENT" javaType="java.lang.String" jdbcType="CLOB"/>
 		<result property="articledate" column="ARTICLEDATE" />
 		<result property="presscompany" column="PRESSCOMPANY" javaType="java.lang.String" jdbcType="VARCHAR"/>
+		<result property="field" column="FIELD" javaType="java.lang.String" jdbcType="VARCHAR"/>
 		<result property="continent" column="CONTINENT" javaType="java.lang.String" jdbcType="VARCHAR"/>
 		<result property="url" column="URL" javaType="java.lang.String" jdbcType="VARCHAR"/>
 		<result property="sentiment" column="SENTIMENT" javaType="java.lang.Double" jdbcType="DOUBLE"/>
@@ -19,24 +19,24 @@
 
 	<insert id="insert" parameterType="Article">
 		insert into articles (
-			articlenum
-			, articleid
+			articleid
 			, articlename
 			, articlecontent
 			, articledate
 			, presscompany
+			, field
 			, url
 			<if test="continent != null">
 			, continent
 			</if>
 		)
 		values (
-			articlenum.nextVal
-			, #{articleid}
+			#{articleid}
 			, #{articlename}
 			, #{articlecontent}
 			, TO_DATE(#{articledate}, 'YYYY/MM/DD')
 			, #{presscompany}
+			, #{field}
 			, #{url}
 			<if test="continent != null">
 			, #{continent, jdbcType=VARCHAR}
@@ -53,6 +53,7 @@
 				, articlecontent
 				, articledate
 				, presscompany
+				, field
 				, url
 				, continent
 			)
@@ -62,6 +63,7 @@
 				, #{element.articlecontent}
 				, TO_DATE(#{element.articledate}, 'YYYY/MM/DD')
 				, #{element.presscompany}
+				, #{element.field}
 				, #{element.url}
 				, #{element.continent, jdbcType=VARCHAR}
 			) 
@@ -71,28 +73,29 @@
 
 	<select id="selectAll" resultMap="getArticle">
 		select
-		    articlenum
-		    , articleid
+		    articleid
 		    , articlename
 		    , articlecontent
 		    , TO_CHAR(articledate, 'yyyymmdd') as articledate
 		    , presscompany
+		    , field
 		    , url
-		    , continent
+		    , nvl(continent,'Asia') as continent
 		    , sentiment
 		from articles
+		order by articleid desc
 	</select>
 	
 	<select id="selectOne" parameterType="String" resultMap="getArticle">
 		select
-		     articlenum
-		    , articleid
+		    articleid
 		    , articlename
 		    , articlecontent
 		    , TO_CHAR(articledate, 'yyyymmdd') as articledate
 		    , presscompany
+		    , field
 		    , url
-		    , continent
+		    , nvl(continent,'Asia') as continent
 		    , sentiment
 		from articles
 		where articleid = #{id}

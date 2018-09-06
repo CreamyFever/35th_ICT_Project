@@ -4,7 +4,6 @@ import time
 
 from naverArticleParser import parse_articles_kr
 from yahooJpArticleParser import parse_articles_jp
-from bbcArticleParser import parse_articles_world
 
 
 def scrape_articles(url, parse_articles):
@@ -20,7 +19,6 @@ def scrape_articles(url, parse_articles):
 if __name__ == "__main__":
     start_time = time.time()
 
-    scrape_articles('https://www.bbc.com/news/world', parse_articles_world)
     scrape_articles('https://news.naver.com/main/home.nhn', parse_articles_kr)
     scrape_articles('https://news.yahoo.co.jp/list/', parse_articles_jp)
 

@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.creamyfever.wow.dao.ArticleRepository;
 import com.creamyfever.wow.vo.Article;
@@ -26,7 +25,6 @@ public class ArticleController {
 
 	@RequestMapping(value = "pythonTest", method = RequestMethod.GET)
 	public String pythonTest() {
-		parseJson("C:/Users/Creamy/Documents/GitKrakenRep/35th_ICT_Project/35th_ICT_Project/WindowOntheWorld/src/main/resources/bbcList.json");
 		parseJson("C:/Users/Creamy/Documents/GitKrakenRep/35th_ICT_Project/35th_ICT_Project/WindowOntheWorld/src/main/resources/naverListS.json");
 		parseJson("C:/Users/Creamy/Documents/GitKrakenRep/35th_ICT_Project/35th_ICT_Project/WindowOntheWorld/src/main/resources/yahooJpListS.json");
 		return "home";
@@ -42,18 +40,6 @@ public class ArticleController {
 		articleList.clear();
 		
 		return "home";
-	}
-	
-	@RequestMapping(value = "insertArticle", method = RequestMethod.POST)
-	public @ResponseBody List<Article> insertArticle() {
-		
-		for(Article article : articleList) {			
-			repository.insert(article);
-		}
-		
-		articleList.clear();
-		
-		return repository.selectAll();
 	}
 	
 	public void parseJson(String jsonPath) {
@@ -79,6 +65,7 @@ public class ArticleController {
 				article.setArticlecontent(node.get("content").asText());
 				article.setArticledate(node.get("publishedAt").asText());
 				article.setPresscompany(node.get("author").asText());
+				article.setField(node.get("area").asText());
 				article.setUrl(node.get("url").asText());
 				
 				if(node.get("continent") != null)
@@ -99,18 +86,6 @@ public class ArticleController {
 			System.out.println(article.getArticlecontent());			
 		}
 		System.out.println(articleList.size());
-		
-		return "home";
-	}
-	
-	@RequestMapping(value = "goArticleView", method = RequestMethod.GET)
-	public String goArticleView() {		
-		return "ArticleView";
-	}
-	
-	@RequestMapping(value = "showPopup", method = RequestMethod.GET)
-	public String showPopup(String continent) {
-		System.out.println(continent);		
 		
 		return "home";
 	}
