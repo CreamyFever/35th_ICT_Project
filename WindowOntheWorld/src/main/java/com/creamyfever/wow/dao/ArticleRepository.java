@@ -66,4 +66,17 @@ public class ArticleRepository {
 		
 		return article;
 	}
+	
+	public List<Article> showArticleByContinent(String continent) {
+		ArticleMapper mapper = session.getMapper(ArticleMapper.class);
+
+		List<Article> articles = null;
+		try {
+			articles = mapper.showArticleByContinent(continent);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return articles;
+	}
 }

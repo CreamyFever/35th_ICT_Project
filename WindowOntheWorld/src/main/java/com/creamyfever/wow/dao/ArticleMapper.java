@@ -9,4 +9,5 @@ public interface ArticleMapper {
 	public int insertFromList(List<Article> list);
 	public List<Article> selectAll();
 	public Article selectOne(String id);
+	public List<Article> showArticleByContinent(String continent);
 }
