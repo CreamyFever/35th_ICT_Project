@@ -14,9 +14,5 @@
 <a href="/wow/pythonTest">Test</a><!-- 파일 읽어오기 테스트 -->
 <a href="/wow/insertArticle">INSERT</a><!-- DB에 데이터 insert -->
 <a href="/wow/selectAllArticle">ShowAll</a><!-- DB에 들어간 데이터 출력 -->
-
-<p>	
-	<a href="/wow/goArticleView">Articles</a><!-- 기사 뷰로 이동-->
-</p>
 </body>
 </html>
