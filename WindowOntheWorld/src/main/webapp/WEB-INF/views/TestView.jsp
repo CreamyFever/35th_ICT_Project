@@ -13,19 +13,56 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 	<head>
 		<title>World News</title>
 		<link href="resources/css/bootstrap.css" rel='stylesheet' type='text/css' />
+		<style>			
+			.sidenav {
+			    height: 100%;
+			    width: 0;
+			    position: fixed;
+			    z-index: 1001;
+			    top: 0;
+			    right: 0;
+			    background-color: #111;
+			    overflow-x: hidden;
+			    transition: 0.5s;
+			    padding-top: 60px;
+			}
+			
+			.sidenav a {
+			    padding: 8px 8px 8px 32px;
+			    text-decoration: none;
+			    font-size: 25px;
+			    color: #818181;
+			    display: block;
+			    transition: 0.3s;
+			}
+			
+			.sidenav a:hover {
+			    color: #f1f1f1;
+			}
+			
+			.sidenav .closebtn {
+			    position: absolute;
+			    top: 0;
+			    right: 25px;
+			    font-size: 36px;
+			    margin-left: 50px;
+			}
+			
+			#main {
+			    transition: margin-left .5s;
+			}
+			
+			@media screen and (max-height: 450px) {
+			  .sidenav {padding-top: 15px;}
+			  .sidenav a {font-size: 18px;}
+			}
+		</style>
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 		 <script src="resources/js/jquery.min.js"></script>
 		 <!---- start-smoth-scrolling---->
 		<script type="text/javascript" src="resources/js/move-top.js"></script>
 		<script type="text/javascript" src="resources/js/easing.js"></script>
-		<script type="text/javascript">
-			jQuery(document).ready(function($) {
-				$(".scroll").click(function(event){		
-					event.preventDefault();
-					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
-				});
-			});
-		</script>
+		
 		<!---- start-smoth-scrolling---->
 		 <!-- Custom Theme files -->
 		<link href="resources/css/theme-style.css" rel='stylesheet' type='text/css' />
@@ -33,7 +70,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<script type="application/x-javascript">
 			addEventListener("load", function() { 
-				setTimeout(hideURLbar, 0); 
+				setTimeout(hideURLbar, 0);
+
+				$("#articles").hide();
+				$("#articles_list").hide();
+				$("#about").hide();
 				showArticleByContinent('Asia');
 			}, false);
 			
@@ -51,23 +92,14 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		<!----start-top-nav-script---->
 		<script>
 			$(function() {
-				var pull 		= $('#pull');
-					menu 		= $('nav ul');
-					menuHeight	= menu.height();
-				$(pull).on('click', function(e) {
-					e.preventDefault();
-					menu.slideToggle();
+				$(".scroll").click(function(event){		
+					event.preventDefault();
+					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
 				});
-				$(window).resize(function(){
-	        		var w = $(window).width();
-	        		if(w > 320 && menu.is(':hidden')) {
-	        			menu.removeAttr('style');
-	        		}
-	    		});
 				
 				$("#asia").on('click', function(){
 					$("#articles").hide(1000,function(){
-						showArticleByContinent('Asia');		// Parameter에 해당하는 대륙의 기사만 출력.
+						showArticleByContinent('Asia');		// Parameter에 해당하는 대륙의 기사만 출력.						
 						$(this).show(1000);
 					});
 				});
@@ -104,6 +136,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			});
 			
 			function showArticleByContinent(continent){
+				$("#continent_name").attr("href", "listArticle?continent=" + continent);
+				
 				$.ajax({
 					url: "showArticleByContinent",
 					method: "POST",
@@ -118,6 +152,19 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			}
 			
 			function output(resp){
+				
+				if(window.location.href.includes("continent")){	// 주소입력 창에 continent 정보가 들어있으면 기사 목록을 보이게 함.
+					$("#articles_list").show(1000, function(){
+						$('html,body').animate({scrollTop:$("#articles_list").offset().top},1000);
+					});
+				}
+				
+				if(window.location.href.includes("articleid")){
+					$("#about").show(1000, function(){
+						$('html,body').animate({scrollTop:$("#about").offset().top},1000);
+					});
+				}
+				
 				var s = "";
 				resp_date = convertDateForm(resp[0].articledate);
 				s += '<div class="col-md-4 articles-grid-row frist-row">';
@@ -219,133 +266,227 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				
 				return result;
 			}
+			
+			
+			
+			function pagingFormSubmit(currentPage) {
+				var form = document.getElementById('pagingForm');
+				var continent = document.getElementById('continent');
+				var page = document.getElementById('page');
+				
+				var url = window.location.href;
+				var formVal = url.split('?');
+				var parameters = formVal[1].split('&');
+				var continent_val = (parameters[0].split('='))[1];
+				
+				continent.value = continent_val;
+				page.value = currentPage;
+				form.submit();
+			}
 		</script>
 		<!----//End-top-nav-script---->
 	</head>
 	<body>
-		<!----start-container------>
-		<!----start-header---->
-		<div id="home" class="header scroll">
-			<div class="container">
-				<!---- start-logo---->
-				<div class="logo">
-					<a href="#"><img src="resources/images/WOWLogoS.png" title="WOW" /></a>
-				</div>
-				<!---- //End-logo---->
-				<!----start-top-nav---->
-				 <nav class="top-nav">
-					<ul class="top-nav">
-						<li class="active"><a href="#services" class="scroll">Continents</a></li>
-						<li class="page-scroll"><a href="#articles" class="scroll">Articles</a></li>
-					</ul>
-					<a href="#" id="pull"><img src="resources/images/nav-icon.png" title="menu" /></a>
-				</nav>
-				<div class="clearfix"> </div>
-				<!----//End-top-nav---->
-			</div>
-		</div>
+		<script>
+		function openNav() {
+		    $("#mySidenav").css("width", "250px");
+		    $("#main").css("marginRight", "250px");
+		    $("body").css("backgroundColor", "rgba(0,0,0,0.4)");
+		}
 		
-		<!----start-services---->
-		<div id="services" class="services">
-			<div class="container">
-				<h3>Continents<label> </label></h3>
-			<!----start-servicves-list---->
-			<div class="services-list text-center">
-				<ul class="list-unstyled list-inline">
-					<li>
-						<a id="asia"><span class="service-icon5"> </span><label>Asia</label></a>
-					</li>
-					<li>
-						<a id="europe"><span class="service-icon5"> </span><label>Europe</label></a>
-					</li>
-					<li>
-						<a id="africa"><span class="service-icon5"> </span><label>Africa</label></a>
-					</li>
-					<li>
-						<a id="north_america"><span class="service-icon5"> </span><label>North America</label></a>
-					</li>
-					<li>
-						<a id="south_america"><span class="service-icon5"> </span><label>South America</label></a>
-					</li>
-					<li>
-						<a id="oceania"><span class="service-icon5"> </span><label>Oceania</label></a>
-					</li>
+		function closeNav() {
+			$("#mySidenav").css("width", "0");
+		    $("#main").css("marginRight", "0");
+		    $("body").css("backgroundColor", "white");
+		}
+		</script>
+		<div id="main">
+			<div id="mySidenav" class="sidenav">
+				<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+				<div id="myProfileImage" class="side_image">
+					<img src="resources/images/DasBoot.jpg" class="profile_image" /><br>				
+				</div>
+				<ul class="top-nav">
+					<li class="active"><a href="#services" class="scroll">Continents</a></li>
+					<li class="page-scroll"><a href="#articles" class="scroll">Articles</a></li>
 				</ul>
 			</div>
-			<!----//End-servicves-list---->
-			</div>
-		</div>
-		<!----//End-services---->
-		
-		<!----start-articles---->
-		<div id="articles" class="articles">
-			<div class="container">
-				<h3>Articles<label> </label></h3>
-				<div class="articles-grids"></div>
-			</div>
-		</div>
-		<!----//End-articles---->
-		
-		<!----start-about----->
-		<div id="about" class="about">
-			<div class="container">
-				<h2>About</h2>
-				<p class="wellcome-note-head"><label>We are a full Services Digital Agency. </label>We Design and develop <span>Websites,</span><span>Applications,</span><span>Mobile Solutions,</span> and more</p>
-				<p class="wellcome-note-info">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In luctus velit quis risus eleifend bibendum. Aenean dictum felis in eros ultrices eleifend. Phasellus ultrices congue feugiat. Vestibulum sed pretium sem, sed venenatis nibh. Phasellus nec tincidunt neque. Proin accumsan sagittis lacus ut lobortis.Proin molestie cursus tortor in eleifend. Suspendisse potenti.</p>
-			<!----start-about-grids----->
-			<div class="about-grids">
-				<div class="col-md-3 about-grid">
-					<span class="about-icon"> </span>
-					<h3><a href="#"><label>Reflexion</label> idea</a></h3>
-					<p>velit est, tempus in nulla sed, convallis porttitor lacus. Curabitur sed egestas eros. Donec convallis ligula eu diam elementum, quis tempor sem tincidunt.</p>
+			
+			<!----start-container------>
+			<!----start-header---->
+			<div id="home" class="header scroll">
+				<div class="container">
+					<!---- start-logo---->
+					<div class="logo">
+						<a href="#"><img src="resources/images/WOWLogoS.png" title="WOW" /></a>
+					</div>
+					<!---- //End-logo---->
+					<!----start-top-nav---->
+					 <nav class="top-nav">
+						<span id="hamburger" onclick="openNav()"><img src="resources/images/nav-icon.png" title="menu" /></span>
+						<ul class="top-nav">
+							<li class="active"><a href="#services" class="scroll">Continents</a></li>
+							<li class="page-scroll"><a href="#articles" class="scroll">Articles</a></li>
+							<li class="page-scroll"><a href="#about" class="scroll">About</a></li>
+							<li class="page-scroll"><a href="#port" class="scroll">Protfolio</a></li>
+							<li class="page-scroll"><a href="#blog" class="scroll">Blog</a></li>
+							<li class="page-scroll"><a href="#team" class="scroll">Team</a></li>
+							<li class="page-scroll"><a href="#contact" class="scroll">Contact</a></li>
+						</ul>
+					</nav>
+					<div class="clearfix"> </div>
+					<!----//End-top-nav---->
 				</div>
-				<div class="col-md-3 about-grid">
-					<span class="about-icon1"> </span>
-					<h3><a href="#"><label>Conception</label> Design</a></h3>
-					<p>velit est, tempus in nulla sed, convallis porttitor lacus. Curabitur sed egestas eros. Donec convallis ligula eu diam elementum, quis tempor sem tincidunt.</p>
-				</div>
-				<div class="col-md-3 about-grid">
-					<span class="about-icon2"> </span>
-					<h3><a href="#"><label>Codage</label> Develop</a></h3>
-					<p>velit est, tempus in nulla sed, convallis porttitor lacus. Curabitur sed egestas eros. Donec convallis ligula eu diam elementum, quis tempor sem tincidunt.</p>
-				</div>
-				<div class="col-md-3 about-grid">
-					<span class="about-icon3"> </span>
-					<h3><a href="#"><label>Efficacite</label> Rapidite</a></h3>
-					<p>velit est, tempus in nulla sed, convallis porttitor lacus. Curabitur sed egestas eros. Donec convallis ligula eu diam elementum, quis tempor sem tincidunt.</p>
-				</div>
-				<div class="clearfix"> </div>
 			</div>
+			
+			<!----start-services---->
+			<div id="services" class="services">
+				<div class="container">
+					<h3>Continents<label> </label></h3>
+				<!----start-services-list---->
+				<div class="services-list text-center">
+					<ul class="list-unstyled list-inline">
+						<li>
+							<a id="asia"><span class="service-icon5"> </span><label>Asia</label></a>
+						</li>
+						<li>
+							<a id="europe"><span class="service-icon5"> </span><label>Europe</label></a>
+						</li>
+						<li>
+							<a id="africa"><span class="service-icon5"> </span><label>Africa</label></a>
+						</li>
+						<li>
+							<a id="north_america"><span class="service-icon5"> </span><label>North America</label></a>
+						</li>
+						<li>
+							<a id="south_america"><span class="service-icon5"> </span><label>South America</label></a>
+						</li>
+						<li>
+							<a id="oceania"><span class="service-icon5"> </span><label>Oceania</label></a>
+						</li>
+					</ul>
+				</div>
+				<!----//End-services-list---->
+				</div>
 			</div>
-			<!----//End-about-grids----->
-		</div>
-		<!----//End-about----->
-		
-		
-		<!----start-copy-right--->
-		<div class="copy-right">
-			<div class="container">
-				<p>Template by <a href="#">W3layouts</a></p>
-					<script type="text/javascript">
-				$(document).ready(function() {
-					/*
-					var defaults = {
-			  			containerID: 'toTop', // fading element id
-						containerHoverID: 'toTopHover', // fading element hover id
-						scrollSpeed: 1200,
-						easingType: 'linear' 
-			 		};
-					*/
+			<!----//End-services---->
+			
+			<!----start-articles---->
+			<div id="articles" class="articles">
+				<div class="container">
+					<h3>Articles<label> </label></h3>
+					<div class="articles-grids"></div>
 					
-					$().UItoTop({ easingType: 'easeOutQuart' });
-					
-				});
-			</script>
-				<a href="#" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
+					<div class="post-bottom-right">
+						<a id="continent_name" href="listArticle?continent=${continent}">
+							<img src="resources/images/more-icon.png" title="more-icon" />
+						</a>
+					</div>
+				</div>
 			</div>
+			<!----//End-articles---->
+			
+			<!----start-articles_list---->
+			<div id="articles_list" class="articles">
+				<div class="container">
+					<h3>Articles List<label> </label></h3>
+					<div class="articles-list-grids">
+						<br>
+						<table>
+							<tr>
+								<td class="white">
+									Total : ${navi.totalRecordsCount}
+								</td>
+								<td class="white" colspan="3"></td>	
+							</tr>
+							<tr>
+								<th>No.</th>
+								<th style="width:600px">Title</th>
+								<th>Date</th>
+							</tr>
+							<c:forEach var="article" items="${articles}">
+							<tr>
+								<td class="center">${article.articlenum}</td>
+								<td>
+									<a href="read?articleid=${article.articleid}" class="article_title">${article.articlename}</a>
+								</td>
+								<td class="center">${article.articledate}</td>
+							</tr>
+							</c:forEach>
+						
+							</table>
+							<br/><br/>
+							
+							<div id="navigator">
+						                     
+								<a class="page_link" href="javascript:pagingFormSubmit(${navi.currentPage - navi.pagePerGroup})">◁◁ </a> &nbsp;&nbsp;
+								<a class="page_link" href="javascript:pagingFormSubmit(${navi.currentPage - 1})">◀</a> &nbsp;&nbsp;
+							
+								<c:forEach var="counter" begin="${navi.startPageGroup}" end="${navi.endPageGroup}">
+									<c:if test="${counter == navi.currentPage}"><b></c:if>
+										<a class="page_link" href="javascript:pagingFormSubmit(${counter})">${counter}</a>&nbsp;
+									<c:if test="${counter == navi.currentPage}"></b></c:if>
+								</c:forEach>
+								&nbsp;&nbsp;
+								<a class="page_link" href="javascript:pagingFormSubmit(${navi.currentPage + 1})">▶</a> &nbsp;&nbsp;
+								<a class="page_link" href="javascript:pagingFormSubmit(${navi.currentPage + navi.pagePerGroup})">▷▷</a>
+						
+							<br><br>
+							
+							<form id="pagingForm" method="get" action="listArticle">
+								<input type="hidden" name="continent" id="continent" />
+								<input type="hidden" name="page" id="page" />
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!----//End-articles_list---->
+			
+			<!----start-about----->
+			<div id="about" class="about">
+				<div class="container">
+					<h2>About</h2>
+					<p class="wellcome-note-head"><b>Title</b>  ${article.articlename}</p>
+					<p class="wellcome-note-info" ><b>URL</b> <a href="${article.url}" class="article_url"> ${article.url}</a></p>
+					<!----start-about-grids----->
+					<div class="about-grids">
+						<b>Date</b> &nbsp;${article.articledate}
+						<br><br>
+						<p id="article_content">${article.articlecontent}</p>
+						<div class="clearfix"> </div>
+					</div>
+					<!----//End-about-grids----->
+				</div>
+			</div>
+			<!----//End-about----->
+			
+			
+			<!----start-copy-right--->
+			<div class="copy-right">
+				<div class="container">
+					<p>Template by <a href="#">W3layouts</a></p>
+						<script type="text/javascript">
+					$(document).ready(function() {
+						/*
+						var defaults = {
+				  			containerID: 'toTop', // fading element id
+							containerHoverID: 'toTopHover', // fading element hover id
+							scrollSpeed: 1200,
+							easingType: 'linear' 
+				 		};
+						*/
+						
+						$().UItoTop({ easingType: 'easeOutQuart' });
+						
+					});
+				</script>
+					<a href="#" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
+				</div>
+			</div>
+			<!----//End-copy-right--->
+			<!----//End-container------>
 		</div>
-		<!----//End-copy-right--->
-		<!----//End-container------>
 	</body>
 </html>
 

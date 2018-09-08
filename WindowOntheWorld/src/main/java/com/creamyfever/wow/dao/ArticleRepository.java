@@ -2,6 +2,7 @@ package com.creamyfever.wow.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -78,5 +79,15 @@ public class ArticleRepository {
 		}
 		
 		return articles;
+	}
+	
+	public List<Article> listArticle(String continent, int startRecord, int countPerPage) {
+		ArticleMapper mapper = session.getMapper(ArticleMapper.class);
+		//전체 검색 결과 중 읽을 시작위치와 개수
+		RowBounds rb = new RowBounds(startRecord, countPerPage);
+		
+		//검색어와 읽을 범위를 전달
+		List<Article> list = mapper.listArticle(continent, rb);
+		return list;
 	}
 }
