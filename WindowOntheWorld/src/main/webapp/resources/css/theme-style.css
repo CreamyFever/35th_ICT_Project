@@ -29,6 +29,16 @@ body a{
 	float:left;
 }
 /*----navbar-nav----*/
+div#myProfileImage{
+	text-align: center!important;
+}
+
+div#myProfileImage img{
+	border-radius: 50%!important;
+	width: 200px!important;
+	height: 200px!important;
+}
+
 .top-nav ul li a{
 	color: #E4E4E4;
 	padding: 0em 0em 0;
@@ -50,6 +60,16 @@ body a{
 .top-nav:after {
     clear: both;
 }
+span#hamburger {
+	display: block;
+	position: relative;
+	color: #F26D7D;
+	top: 35px;
+	padding-left: 150px;
+	float: right;
+	cursor: pointer;
+}
+
 nav {
 	position: relative;
 }
@@ -275,9 +295,13 @@ nav a#pull {
   }
 
 a {
-  color: #fff;
+  color: #FFF;
   text-decoration: none;
   }
+  
+a.article_title, a.page_link a.article_url{
+	color: #000000;
+}
 
 #download {
   background: #333;
@@ -487,6 +511,13 @@ h3 {
 	color: #97AEB3;
 }
 .about-grid p{
+	color: #4F6367;
+	text-align: justify;
+	font-size: 0.875em;
+	line-height: 1.6em;
+}
+
+p#article_content{
 	color: #4F6367;
 	text-align: justify;
 	font-size: 0.875em;

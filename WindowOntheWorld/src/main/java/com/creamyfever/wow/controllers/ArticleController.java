@@ -7,11 +7,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.creamyfever.wow.dao.ArticleRepository;
+import com.creamyfever.wow.util.PageNavigator;
 import com.creamyfever.wow.vo.Article;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,7 +25,11 @@ public class ArticleController {
 	@Autowired
 	ArticleRepository repository;
 
-	ArrayList<Article> articleList = new ArrayList<>();
+	ArrayList<Article> articleList = new ArrayList<>();	
+
+	//게시판 관련 상수값들
+	final int countPerPage = 10;			//페이지 당 글 수
+	final int pagePerGroup = 5;				//페이지 이동 그룹 당 표시할 페이지 수
 
 	@RequestMapping(value = "pythonTest", method = RequestMethod.GET)
 	public String pythonTest() {
@@ -106,11 +113,59 @@ public class ArticleController {
 	@RequestMapping(value = "showArticleByContinent", method = RequestMethod.POST)
 	public @ResponseBody List<Article> showArticleByContinent(String continent){
 		List<Article> articleList = repository.showArticleByContinent(continent);
-		for(Article article : articleList) {
-			System.out.println(article.getArticlecontent());			
-		}
-		System.out.println(articleList.size());
+//		for(Article article : articleList) {
+//			System.out.println(article.getArticleid());			
+//		}
+//		System.out.println(articleList.size());
 		
 		return articleList;
+	}
+	
+	
+	@RequestMapping (value="listArticle", method=RequestMethod.GET)
+	public String list(
+			
+			@RequestParam(value="page", defaultValue="1") int page,
+			@RequestParam(value="continent", defaultValue="Asia") String continent,
+			Model model) {
+		
+		List<Article> articleList = repository.showArticleByContinent(continent);
+
+		int total = articleList.size();			//전체 글 개수
+		
+		//페이지 계산을 위한 객체 생성
+		PageNavigator navi = new PageNavigator(countPerPage, pagePerGroup, page, total); 
+		
+		List<Article> articles = repository.listArticle(continent, navi.getStartRecord(), navi.getCountPerPage());
+		
+		//페이지 정보 객체와 글 목록, 검색어를 모델에 저장
+		model.addAttribute("articles", articles);
+		model.addAttribute("navi", navi);
+		model.addAttribute("continent", continent);
+		
+		return "TestView";
+	}
+	
+	/**
+	 * 글 읽기
+	 * @param boardnum 읽을 글번호
+	 * @return 해당 글 정보
+	 */
+	@RequestMapping (value="read", method=RequestMethod.GET)
+	public String read(String articleid, Model model) {
+		//전달된 글 번호로 해당 글정보 읽기
+		Article article = repository.selectOne(articleid);
+		if (article == null) {
+			return "redirect:/";
+		}
+		
+		//해당 글에 달린 리플목록 읽기
+		//ArrayList<Reply> replylist = repository.listReply(articleid);
+		
+		//본문글정보와 리플목록을 모델에 저장
+		model.addAttribute("article", article);
+		//model.addAttribute("replylist", replylist);
+		
+		return "TestView";
 	}
 }

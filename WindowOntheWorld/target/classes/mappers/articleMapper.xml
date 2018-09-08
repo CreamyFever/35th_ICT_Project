@@ -113,4 +113,16 @@
 		where continent = #{continent}
 		order by articledate desc
 	</select>
+	
+	<select id="listArticle" parameterType="string" resultMap="getArticle">
+		select 
+			 articlenum
+			, articleid
+		    , articlename
+		    , TO_CHAR(articledate, 'yyyymmdd') as articledate
+		    , presscompany
+		from articles
+		where continent = #{continent}
+		order by articledate desc
+	</select>
 </mapper>
