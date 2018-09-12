@@ -156,7 +156,7 @@ public class ArticleController {
 		//전달된 글 번호로 해당 글정보 읽기
 		Article article = repository.selectOne(articleid);
 		if (article == null) {
-			return "redirect:/";
+			return "redirect:/main";
 		}
 		
 		//해당 글에 달린 리플목록 읽기

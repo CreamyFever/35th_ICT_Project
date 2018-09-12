@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+<!-- typeAlias -->	
+	
+	<typeAliases>
+		<typeAlias type="com.creamyfever.wow.vo.Members" alias="Members" />
+		<typeAlias type="com.creamyfever.wow.vo.Reply" alias="Reply" />
+		<typeAlias type="com.creamyfever.wow.vo.Board" alias="Board" />
+	
+	
+	</typeAliases>
+		
+
+<!-- mapper -->
+	
+	<mappers>
+		<mapper resource="mappers/membersMapper.xml" />
+		<mapper resource="mappers/boardMapper.xml" />
+	
+	</mappers>	
+
+</configuration>
