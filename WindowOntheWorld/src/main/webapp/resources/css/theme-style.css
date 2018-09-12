@@ -28,6 +28,59 @@ body a{
 	max-height:auto;
 	float:left;
 }
+
+.search_area{
+	background-color:#FFF;
+	text-align:center;
+	padding-top: 150px;
+}
+
+.search_area input#input_keyword{
+	width: 90%;
+	height: 100px;
+	font-size:50px;
+}
+
+.search_area input#search_button{
+	display: inline-block;
+    vertical-align: middle;
+    height: 85px;
+    width: auto;
+}
+
+.table {
+    display:table;
+    width:100%;
+    margin:0 auto;
+}
+.cell {
+    display:table-cell;
+    width:50%;
+    vertical-align:middle;
+}
+
+div#summary h2{
+	font-size: 2.2em;
+	font-weight: 900;
+	color: #4F6367;
+	text-align: left;
+	margin: 0.8em 0 0.8em;
+}
+
+div#keywords_summary{
+	background-color:#00d8ff;
+}
+div#board_summary{
+	background-color:#85eafc;
+}
+div#discussion_summary{
+	background-color:#e8fbff;
+}
+
+.summary_bottom{
+	float:right;
+	padding: 30px 30px 30px 30px;
+}
 /*----navbar-nav----*/
 div#myProfileImage{
 	text-align: center!important;
@@ -534,7 +587,6 @@ p#article_content{
 }
 /*----start-services----*/
 .services{
-	margin-top: 120px;
 	background:#05A4C2;
 	padding:2em 0;
 }

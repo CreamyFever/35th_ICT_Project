@@ -57,8 +57,10 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			  .sidenav a {font-size: 18px;}
 			}
 		</style>
-		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-		 <script src="resources/js/jquery.min.js"></script>
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->		 
+		 
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		 
 		 <!---- start-smoth-scrolling---->
 		<script type="text/javascript" src="resources/js/move-top.js"></script>
 		<script type="text/javascript" src="resources/js/easing.js"></script>
@@ -187,7 +189,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				s += '			<p><a href="#">0 Comments</a> | <i class="fa fa-heart"> </i> 0</p>';
 				s += '		</div>';
 				s += '		<div class="post-bottom-right">';
-				s += '			<a class="artbtn" href="#">Read More</a>';
+				s += '			<a class="artbtn" href="'+ resp[0].url +'">Read More</a>';
 				s += '		</div>';
 				s += '		<div class="clearfix"> </div>';
 				s += '	</div>';
@@ -216,7 +218,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 						s += '		<p><a href="#">0 Comments</a> | <i class="fa fa-heart"> </i> 0</p>';
 						s += '	</div>';
 						s += '	<div class="post-bottom-right">';
-						s += '		<a class="artbtn artbtn1" href="#">Read More</a>';
+						s += '		<a class="artbtn artbtn1" href="'+ resp[2*i + (j+1)].url +'">Read More</a>';
 						s += '	</div>';
 						s += '	<div class="clearfix"> </div>';
 						s += '</div>';
@@ -299,16 +301,34 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		    $("#main").css("marginRight", "0");
 		    $("body").css("backgroundColor", "white");
 		}
+		
+		function sendKeyword(){
+			var searchWord = $("#input_keyword").val();
+			$("#searchForm").submit();
+		}
 		</script>
 		<div id="main">
 			<div id="mySidenav" class="sidenav">
 				<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 				<div id="myProfileImage" class="side_image">
-					<img src="resources/images/DasBoot.jpg" class="profile_image" /><br>				
+			<img src="./resources/images/DasBoot.jpg" class="profile_image" /><br>				
+					<c:if test="${loginId != null}">
+					${sessionScope.loginName}(${sessionScope.loginId})님 로그인 중<br>
+					</c:if>
 				</div>
 				<ul class="top-nav">
-					<li class="active"><a href="#services" class="scroll">Continents</a></li>
-					<li class="page-scroll"><a href="#articles" class="scroll">Articles</a></li>
+				<c:if test="${loginId == null}">
+					<li class="active"><a href="members/login" class="scroll">로그인</a></li>
+					<li class="page-scroll"><a href="members/join" class="scroll">회원가입</a></li>
+				</c:if>
+				
+				<c:if test="${loginId != null}">
+					<li class="active"><a href="members/logout" class="scroll">로그아웃</a></li>
+					<li class="active"><a href="members/update" class="scroll">회원정보 수정</a></li>
+				</c:if>	
+					
+					<li><a href="board/list">게시판</a>
+			
 				</ul>
 			</div>
 			
@@ -338,6 +358,100 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 					<!----//End-top-nav---->
 				</div>
 			</div>
+			
+			<!----start-search_bar----->
+			<div id="search_bar" class="search_area" style="padding-top: 150px;">
+				<div class="container">
+					<div id="search_keyword">
+			            <form id="searchForm" action="world" method="get">
+			              <input type="text" name="searchWord" value="" id="input_keyword" placeholder="Enter a keyword" class="txt_field" style="width: 90%;
+	height: 100px;font-size:50px">
+						  <input type="image" src="resources/images/link-ico.png" onclick="sendKeyword()" alt="Search" id="search_button" style="display: inline-block;
+    vertical-align: middle; height: 85px; width: auto;">
+			            </form>
+			        </div>
+				</div>
+			</div>
+			<!----//End-search_bar----->
+			
+			<h1 style="background: white;">${search}についての結果</h1>
+			
+			<div id="world" style="background-color: black">
+				<img src="./resources/worldmap/img/worldmap.png" id="worldmap" style="width: 1200px; margin-left: auto; margin-right: auto; display: block;" onclick="newweb('${search}')"/>
+			</div>
+			
+			<!-- 위에 띄우는 대륙별 그래프!!!!!!!!! -->
+			<!-- NA -->
+			<div style="height: 80px; width: 80px; position: absolute; left: 280px; top: 465px; ">
+			<canvas id="pieChart_NA" height="10px" width="10px">This browser doesn't support canvas</canvas>
+			</div>
+			<!-- SA -->
+			<div style="height: 80px; width: 80px; position: absolute; left: 438px; top: 660px; ">
+			<canvas id="pieChart_SA" height="10px" width="10px">This browser doesn't support canvas</canvas>
+			</div>
+			<!-- Europe -->
+			<div style="height: 80px; width: 80px; position: absolute; left: 680px; top: 435px; ">
+			<canvas id="pieChart_Euro" height="10px" width="10px">This browser doesn't support canvas</canvas>
+			</div>
+			<!-- Asia -->
+			<div style="height: 80px; width: 80px; position: absolute; left: 877px; top: 472px; ">
+			<canvas id="pieChart_Asia" height="10px" width="10px">This browser doesn't support canvas</canvas>
+			</div>
+			<!-- Oceania -->
+			<div style="height: 80px; width: 80px; position: absolute; left: 900px; top: 707px; ">
+			<canvas id="pieChart_Ocea" height="10px" width="10px">This browser doesn't support canvas</canvas>
+			</div>
+			<!-- Aprica -->
+			<div style="height: 80px; width: 80px; position: absolute; left: 636px; top: 641px; ">
+			<canvas id="pieChart_Apri" height="10px" width="10px">This browser doesn't support canvas</canvas>
+			</div>
+				
+			<!-- Aprica click! -->
+			<div id="apri_div_out">
+				<div id="apri_div" style="height: 300px;  width: 300px; position:absolute; left:635px; top:232px;">
+					<img src="" width="170px">
+				</div>
+			</div>
+			<!-- Oceania click! -->
+			<div id="ocea_div_out">
+				<div id="ocea_div" style="height: 300px;  width: 300px; position:absolute; left:930px; top:337px;">
+					<img src="" width="174px">
+				</div>
+			</div>
+			<!-- SA click! -->
+			<div id="SA_div_out">
+				<div id="ocea_div" style="height: 300px;  width: 300px; position:absolute; left:930px; top:337px;">
+					<img src="" width="174px">
+				</div>
+			</div>
+			<div id="result" style="color: white;"></div>
+			
+			
+			<div id="lastOuter">
+			  <div id="chartContainer" style="height: 500px; width: 50%; float:left;">
+			  </div>
+			
+			   <div id="out" style=" height:500px; width: 50%; float:right;">
+			      <div id="outer1"  style="width:50%; float: left;" >
+			            <div id="gender" style="height: 500px; width: 50%; float: left;"></div>
+			            <div id="age" style="height: 500px; width: 50%; float: right;"></div>
+			      </div>
+			      <div id="outer2" style="width:50%; height:500px; float: right;">
+			         <div id="stackedColumn" style="height: 500px;"></div>
+			      </div>
+			   </div>
+			</div>
+			
+			<input type="hidden" id="sent_SA" value="${sentiment_SA}">
+			<input type="hidden" id="sent_NA" value="${sentiment_NA}">
+			<input type="hidden" id="sent_Africa" value="${sentiment_Africa}">
+			<input type="hidden" id="sent_Oceania" value="${sentiment_Oceania}">
+			<input type="hidden" id="sent_Asia" value="${sentiment_Asia}">
+			<input type="hidden" id="sent_Europe" value="${sentiment_Europe}">
+			
+			
+			
+			
 			
 			<!----start-services---->
 			<div id="services" class="services">
@@ -488,5 +602,214 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			<!----//End-container------>
 		</div>
 	</body>
+	
+	<script src="./resources/worldmap/js/worldGraph.js"></script>
+	<script src="./resources/worldmap/js/Chart.bundle.min.js"></script>
+	
+	<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+	
+	<!-- pieOptions와 각 대륙별 데이터 뽑아오기 -->
+			<!-- 각 대륙별 차트 생성-->
+			<script type="text/javascript"  src="./resources/worldmap/js/continent_chart.js">
+			</script>
+			
+			<!-- 버블그래프 차트 생성 -->
+			<script type="text/javascript">
+			  $(function () {
+			    var chart = new CanvasJS.Chart("chartContainer",
+			    {
+			    	 legendText: "Size of Bubble Represents Population",
+			         showInLegend: true,
+			         theme : "dark2",
+			         legendMarkerType: "circle",
+			      title:{
+			       text: "BUBBLE GRAPH"
+			      },
+			
+			  	axisX: {
+			  		title: "大陸",
+			  		gridThickness: 0,
+			  		viewportMinimum: -10,
+			        viewportMaximum: 10,
+			        stripLines: [
+			            {
+			              value: 0,
+			              showOnTop: true,
+			              color: "blue",
+			              thickness: 2
+			            }
+			          ]
+			        
+			  	},
+			  	axisY: {
+			  		title: "使用者",
+			  		gridThickness: 0,
+			  		viewportMinimum: -10,
+			        viewportMaximum: 10,
+			        stripLines: [
+			            {
+			              value: 0,
+			              showOnTop: true,
+			              color: "blue",
+			              thickness: 2
+			            }
+			          ]
+			  	},
+			      data: [
+			      {
+			        type: "bubble",
+			     dataPoints: [
+			     { x: 1.0, y: -1.0, z: 900, name: "SA"},
+			     { x: 2.5, y: -2.5, z: 800, name: "NA"},
+			     { x: 3.5, y: 9.0, z: 300, name: "Asia"},
+			     { x: -5.0, y: -10.0, z: 400, name: "Oceania"},
+			     { x: 6.5, y: 7.5, z: 500, name: "Europe"},
+			     { x: 9.0, y: -10.5, z: 1000, name: "Africa"},
+			    // { x: 64.8, y: 2.66, z:12074.4 , name: "India"},
+			   //  { x: 73.1, y: 1.61, z:13313.8, name: "China"},
+			     /* { x: 78.1, y: 2.00, z:306.77, name: "US"},
+			     { x: 68.5, y: 2.15, z: 237.414, name: "Indonesia"},
+			     { x: 72.5, y: 1.86, z: 193.24, name: "Brazil"},
+			     { x: 76.5, y: 2.36, z: 112.24, name: "Mexico"},
+			     { x: 50.9, y: 5.56, z: 154.48, name: "Nigeria"},
+			     { x: 68.6, y: 1.54, z:141.91, name: "Russia" },
+			
+			     { x: 82.9, y: 1.37, z:127.55, name: "Japan" },
+			     { x: 79.8, y: 1.36, z:81.90, name:"Australia" },
+			     { x: 72.7, y: 2.78, z: 79.71, name: "Egypt"},
+			     { x: 80.1, y: 1.94, z:61.81, name:"UK" },
+			     { x: 55.8, y: 4.76, z: 39.24, name: "Kenya"},
+			     { x: 81.5, y: 1.93, z:21.95, name:"Australia" },
+			     { x: 68.1, y: 4.77, z: 31.09, name: "Iraq"},
+			     { x: 47.9, y: 6.42, z: 33.42, name: "Afganistan"},
+			     { x: 50.3, y: 5.58, z: 18.55, name: "Angola"} */
+			     ]
+			   }
+			   ]
+			 });
+			
+			chart.render();
+			});
+			</script>
+			
+			<!-- 좌표 구하는 함수 -->
+			<script type="text/javascript">
+			    function pos(event) {
+			        var str = "";
+			        str = "offsetX: " + (event.offsetX == undefined ? event.layerX : event.offsetX);
+			        str += ", offsetY: " + (event.offsetY == undefined ? event.layerY : event.offsetY);
+			        str += "<br/>screenX: " + event.screenX;
+			        str += ", screenY : " + event.screenY;
+			        str += "<br/>clientX : " + event.clientX;
+			        str += ", clientY : " + event.clientY;
+			        str += "<br/>pageX : " + event.pageX;
+			        str += ", pageY : " + event.pageY;
+			        document.getElementById("result").innerHTML = str;
+			    }
+			</script>
+			
+			<!-- 나이, 성별 그래프 -->
+			<script type="text/javascript">
+			$(function () {
+				
+				/*
+				http://yeahvely.tistory.com/6
+				차트 연습하는 사이트 목록
+				*/
+				
+				 var chart_gender = new CanvasJS.Chart("gender",
+						    {
+						      title:{
+						        text: "Gender"
+						      },
+						      data: [
+			
+						      {
+						        dataPoints: [
+						        { x: 1, y: 297571, label: "W"},
+						        { x: 2, y: 267017,  label: "M" },
+						        ]
+						      }
+						      ]
+						    });
+				
+				 chart_gender.render();
+				
+				 var chart_age = new CanvasJS.Chart("age",
+						    {
+						      title:{
+						        text: "Age"
+						      },
+						      data: [
+			
+						      {
+						        dataPoints: [
+						        { x: 1, y: 297571, label: "~19"},
+						        { x: 2, y: 267017,  label: "20~29" },
+						        { x: 3, y: 175200,  label: "30~39"},
+						        { x: 4, y: 154580,  label: "40~49"},
+						        { x: 5, y: 116000,  label: "50~"},
+						        ]
+						      }
+						      ]
+						    });
+			
+				 chart_age.render();
+						    
+			
+			});
+				
+			</script>
+			
+			<!-- stacked age, gender -->
+			<script type="text/javascript">
+			
+			$(function(){
+				var chart = new CanvasJS.Chart("stackedColumn",
+						{
+							title:{
+								text: "Gender + Age"
+							},
+							axisY:{
+								title:"Coal (bn tonnes)",
+								valueFormatString: "#0.#,.",
+							},
+							data: [
+							{
+								type: "stackedColumn",
+								legendText: "Anthracite & Bituminous",
+								showInLegend: "true",
+								dataPoints: [
+									{  y: 111338 , label: "USA"},
+									{  y: 49088, label: "Russia" },
+									{  y: 62200, label: "China" },
+									{  y: 90085, label: "India" },
+									{  y: 38600, label: "Australia"},
+									{  y: 48750, label: "SA"}
+								]
+							},  {
+								type: "stackedColumn",
+								legendText: "SubBituminous & Lignite",
+								showInLegend: "true",
+								indexLabel: "#total bn",
+								yValueFormatString: "#0.#,.",
+								indexLabelPlacement: "outside",
+								dataPoints: [
+									{  y: 135305 , label: "USA"},
+									{  y: 107922, label: "Russia" },
+									{  y: 52300, label: "China" },
+									{  y: 3360, label: "India" },
+									{  y: 39900, label: "Australia"},
+									{  y: 0, label: "SA"}
+								]
+							}
+							]
+						});
+				chart.render();
+				
+			});
+			</script>
+	
+	
 </html>
 

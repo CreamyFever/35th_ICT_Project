@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.creamyfever.wow.dao.WorldmapMapper">
+
+		<select id="printArticleList" parameterType="String" resultType="Article">
+		SELECT
+			ARTICLENAME, REGEXP_REPLACE(ARTICLECONTENT, '[[:punct:]]'), ARTICLEDATE, CONTINENT, SENTIMENT
+		FROM
+			ARTICLES
+		WHERE
+			ARTICLECONTENT LIKE '%'||#{keyword}||'%'
+		</select>
+		
+
+		<select id="printAll" resultType="Article">
+		SELECT
+			ARTICLENAME, ARTICLEID, ARTICLENUM, ARTICLECONTENT, ARTICLEDATE, CONTINENT, SENTIMENT
+		FROM
+			ARTICLES
+		</select>
+		
+		<update id="updateSentiment" parameterType="Article">
+			UPDATE
+				ARTICLES
+			SET
+				SENTIMENT=#{sentiment}
+			WHERE
+				ARTICLEID=#{articleid}
+		</update>
+	
+</mapper>

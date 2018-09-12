@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="DAO.BoardMapper">
+	
+	<select id="printBoardList" resultType="Board">
+		SELECT
+			B.TITLE,
+			M.NICKNAME,
+			B.REGDATE,
+			B.HITCOUNT
+		FROM
+			BOARDS B, MEMBERS M
+        WHERE
+            M.IDNO=B.IDNO
+        ORDER BY STARS DESC	
+	</select>
+	
+ 	<select id="printDiscussionList" resultType="Discussion">
+		SELECT
+			DIS_NO,
+			DIS_TITLE,
+			ARTICLENUM,
+			DIS_REGDATE,
+			DIS_GRADE
+		FROM
+			DISCUSSION_ROOMS
+		ORDER BY DIS_GRADE DESC	
+	</select> 
+	
+	
+	<insert id="insertKeyword" parameterType="Topkeyword">
+		INSERT INTO TOPKEYWORD
+			(KEYWORD)
+		VALUES
+			(#{keyword},#{age},#{gender})
+	</insert>
+	
+	<update id="updateKeyword" parameterType="Topkeyword">
+		UPDATE 
+			TOPKEYWORD
+		SET
+			count=count+1
+		WHERE
+			KEYWORD = #{keyword}
+	</update>	
+	
+	<select id="printKeyword" resultType="Topkeyword">
+		SELECT
+			*
+		FROM
+			TOPKEYWORD
+	</select>
+	
+	
+</mapper>
