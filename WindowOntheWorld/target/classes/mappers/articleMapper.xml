@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.creamyfever.wow.dao.ArticleMapper">
+	
+	<resultMap id="getArticle" type="Article">
+		<result property="articlenum" column="ARTICLENUM" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+		<result property="articleid" column="ARTICLEID" javaType="java.lang.String" jdbcType="VARCHAR"/>
+		<result property="articlename" column="ARTICLENAME" javaType="java.lang.String" jdbcType="VARCHAR"/>
+		<result property="articlecontent" column="ARTICLECONTENT" javaType="java.lang.String" jdbcType="CLOB"/>
+		<result property="articledate" column="ARTICLEDATE" />
+		<result property="presscompany" column="PRESSCOMPANY" javaType="java.lang.String" jdbcType="VARCHAR"/>
+		<result property="continent" column="CONTINENT" javaType="java.lang.String" jdbcType="VARCHAR"/>
+		<result property="url" column="URL" javaType="java.lang.String" jdbcType="VARCHAR"/>
+		<result property="sentiment" column="SENTIMENT" javaType="java.lang.Double" jdbcType="DOUBLE"/>
+	</resultMap>
+
+	<insert id="insert" parameterType="Article">
+		insert into articles (
+			articlenum
+			, articleid
+			, articlename
+			, articlecontent
+			, articledate
+			, presscompany
+			, url
+			<if test="continent != null">
+			, continent
+			</if>
+		)
+		values (
+			articlenum.nextVal
+			, #{articleid}
+			, #{articlename}
+			, #{articlecontent}
+			, TO_DATE(#{articledate}, 'YYYY/MM/DD')
+			, #{presscompany}
+			, #{url}
+			<if test="continent != null">
+			, #{continent, jdbcType=VARCHAR}
+			</if>
+		) 
+	</insert>
+	
+	<insert id="insertFromList" parameterType="java.util.List">
+		insert all
+		<foreach collection="list" item="element" index="index">
+	        into articles (
+				articleid
+				, articlename
+				, articlecontent
+				, articledate
+				, presscompany
+				, url
+				, continent
+			)
+			values (
+				#{element.articleid}
+				, #{element.articlename}
+				, #{element.articlecontent}
+				, TO_DATE(#{element.articledate}, 'YYYY/MM/DD')
+				, #{element.presscompany}
+				, #{element.url}
+				, #{element.continent, jdbcType=VARCHAR}
+			) 
+	    </foreach>
+		select * from dual
+	</insert>
+
+	<select id="selectAll" resultMap="getArticle">
+		select
+		    articlenum
+		    , articleid
+		    , articlename
+		    , articlecontent
+		    , TO_CHAR(articledate, 'yyyymmdd') as articledate
+		    , presscompany
+		    , url
+		    , continent
+		    , sentiment
+		from articles
+	</select>
+	
+	<select id="selectOne" parameterType="String" resultMap="getArticle">
+		select
+		     articlenum
+		    , articleid
+		    , articlename
+		    , articlecontent
+		    , TO_CHAR(articledate, 'yyyymmdd') as articledate
+		    , presscompany
+		    , url
+		    , continent
+		    , sentiment
+		from articles
+		where articleid = #{id}
+	</select>
+	
+	<select id="showArticleByContinent" parameterType="String" resultMap="getArticle">
+		select
+		     articlenum
+		    , articleid
+		    , articlename
+		    , articlecontent
+		    , TO_CHAR(articledate, 'yyyymmdd') as articledate
+		    , presscompany
+		    , url
+		    , continent
+		    , sentiment
+		from articles
+		where continent = #{continent}
+		order by articledate desc
+	</select>
+	
+	<select id="listArticle" parameterType="string" resultMap="getArticle">
+		select 
+			 articlenum
+			, articleid
+		    , articlename
+		    , TO_CHAR(articledate, 'yyyymmdd') as articledate
+		    , presscompany
+		from articles
+		where continent = #{continent}
+		order by articledate desc
+	</select>
+</mapper>
