@@ -93,65 +93,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		<!----//webfonts---->
 		<!----start-top-nav-script---->
 		<script>
-			$(function() {
-				$(".scroll").click(function(event){		
-					event.preventDefault();
-					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
-				});
-				
-				$("#asia").on('click', function(){
-					$("#articles").hide(1000,function(){
-						showArticleByContinent('Asia');		// Parameter에 해당하는 대륙의 기사만 출력.						
-						$(this).show(1000);
-					});
-				});
-				$("#europe").on('click', function(){
-					$("#articles").hide(1000,function(){
-						showArticleByContinent('Europe');
-						$(this).show(1000);
-					});
-				});
-				$("#africa").on('click', function(){
-					$("#articles").hide(1000,function(){
-						showArticleByContinent('Africa');
-						$(this).show(1000);
-					});
-				});
-				$("#north_america").on('click', function(){
-					$("#articles").hide(1000,function(){
-						showArticleByContinent('North_America');
-						$(this).show(1000);
-					});
-				});
-				$("#south_america").on('click', function(){
-					$("#articles").hide(1000,function(){
-						showArticleByContinent('South_America');
-						$(this).show(1000);
-					});
-				});
-				$("#oceania").on('click', function(){
-					$("#articles").hide(1000,function(){
-						showArticleByContinent('Oceania');
-						$(this).show(1000);
-					});
-				});
-			});
 			
-			function showArticleByContinent(continent){
-				$("#continent_name").attr("href", "listArticle?continent=" + continent);
-				
-				$.ajax({
-					url: "showArticleByContinent",
-					method: "POST",
-					data:{
-						"continent":continent
-					},
-					success: output,
-					error: function(){
-						alert("error");
-					}
-				});
-			}
 			
 			function output(resp){
 				
@@ -327,8 +269,10 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 					<li class="active"><a href="members/update" class="scroll">회원정보 수정</a></li>
 				</c:if>	
 					
-					<li><a href="board/list">게시판</a>
-			
+					<li><a href="board/list">게시판</a></li>
+					
+					<li><a href="main">메인으로</a></li>
+					
 				</ul>
 			</div>
 			
@@ -379,6 +323,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			<div id="world" style="background-color: black">
 				<img src="./resources/worldmap/img/worldmap.png" id="worldmap" style="width: 1200px; margin-left: auto; margin-right: auto; display: block;" onclick="newweb('${search}')"/>
 			</div>
+			
+			<input type="hidden" id="continent_input" value="">
 			
 			<!-- 위에 띄우는 대륙별 그래프!!!!!!!!! -->
 			<!-- NA -->
@@ -557,24 +503,6 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			</div>
 			<!----//End-articles_list---->
 			
-			<!----start-about----->
-			<div id="about" class="about">
-				<div class="container">
-					<h2>About</h2>
-					<p class="wellcome-note-head"><b>Title</b>  ${article.articlename}</p>
-					<p class="wellcome-note-info" ><b>URL</b> <a href="${article.url}" class="article_url"> ${article.url}</a></p>
-					<!----start-about-grids----->
-					<div class="about-grids">
-						<b>Date</b> &nbsp;${article.articledate}
-						<br><br>
-						<p id="article_content">${article.articlecontent}</p>
-						<div class="clearfix"> </div>
-					</div>
-					<!----//End-about-grids----->
-				</div>
-			</div>
-			<!----//End-about----->
-			
 			
 			<!----start-copy-right--->
 			<div class="copy-right">
@@ -603,7 +531,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		</div>
 	</body>
 	
-	<script src="./resources/worldmap/js/worldGraph.js"></script>
+	<script src="./resources/worldmap/js/worldGraph.js?ver=2"></script>
 	<script src="./resources/worldmap/js/Chart.bundle.min.js"></script>
 	
 	<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
@@ -659,8 +587,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			      {
 			        type: "bubble",
 			     dataPoints: [
-			     { x: 1.0, y: -1.0, z: 900, name: "SA"},
-			     { x: 2.5, y: -2.5, z: 800, name: "NA"},
+			     { x: 1.0, y: -1.0, z: 900, name: "South_America"},
+			     { x: 2.5, y: -2.5, z: 800, name: "Norti_America"},
 			     { x: 3.5, y: 9.0, z: 300, name: "Asia"},
 			     { x: -5.0, y: -10.0, z: 400, name: "Oceania"},
 			     { x: 6.5, y: 7.5, z: 500, name: "Europe"},
@@ -720,7 +648,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				 var chart_gender = new CanvasJS.Chart("gender",
 						    {
 						      title:{
-						        text: "Gender"
+						        text: "By Gender"
 						      },
 						      data: [
 			
@@ -738,7 +666,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				 var chart_age = new CanvasJS.Chart("age",
 						    {
 						      title:{
-						        text: "Age"
+						        text: "Top Oil Reserves"
 						      },
 						      data: [
 			
@@ -768,7 +696,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				var chart = new CanvasJS.Chart("stackedColumn",
 						{
 							title:{
-								text: "Gender + Age"
+								text: "Coal Reserves of Countries"
 							},
 							axisY:{
 								title:"Coal (bn tonnes)",

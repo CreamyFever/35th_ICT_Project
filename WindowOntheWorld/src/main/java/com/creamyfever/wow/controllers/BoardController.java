@@ -68,6 +68,7 @@ public class BoardController {
 		/*	MultipartFile upload,*/
 			HttpSession session, 
 			Model model) {
+		System.out.println(board);
 		//세션에서 로그인한 사용자의 아이디no를 읽어서 Board객체의 작성자 정보에 세팅
 		String idno = (String) session.getAttribute("loginIdno");
 		board.setIdno(idno);
@@ -79,7 +80,6 @@ public class BoardController {
 			board.setSavedfile(savedfile);
 		}
 		*/
-		System.out.println("To Insert = " + board);
 		dao.insert(board);
 		return "redirect:list";
 	}

@@ -97,8 +97,8 @@
 		from articles
 		where articleid = #{id}
 	</select>
-	
-	<select id="showArticleByContinent" parameterType="String" resultMap="getArticle">
+		
+	<select id="showArticleByKeyword" parameterType="Map" resultMap="getArticle">
 		select
 		     articlenum
 		    , articleid
@@ -111,10 +111,11 @@
 		    , sentiment
 		from articles
 		where continent = #{continent}
+		and articlecontent like '%' || #{keyword} || '%'
 		order by articledate desc
 	</select>
 	
-	<select id="listArticle" parameterType="string" resultMap="getArticle">
+	<select id="listArticle" parameterType="Map" resultMap="getArticle">
 		select 
 			 articlenum
 			, articleid
@@ -123,6 +124,7 @@
 		    , presscompany
 		from articles
 		where continent = #{continent}
+		and articlecontent like '%' || #{keyword} || '%'
 		order by articledate desc
 	</select>
 </mapper>

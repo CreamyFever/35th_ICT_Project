@@ -1,6 +1,8 @@
 package com.creamyfever.wow.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
@@ -68,12 +70,16 @@ public class ArticleRepository {
 		return article;
 	}
 	
-	public List<Article> showArticleByContinent(String continent) {
+	public List<Article> showArticleByKeyword(String keyword, String continent) {
 		ArticleMapper mapper = session.getMapper(ArticleMapper.class);
 
+		Map<String, String> map = new HashMap<>();
+		
+		map.put("keyword", keyword);
+		map.put("continent", continent);
 		List<Article> articles = null;
 		try {
-			articles = mapper.showArticleByContinent(continent);
+			articles = mapper.showArticleByKeyword(map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -81,13 +87,19 @@ public class ArticleRepository {
 		return articles;
 	}
 	
-	public List<Article> listArticle(String continent, int startRecord, int countPerPage) {
+	public List<Article> listArticle(String keyword, String continent, int startRecord, int countPerPage) {
 		ArticleMapper mapper = session.getMapper(ArticleMapper.class);
+		
+		Map<String, String> map = new HashMap<>();
+		
+		map.put("keyword", keyword);
+		map.put("continent", continent);
+		
 		//전체 검색 결과 중 읽을 시작위치와 개수
 		RowBounds rb = new RowBounds(startRecord, countPerPage);
 		
 		//검색어와 읽을 범위를 전달
-		List<Article> list = mapper.listArticle(continent, rb);
+		List<Article> list = mapper.listArticle(map, rb);
 		return list;
 	}
 }

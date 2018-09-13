@@ -102,6 +102,6 @@ public class HomeController {
 		System.out.println(searchWord);
 		model.addAttribute("search", searchWord);
 		
-		return "TestView";
+		return "ArticleView";
 	}
 }

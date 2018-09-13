@@ -1,13 +1,13 @@
 package com.creamyfever.wow.vo;
 
 public class Members {
-	private String idno; // 회원 고유번호
+	private int idno; // 회원 고유번호
 	private String id; // 회원ID
 	private String password; // 비밀번
 	private String email; // 이메일
 	private String nickname; // 닉네임
 	private String gender; // 성별
-	private String age; // 나이
+	private int age; // 나이
 	private String filename; // 이미지 첨부파일 이름
 	private String nationality; // 국가코드
 
@@ -15,7 +15,7 @@ public class Members {
 		super();
 	}
 
-	public Members(String idno, String id, String password, String email, String nickname, String gender, String age,
+	public Members(int idno, String id, String password, String email, String nickname, String gender, int age,
 			String filename, String nationality) {
 		super();
 		this.idno = idno;
@@ -29,11 +29,11 @@ public class Members {
 		this.nationality = nationality;
 	}
 
-	public String getIdno() {
+	public int getIdno() {
 		return idno;
 	}
 
-	public void setIdno(String idno) {
+	public void setIdno(int idno) {
 		this.idno = idno;
 	}
 
@@ -77,11 +77,11 @@ public class Members {
 		this.gender = gender;
 	}
 
-	public String getAge() {
+	public int getAge() {
 		return age;
 	}
 
-	public void setAge(String age) {
+	public void setAge(int age) {
 		this.age = age;
 	}
 

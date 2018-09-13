@@ -110,13 +110,9 @@ public class ArticleController {
 		return "home";
 	}
 	
-	@RequestMapping(value = "showArticleByContinent", method = RequestMethod.POST)
-	public @ResponseBody List<Article> showArticleByContinent(String continent){
-		List<Article> articleList = repository.showArticleByContinent(continent);
-//		for(Article article : articleList) {
-//			System.out.println(article.getArticleid());			
-//		}
-//		System.out.println(articleList.size());
+	@RequestMapping(value = "showArticleByKeyword", method = RequestMethod.POST)
+	public @ResponseBody List<Article> showArticleByKeyword(String keyword, String continent){
+		List<Article> articleList = repository.showArticleByKeyword(keyword, continent);
 		
 		return articleList;
 	}
@@ -126,24 +122,26 @@ public class ArticleController {
 	public String list(
 			
 			@RequestParam(value="page", defaultValue="1") int page,
+			@RequestParam(value="keyword", defaultValue="") String keyword,
 			@RequestParam(value="continent", defaultValue="Asia") String continent,
 			Model model) {
 		
-		List<Article> articleList = repository.showArticleByContinent(continent);
+		List<Article> articleList = repository.showArticleByKeyword(keyword, continent);
 
 		int total = articleList.size();			//전체 글 개수
 		
 		//페이지 계산을 위한 객체 생성
 		PageNavigator navi = new PageNavigator(countPerPage, pagePerGroup, page, total); 
 		
-		List<Article> articles = repository.listArticle(continent, navi.getStartRecord(), navi.getCountPerPage());
+		List<Article> articles = repository.listArticle(keyword, continent, navi.getStartRecord(), navi.getCountPerPage());
 		
 		//페이지 정보 객체와 글 목록, 검색어를 모델에 저장
 		model.addAttribute("articles", articles);
 		model.addAttribute("navi", navi);
+		model.addAttribute("keyword", keyword);
 		model.addAttribute("continent", continent);
 		
-		return "TestView";
+		return "detail";
 	}
 	
 	/**
@@ -166,6 +164,6 @@ public class ArticleController {
 		model.addAttribute("article", article);
 		//model.addAttribute("replylist", replylist);
 		
-		return "TestView";
+		return "About";
 	}
 }
