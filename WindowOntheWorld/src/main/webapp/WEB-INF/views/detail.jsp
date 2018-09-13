@@ -17,6 +17,175 @@
 	<link href="resources/css/theme-style.css?ver=1" rel='stylesheet' type='text/css' />
   		 <!-- Custom Theme files -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<script> 
+	window.onload=function() { 
+	var canvas = document.getElementById("canvas1"); 
+	var context = canvas.getContext("2d"); 
+	var context4 = document.getElementById("pieChart_detail").getContext("2d"); 
+	var pieChartCanvas_detail = document.getElementById("pieChart_detail").getContext("2d"); 
+
+	/*
+	http://yeahvely.tistory.com/6
+	차트 연습하는 사이트 목록
+	*/
+	
+	 var chart_gender = new CanvasJS.Chart("gender",
+			    {
+			      title:{
+			        text: "By Gender"
+			      },
+			      data: [
+
+			      {
+			        dataPoints: [
+			        { x: 1, y: 297571, label: "W"},
+			        { x: 2, y: 267017,  label: "M" },
+			        ]
+			      }
+			      ]
+			    });
+	
+	 var chart_age = new CanvasJS.Chart("age",
+			    {
+			      title:{
+			        text: "Top Oil Reserves"
+			      },
+			      data: [
+
+			      {
+			        dataPoints: [
+			        { x: 1, y: 297571, label: "~19"},
+			        { x: 2, y: 267017,  label: "20~29" },
+			        { x: 3, y: 175200,  label: "30~39"},
+			        { x: 4, y: 154580,  label: "40~49"},
+			        { x: 5, y: 116000,  label: "50~"},
+			        ]
+			      }
+			      ]
+			    });
+
+			    chart_age.render();
+			    chart_gender.render();
+/*  	var myChart = new Chart(context422, {
+		type: 'bar',
+		data : {
+	        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+	        datasets: [{
+	            label: '# of Votes',
+	            data: [12, 19, 3, 5, 10, 3],
+	            backgroundColor: [
+	                'rgba(255, 99, 132, 0.2)',
+	                'rgba(54, 162, 235, 0.2)',
+	                'rgba(255, 206, 86, 0.2)',
+	                'rgba(75, 192, 192, 0.2)',
+	                'rgba(153, 102, 255, 0.2)',
+	                'rgba(255, 159, 64, 0.2)'
+	            ],
+	            borderColor: [
+	                'rgba(255,99,132,1)',
+	                'rgba(54, 162, 235, 1)',
+	                'rgba(255, 206, 86, 1)',
+	                'rgba(75, 192, 192, 1)',
+	                'rgba(153, 102, 255, 1)',
+	                'rgba(255, 159, 64, 1)'
+	            ],
+	            borderWidth: 1
+	        }]
+	    },
+	});
+ */	
+	context.beginPath();
+	context.stroke(); context.closePath(); 
+	
+	
+	
+	
+	
+	
+
+	
+	//--------------------------------------------------------------------------
+	
+	
+	
+
+var data = {
+	    datasets: [{
+	        data: [
+	            3,
+	            14
+	        ],
+	        backgroundColor: [
+	            "#E7E9ED",
+	            "#36A2EB"
+	        ],
+	        label: 'My dataset' // for legend
+	    }],
+	    labels: [
+	        "Grey",
+	        "Blue"
+	    ]
+	};
+
+	var pieOptions = {
+			legend: {
+	            display: false
+	         }, //범례 삭제하는 법★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+		events: false,
+	  animateRotate : true,
+	  animationSteps : 100,
+	  animation: {
+	    duration: 500,
+	    easing: "easeOutQuart",
+	    onComplete: function () {
+	      var ctx = this.chart.ctx;
+	      ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontFamily, 'normal', Chart.defaults.global.defaultFontFamily);
+	      ctx.textAlign = 'center';
+	      ctx.textBaseline = 'bottom';
+
+	      this.data.datasets.forEach(function (dataset) {
+
+	        for (var i = 0; i < dataset.data.length; i++) {
+	          var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model,
+	              total = dataset._meta[Object.keys(dataset._meta)[0]].total,
+	              mid_radius = model.innerRadius + (model.outerRadius - model.innerRadius)/2,
+	              start_angle = model.startAngle,
+	              end_angle = model.endAngle,
+	              mid_angle = start_angle + (end_angle - start_angle)/2;
+
+	          var x = mid_radius * Math.cos(mid_angle);
+	          var y = mid_radius * Math.sin(mid_angle);
+
+	          ctx.fillStyle = '#fff';
+	          if (i == 3){ // Darker text color for lighter background
+	            ctx.fillStyle = '#444';
+	          }
+	          var percent = String(Math.round(dataset.data[i]/total*100)) + "%";
+	          ctx.fillText(dataset.data[i], model.x + x, model.y + y);
+	          // Display percent in another line, line break doesn't work for fillText
+	          ctx.fillText(percent, model.x + x, model.y + y + 15);
+	        }
+	      });               
+	    }
+	  }
+	}
+
+	
+	
+
+	var pieChart22 = new Chart(pieChartCanvas_detail, {
+	  type: 'doughnut',
+	  data: data,
+	  hidden: true,
+	  options: pieOptions
+	});	
+}; 
+	
+	
+	</script> 
+	
+	
 	<script type="application/x-javascript">
 			addEventListener("load", function() { 
 				setTimeout(hideURLbar, 0);
