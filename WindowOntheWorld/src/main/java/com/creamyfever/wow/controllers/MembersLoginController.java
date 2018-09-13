@@ -75,6 +75,6 @@ public class MembersLoginController {
 	@RequestMapping (value="logout", method=RequestMethod.GET)
 	public String logout(HttpSession session) {
 		session.invalidate();
-		return "redirect:/";
+		return "redirect:/main";
 	}
 }

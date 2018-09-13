@@ -62,7 +62,7 @@ public class MembersJoinController {
 			return "members/joinForm";
 		}
 		System.out.println("가입성공");
-		return "redirect:/";
+		return "redirect:/main";
 	}
 
 	/**

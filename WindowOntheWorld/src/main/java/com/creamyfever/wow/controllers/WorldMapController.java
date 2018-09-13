@@ -170,8 +170,8 @@ public class WorldMapController {
 		//디테일로 가기
 		@RequestMapping(value = "/goToDetail", method = RequestMethod.GET)
 		public String goToDetail(Locale locale, Model model, String keyword, String continent) {
-			System.out.println(keyword);
-			System.out.println(continent);
+			System.out.println("Keyword = " + keyword);
+			System.out.println("Continent = " + continent);
 			WorldmapMapper mapMapper = session.getMapper(WorldmapMapper.class);
 			ArrayList<Article> ArticleList = mapMapper.printArticleList(keyword);
 			System.out.println(ArticleList);

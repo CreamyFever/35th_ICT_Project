@@ -7,10 +7,9 @@
 
 function newweb(search)	{
 	console.log(search);
-	var continent = $("#worldmap").val();
+	var continent = $("#continent_input").val();
 	console.log(continent);
 	window.open("goToDetail?keyword="+search+"&continent="+continent,"","width=800, height=600");
-	alert(search);
 }
 function fire()	{
 	window.open("goToDetail","","width=400, height=300");
@@ -53,15 +52,15 @@ var Ocea01 = {x:940, y:354, path:"./resources/worldmap/img/oceania_full.png", co
 var Ocea02 = {x:884, y:405, path:"./resources/worldmap/img/oceania_full.png", country:"Oceania"};
 var Ocea03 = {x:985, y:447, path:"./resources/worldmap/img/oceania_full.png", country:"Oceania"};
 
-var SA01 = {x:433, y:342, path:"./resources/worldmap/img/south_america_full.png", country:"SA"};
-var SA02 = {x:413, y:424, path:"./resources/worldmap/img/south_america_full.png", country:"SA"};
-var SA03 = {x:442, y:355, path:"./resources/worldmap/img/south_america_full.png", country:"SA"};
-var SA04 = {x:364, y:302, path:"./resources/worldmap/img/south_america_full.png", country:"SA"};
+var SA01 = {x:433, y:342, path:"./resources/worldmap/img/south_america_full.png", country:"South_America"};
+var SA02 = {x:413, y:424, path:"./resources/worldmap/img/south_america_full.png", country:"South_America"};
+var SA03 = {x:442, y:355, path:"./resources/worldmap/img/south_america_full.png", country:"South_America"};
+var SA04 = {x:364, y:302, path:"./resources/worldmap/img/south_america_full.png", country:"South_America"};
 
-var NA01 = {x:444, y:98, path:"./resources/worldmap/img/north_america_full.png", country:"NA"};
-var NA02 = {x:206, y:141, path:"./resources/worldmap/img/north_america_full.png", country:"NA"};
-var NA03 = {x:315, y:209, path:"./resources/worldmap/img/north_america_full.png", country:"NA"};
-var NA04 = {x:373, y:259, path:"./resources/worldmap/img/north_america_full.png", country:"NA"};
+var NA01 = {x:444, y:98, path:"./resources/worldmap/img/north_america_full.png", country:"North_America"};
+var NA02 = {x:206, y:141, path:"./resources/worldmap/img/north_america_full.png", country:"North_America"};
+var NA03 = {x:315, y:209, path:"./resources/worldmap/img/north_america_full.png", country:"North_America"};
+var NA04 = {x:373, y:259, path:"./resources/worldmap/img/north_america_full.png", country:"North_America"};
 
 countries.push(Euro01);countries.push(Euro02);
 countries.push(Euro03);countries.push(Euro04);
@@ -115,7 +114,8 @@ $(function(){
             }
             com=15000;
             $("#worldmap").attr("src",target.path);
-            $("#worldmap").attr("value",target.country);
+            $("#continent_input").val(target.country);
+            //$("#worldmap").attr("value",target.country);
 	}, function(){
 		$("#worldmap").attr("src","./resources/worldmap/img/worldmap.png");
 	});

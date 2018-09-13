@@ -51,7 +51,7 @@ public class MembersUpdateController {
 	public String update(
 			@ModelAttribute("members") Members members,
 			Model model) {
-		System.out.println("회원 수정");
+		
 		int result = dao.update(members);
 		if (result != 1) {
 			//DB update에 실패한 경우 alert() 출력용 메시지를 모델에 저장
