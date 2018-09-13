@@ -55,7 +55,7 @@ function formCheck() {
 </tr>
 <tr>
 	<td>Password</td>
-	<td><input type="text" name="password" id="password" /></td>
+	<td><input type="password" name="password" id="password" /></td>
 </tr>
 <tr>
 	<td class="white"></td>
