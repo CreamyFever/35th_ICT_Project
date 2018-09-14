@@ -50,7 +50,7 @@ public class HomeController {
 	
 	@RequestMapping(value = "login", method = RequestMethod.GET)
 	public String goLogin() {
-		return "Login";
+		return "loginForm";
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public class HomeController {
 		model.addAttribute("discussionList", dList);	
 		
 		
-		return "index";
+		return "homepage";
 	}
 	
 	@RequestMapping(value = "world", method = RequestMethod.GET)

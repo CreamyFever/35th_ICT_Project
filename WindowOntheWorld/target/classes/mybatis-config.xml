@@ -12,6 +12,9 @@
 		<typeAlias type="com.creamyfever.wow.vo.Reply" alias="Reply" />
  	    <typeAlias type="com.creamyfever.wow.vo.Topkeyword" alias="Topkeyword" />
  	    <typeAlias type="com.creamyfever.wow.vo.Discussion" alias="Discussion" />
+ 	    <typeAlias type="com.creamyfever.wow.vo.Discussion_log" alias="Discussion_log" />
+ 	    <typeAlias type="com.creamyfever.wow.vo.Discussion_member" alias="Discussion_member" />
+ 	    <typeAlias type="com.creamyfever.wow.vo.Discussion_rooms" alias="Discussion_rooms" />
 	</typeAliases>
 		
 
@@ -22,6 +25,7 @@
 		<mapper resource="mappers/ArticleMapper.xml" />
  		<mapper resource="mappers/BoardMapper.xml" />
  		<mapper resource="mappers/WorldmapMapper.xml" />
+ 		<mapper resource="mappers/DiscussionMapper.xml" />
 	</mappers>	
 
 </configuration>
