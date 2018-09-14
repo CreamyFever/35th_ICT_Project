@@ -45,7 +45,24 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 	</head>
 	<body>
 		<div id="main">
-			<jsp:include page="Sidebar.jsp" />
+			<div class="profile">
+				<div class="profileImage"></div>
+				<ul>
+					<c:if test="${loginId != null}">
+						<div class="loginName">${sessionScope.loginName}</div>
+						<li><a class="loginli" href="members/update">회원정보수정</a></li>
+						<li><a class="loginli" href="members/logout">로그아웃</a></li>
+					</c:if>
+					<c:if test="${loginId == null}">
+						<li><a class="loginli" href="login">로그인</a></li>
+						<li><a class="loginli" href="join">회원가입</a></li>
+					</c:if>
+	
+					<li><a class="loginli" href="board/list">게시판</a></li>
+	
+					<li><a class="loginli" href="main">메인으로</a></li>
+				</ul>
+			</div>
 			
 			<!----start-container------>
 			<!----start-header---->

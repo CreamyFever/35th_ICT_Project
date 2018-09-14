@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -8,7 +9,7 @@
 
 <style>
 body {
-	background-color: #222730;
+	background-color: #ffffff;
 }
 
 div#introLogo img{
@@ -23,10 +24,16 @@ div#introLogo img{
 
 </head>
 <body>
-
-	<div id="introLogo">
-		<a href="login"><img src="resources/images/WOWLogo.png" /></a>
-	</div>
+	<c:if test="${sessionScope.loginName == null}">
+		<div id="introLogo">
+			<a href="login"><img src="resources/images/WOWLogo.png" /></a>
+		</div>
+	</c:if>
+	<c:if test="${sessionScope.loginName != null}">
+		<div id="introLogo">
+			<a href="main"><img src="resources/images/WOWLogo.png" /></a>
+		</div>
+	</c:if>
 
 </body>
 </html>
