@@ -333,13 +333,23 @@ li {
 			</div>
 		</div>
 
-		<input type="hidden" id="sent_SA" value="${sentiment_SA}"> <input
-			type="hidden" id="sent_NA" value="${sentiment_NA}"> <input
-			type="hidden" id="sent_Africa" value="${sentiment_Africa}"> <input
-			type="hidden" id="sent_Oceania" value="${sentiment_Oceania}">
-		<input type="hidden" id="sent_Asia" value="${sentiment_Asia}">
-		<input type="hidden" id="sent_Europe" value="${sentiment_Europe}">
-
+		<!-- 여기 다시 고치기★★★★★★★★★★★★★★★★★★★★★★★★★★ -->	
+			
+			 <input type="hidden" id="sent_Africa" value="${sentimentList[0]}">
+	         <input type="hidden" id="sent_Asia" value="${sentimentList[1]}">
+	         <input type="hidden" id="sent_SA" value="${sentimentList[2]}">
+	         <input type="hidden" id="sent_NA" value="${sentimentList[3]}">
+	         <input type="hidden" id="sent_Oceania" value="${sentimentList[4]}">
+	         <input type="hidden" id="sent_Europe" value="${sentimentList[5]}">
+	
+	         <input type="hidden" id="gender_w" value="${genderList[0]}">
+	         <input type="hidden" id="gender_m" value="${genderList[1]}">
+	
+	         <input type="hidden" id="age_under19" value="${ageList[0]}">
+	         <input type="hidden" id="age_up20under29" value="${ageList[1]}">
+	         <input type="hidden" id="age_up30under39" value="${ageList[2]}">
+	         <input type="hidden" id="age_up40under49" value="${ageList[3]}">
+	         <input type="hidden" id="age_up50" value="${ageList[4]}">
 
 
 		<!----start-copy-right--->
@@ -633,7 +643,4 @@ li {
 
 	});
 </script>
-
-
 </html>
-

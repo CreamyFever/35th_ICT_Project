@@ -14,36 +14,44 @@
 <h1>[ 개인 정보 수정 완료 ]</h1>
 
 <table>
+	<div class="filebox">
+        <input type="file" name="cma_file" id="cma_file" accept="image/*" capture="camera" onchange="getThumbnailPrivew(this,$('#cma_image'))" />
+        <br /><br />
+        <div id="cma_image"></div>
+    </div>
+	
+
+
 	<tr>
 		<th>ID</th>
-		<td>${members.id}</td>
+		<td>${result.id}</td>
 	</tr>
 	<tr>
 		<th>비밀번호</th>
-		<td>${members.password}</td>
+		<td>${result.password}</td>
 	</tr>
 	<tr>
 		<th>이메일</th>
-		<td>${members.email}</td>
+		<td>${result.email}</td>
 	</tr>
 	<tr>
 		<th>닉네임</th>
-		<td>${members.nickname}</td>
+		<td>${result.nickname}</td>
 	</tr>
 	<tr>
 		<th>성별</th>
 		<td>
-			<c:if test="${members.gender =='male'}">male</c:if>
-			<c:if test="${members.gender =='female'}">female</c:if>
+			<c:if test="${result.gender =='male'}">male</c:if>
+			<c:if test="${result.gender =='female'}">female</c:if>
 		</td>
 	</tr>
 	<tr>
 		<th>나이</th>
-		<td>${members.age}</td>
+		<td>${result.age}</td>
 	</tr>
 	<tr>
 		<th>국적</th>
-		<td style="width:300px;">${members.nationality}</td>
+		<td style="width:300px;">${result.nationality}</td>
 	</tr>
 </table>
 

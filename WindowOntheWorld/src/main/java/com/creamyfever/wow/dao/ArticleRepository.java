@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.creamyfever.wow.vo.Article;
+import com.creamyfever.wow.vo.ArticleHtml;
 
 @Repository
 public class ArticleRepository {
@@ -24,6 +25,19 @@ public class ArticleRepository {
 		try {
 			if(selectOne(article.getArticleid()) == null)	// 해당하는 기사 ID가 없을 경우(중복된 기사 넣지 않도록)
 				result = mapper.insert(article);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+	
+	public int insertHtml(ArticleHtml html) {
+		ArticleMapper mapper = session.getMapper(ArticleMapper.class);
+		
+		int result = 0;
+		try {
+			result = mapper.insertHtml(html);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -63,6 +77,20 @@ public class ArticleRepository {
 		Article article = null;
 		try {
 			article = mapper.selectOne(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return article;
+	}
+	
+	public Article selectArticleHtml(String id) {
+		ArticleMapper mapper = session.getMapper(ArticleMapper.class);
+
+		Article article = null;
+		try {
+			article = mapper.selectArticleHtml(id);
+			System.out.println(article);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

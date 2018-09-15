@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.servlet.http.HttpSession;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -28,9 +29,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.creamyfever.wow.dao.GraphMapper;
+import com.creamyfever.wow.dao.MembersDAO;
 import com.creamyfever.wow.dao.WorldmapMapper;
+import com.creamyfever.wow.vo.AgeGender;
 import com.creamyfever.wow.vo.Article;
-import com.creamyfever.wow.vo.Topkeyword;
+import com.creamyfever.wow.vo.Members;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -40,6 +44,10 @@ import com.google.gson.JsonParser;
 
 @Controller
 public class WorldMapController {
+	
+	@Autowired
+	MembersDAO mDao;
+	
 	//특수문자 제거1
 		public static String StringReplace(String str){       
 		      String match = "^[\uAC00-\uD7A3xfe0-9a-zA-Zk\\s]";
@@ -134,38 +142,87 @@ public class WorldMapController {
 				
 		
 		//월드맵으로 가기
-		@RequestMapping(value = "/goToWorldMap", method = RequestMethod.GET)
-		public String goToWorldMap(Locale locale, Model model, String search) {
-			/*
-			 * session에 로그인한 사용자 정보 받아오기
-			 * 이후 변수 처리해서 삽입
-			 * */
-			
-			Topkeyword tk = new Topkeyword();
-			tk.setKeyword(search);
-			
-			WorldmapMapper mapMapper = session.getMapper(WorldmapMapper.class);
-			ArrayList<Article> articleList = mapMapper.printArticleList(search);
-			System.out.println(articleList.size());
-			
-			double sentiment_Africa = (double) 100 * getSenAve(articleList, "Africa");
-			double sentiment_Asia = (double) 100 * getSenAve(articleList, "Asia");
-			double sentiment_SA = (double) 100 * getSenAve(articleList, "South America");
-			double sentiment_NA = (double) 100 * getSenAve(articleList, "North America");
-			double sentiment_Oceania = (double) 100 * getSenAve(articleList, "Oceania");
-			double sentiment_Europe = (double) 100 * getSenAve(articleList, "Europe");
-			model.addAttribute("sentiment_Asia", sentiment_Asia);
-			model.addAttribute("sentiment_SA", sentiment_SA);
-			model.addAttribute("sentiment_Africa", sentiment_Africa);
-			model.addAttribute("sentiment_NA", sentiment_NA);
-			model.addAttribute("sentiment_Europe", sentiment_Europe);
-			model.addAttribute("sentiment_Oceania", sentiment_Oceania);
-			
-			
-			System.out.println(search);
-			model.addAttribute("search", search);
-			return "worldmap";
-		}
+				@RequestMapping(value = "/goToWorldMap", method = RequestMethod.GET)
+				public String goToWorldMap(HttpSession httpsession, Locale locale, Model model, String search) {
+					/*
+					 * session에 로그인한 사용자 정보 받아오기
+					 * 이후 변수 처리해서 삽입
+					 * */
+					
+					//dd
+					GraphMapper gMapper = session.getMapper(GraphMapper.class);
+					
+					String loginId = (String)httpsession.getAttribute("loginId");
+					Members members = mDao.get(loginId);
+					
+					AgeGender ag = new AgeGender(members.getId(), members.getAge(), members.getGender(), search);
+					System.out.println(ag);
+					gMapper.insertAgeGender(ag);
+					System.out.println("INSERT");
+					ArrayList<AgeGender> agList = gMapper.selectAgeGender(search);
+					ArrayList<Integer> ageList = new ArrayList<>();
+					ArrayList<Integer> genderList = new ArrayList<>();
+					int woman = 0;
+					int man = 0;
+					int under19=0;
+					int up20under29=0;
+					int up30under39=0;
+					int up40under49=0;
+					int up50=0;
+					
+					for(AgeGender data : agList) {
+						if(data.getGender().equals("female")) {
+							woman++;
+						}else {
+							man++;
+						}
+						
+						if(data.getAge()<20) {
+							under19++;
+						} else if(data.getAge()>=20||data.getAge()<30) {
+							up20under29++;
+						} else if(data.getAge()>=30||data.getAge()<40) {
+							up30under39++;
+						} else if(data.getAge()>=40||data.getAge()<50) {
+							up40under49++;
+						} else {
+							up50++;
+						}
+					}
+					
+					genderList.add(woman);
+					genderList.add(man);
+					ageList.add(under19);
+					ageList.add(up20under29);
+					ageList.add(up30under39);
+					ageList.add(up40under49);
+					ageList.add(up50);
+					
+					WorldmapMapper mapMapper = session.getMapper(WorldmapMapper.class);
+					ArrayList<Article> articleList = mapMapper.printArticleList(search);
+					System.out.println(articleList.size());
+					
+					double sentiment_Africa = (double) 100 * getSenAve(articleList, "Africa");
+					double sentiment_Asia = (double) 100 * getSenAve(articleList, "Asia");
+					double sentiment_SA = (double) 100 * getSenAve(articleList, "South_America");
+					double sentiment_NA = (double) 100 * getSenAve(articleList, "North_America");
+					double sentiment_Oceania = (double) 100 * getSenAve(articleList, "Oceania");
+					double sentiment_Europe = (double) 100 * getSenAve(articleList, "Europe");
+					ArrayList<Double> sentimentList = new ArrayList<>();
+					sentimentList.add(sentiment_Africa);
+					sentimentList.add(sentiment_Asia);
+					sentimentList.add(sentiment_SA);
+					sentimentList.add(sentiment_NA);
+					sentimentList.add(sentiment_Oceania);
+					sentimentList.add(sentiment_Europe);
+					
+					model.addAttribute("ageList", ageList);
+					model.addAttribute("genderList", genderList);
+					model.addAttribute("sentimentList", sentimentList);
+					model.addAttribute("search", search);
+					
+					return "ArticleView";
+				}
 		
 		//디테일로 가기
 		@RequestMapping(value = "/goToDetail", method = RequestMethod.GET)
@@ -184,10 +241,6 @@ public class WorldMapController {
 		}
 		
 		
-		
-		
-		
-		
 		@RequestMapping(value = "/goToFB", method = RequestMethod.GET)
 		public String goToFB(Locale locale, Model model) {
 			
@@ -201,22 +254,6 @@ public class WorldMapController {
 			
 			return "firebase";
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		
 		// **********************************************
@@ -287,12 +324,6 @@ public class WorldMapController {
 		        return gson.toJson(json);
 		    }
 		    
-		    
-
-		    
-		    
-		    
-		    
 		
 		//디테일로 가기
 		@RequestMapping(value = "/translate", method = RequestMethod.POST)
@@ -314,12 +345,6 @@ public class WorldMapController {
 			
 			return tran;
 		}
-		
-		
-		
-		
-		
-			
 		
 		
 		//컨트롤러 내에서	 감정 처리하기
@@ -393,7 +418,6 @@ public class WorldMapController {
 				} 
 			}
 			
-			
 			return kanseiResult;
 		}
 		//컨트롤러 내에서	 감정 처리하기
@@ -419,11 +443,7 @@ public class WorldMapController {
 				if(a.getArticleid().contains("NA")&& a.getSentiment()==0) { //JP, EU 등 대륙별로 분석을 돌림
 					System.out.println(a.getArticleid());
 					String cont = StringReplace(a.getArticlecontent());
-					try {
-						
-						
-						
-						
+					try {						
 					/*	response = Translate (a.getArticlecontent());
 						System.out.println("res" + response);
 						tran = prettify (response);

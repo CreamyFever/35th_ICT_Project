@@ -16,6 +16,11 @@
 		<result property="url" column="URL" javaType="java.lang.String" jdbcType="VARCHAR"/>
 		<result property="sentiment" column="SENTIMENT" javaType="java.lang.Double" jdbcType="DOUBLE"/>
 	</resultMap>
+	
+	<resultMap id="getArticleHtml" type="ArticleHtml">
+		<result property="articleid" column="ARTICLEID" javaType="java.lang.String" jdbcType="VARCHAR"/>
+		<result property="articlehtml" column="ARTICLEHTML" javaType="java.lang.String" jdbcType="CLOB"/>
+	</resultMap>
 
 	<insert id="insert" parameterType="Article">
 		insert into articles (
@@ -43,6 +48,34 @@
 			</if>
 		) 
 	</insert>
+	
+	<insert id="insertHtml" parameterType="ArticleHtml">
+		insert into article_html (
+			articleid
+			, articlehtml
+		)
+		values (
+			#{articleid}
+			, #{articlehtml}
+		) 
+	</insert>
+	
+	<select id="selectArticleHtml" parameterType="String" resultMap="getArticle">
+		select
+			 a.articlenum
+		    , a.articleid
+		    , a.articlename
+		    , h.articlehtml as articlecontent
+		    , TO_CHAR(a.articledate, 'yyyymmdd') as articledate
+		    , a.presscompany
+		    , a.url
+		    , a.continent
+		    , a.sentiment
+		from articles a, article_html h
+		where 
+			a.articleid=h.articleid
+			and a.articleid = #{id}
+	</select>
 	
 	<insert id="insertFromList" parameterType="java.util.List">
 		insert all

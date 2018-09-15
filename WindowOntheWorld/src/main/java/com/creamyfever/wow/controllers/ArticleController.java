@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.creamyfever.wow.dao.ArticleRepository;
 import com.creamyfever.wow.util.PageNavigator;
 import com.creamyfever.wow.vo.Article;
+import com.creamyfever.wow.vo.ArticleHtml;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -25,7 +26,8 @@ public class ArticleController {
 	@Autowired
 	ArticleRepository repository;
 
-	ArrayList<Article> articleList = new ArrayList<>();	
+	ArrayList<Article> articleList = new ArrayList<>();
+	ArrayList<ArticleHtml> articleHtmlList = new ArrayList<>();	
 
 	//게시판 관련 상수값들
 	final int countPerPage = 10;			//페이지 당 글 수
@@ -36,6 +38,12 @@ public class ArticleController {
 		parseJson("C:/Users/scit/Documents/35th_ICT_Project-Taehee/WindowOntheWorld/src/main/resources/bbcList.json");
 		parseJson("C:/Users/scit/Documents/35th_ICT_Project-Taehee/WindowOntheWorld/src/main/resources/naverListS.json");
 		parseJson("C:/Users/scit/Documents/35th_ICT_Project-Taehee/WindowOntheWorld/src/main/resources/yahooJpListS.json");
+		return "home";
+	}
+	
+	@RequestMapping(value = "insertHtmlTest", method = RequestMethod.GET)
+	public String insertHtmlTest() {
+		parseHtmlJson("C:\\Users\\Creamy\\Documents\\GitKrakenRep\\35th_ICT_Project\\35th_ICT_Project\\WindowOntheWorld\\src\\main\\resources/bbcListHtml.json");
 		return "home";
 	}
 	
@@ -99,6 +107,48 @@ public class ArticleController {
 		}
 	}
 	
+	@RequestMapping(value = "insertArticleHtml", method = RequestMethod.GET)
+	public String insertArticleHtml() {
+		
+		for(ArticleHtml html : articleHtmlList) {			
+			repository.insertHtml(html);
+		}
+		
+		articleHtmlList.clear();
+		
+		return "home";
+	}
+	
+	public void parseHtmlJson(String jsonPath) {
+
+		File jsonFile = new File(jsonPath);
+		System.out.println(jsonFile.exists());
+
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+
+			JsonNode root = objectMapper.readTree(jsonFile);
+			Iterator<JsonNode> articles = root.get("articles").elements();
+
+			ArticleHtml html;
+			JsonNode node;
+			while (articles.hasNext()) {
+				html = new ArticleHtml();
+
+				node = articles.next();
+
+				html.setArticleid(node.get("id").asText());
+				html.setArticlehtml(node.get("html").asText());
+
+				articleHtmlList.add(html);
+			}
+			
+			System.out.println(articleHtmlList.size());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@RequestMapping(value = "selectAllArticle", method = RequestMethod.GET)
 	public String selectAll(){
 		List<Article> articleList = repository.selectAll();
@@ -152,7 +202,7 @@ public class ArticleController {
 	@RequestMapping (value="read", method=RequestMethod.GET)
 	public String read(String articleid, Model model) {
 		//전달된 글 번호로 해당 글정보 읽기
-		Article article = repository.selectOne(articleid);
+		Article article = repository.selectArticleHtml(articleid);
 		if (article == null) {
 			return "redirect:/main";
 		}
