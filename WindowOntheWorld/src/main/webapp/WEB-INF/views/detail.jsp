@@ -205,7 +205,7 @@ var data = {
 		var continent = $("#continent").val();
 		
 		showArticleByKeyword(keyword, continent);
-	})
+	});
 	
 	
 	function showArticleByKeyword(keyword, continent){
@@ -391,6 +391,58 @@ var pieChart = new Chart(pieChartCanvas, {
 
 </script>
 
+<script type="text/javascript">
+
+	$(function(){
+    	var s = $('#keyword').val();
+    	if(s != ''){
+    		$.ajax({
+    			url: "searchKeywordNum",
+    			type: "post",
+    			data: {"keyword" : s},
+    			success: function(data){
+    				console.log('success');
+    				console.log(data);
+    				$('#searchResult').html();
+    				for(var i in data){
+    					hashtag(data[i]);
+    				}
+    			}
+    		});
+    	}    	
+    });
+    function searchKeyword(articlenum){
+    	$.ajax({
+    		url: "searchKeyword",
+    		type: "post",
+    		data: {"articlenum" : articlenum},
+    		success: function(data){
+    			console.log('success hashtag');
+    			var tag;
+    			for(var i in data){
+    				tag += "#"+data[i]+" ";
+    			}
+    			$('#searchResult').append("<p>"+ tag +"</p>");
+    		}
+    	});
+    }
+    function hashtag(articlenum){
+    	$.ajax({
+    		url: "selectKeyword",
+    		type: "post",
+    		data: {"articlenum" : articlenum},
+    		success: function(data){
+    			console.log('success hashtag');
+    			var tag='';
+    	    	$('#searchResult').append("<p> Article No. : " + articlenum + "</p>");
+    			for(var i in data){
+    				tag += "#"+data[i]+" ";
+    			}
+    			$('#searchResult').append("<p>"+ tag +"</p>");
+    		}
+    	});
+    }
+</script>
 
 	</head> 
 	<body>
@@ -413,7 +465,13 @@ var pieChart = new Chart(pieChartCanvas, {
 	</div>
 	
 	<hr color="skyblue" size="5px">
-	<h1>해시태그 들어갈 자리</h1>	
+		<div id="hash_tags" class="articles">
+			<div class="container">
+				<h3>Hash Tags<label> </label></h3>
+				<div id="searchResult"></div>
+			</div>
+		</div>
+	
 	<hr color="skyblue" size="5px">
 		<!----start-articles---->
 		<div id="articles" class="articles">

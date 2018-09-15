@@ -208,9 +208,9 @@ table{
 			</ul>
 		</c:if>
 	</div>	
-	<form id="searchForm" class="searchForm" action="world" method="get">
+	<form id="searchForm" class="searchForm" action="goToWorldMap" method="get">
 		<div class="wrap-input100 search">
-			<input class="input100" type="text" name="searchWord" id="input_keyword" placeholder="Enter a keyword!">
+			<input class="input100" type="text" name="search" id="input_keyword" placeholder="Enter a keyword!">
 			<span class="focus-input100"></span>
 		</div>	
 	</form>
