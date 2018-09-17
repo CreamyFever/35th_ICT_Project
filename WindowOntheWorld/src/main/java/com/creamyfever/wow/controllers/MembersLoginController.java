@@ -33,7 +33,7 @@ public class MembersLoginController {
 	 */
 	@RequestMapping (value="login", method=RequestMethod.GET)
 	public String loginForm() {
-		return "members/loginForm";
+		return "loginForm";
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class MembersLoginController {
 		else {
 			model.addAttribute("errorMsg", "ID 또는 비밀번호가 틀립니다.");
 			System.out.println("로그인 검색 실패");
-			return "members/loginForm";
+			return "loginForm";
 		}
 	}
 	

@@ -1,23 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
-<!--
-Author: W3layouts
-Author URL: http://w3layouts.com
-License: Creative Commons Attribution 3.0 Unported
-License URL: http://creativecommons.org/licenses/by/3.0/
--->
 <!DOCTYPE HTML>
 <html>
 <head>
 <title>Window On the World</title>
-<link href="resources/css/bootstrap.css" rel='stylesheet'
-	type='text/css' />
-<link rel="stylesheet" href="resources/fonts/css/font-awesome.min.css">
-<link
-	href='http://fonts.googleapis.com/css?family=Raleway:400,100,300,500,600,200,700,800,900'
-	rel='stylesheet' type='text/css'>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href='http://fonts.googleapis.com/css?family=Raleway:400,100,300,500,600,200,700,800,900' rel='stylesheet' type='text/css'>
 <style>
 * {
 	margin: 0;
@@ -32,10 +21,9 @@ body {
 html.open {
 	overflow: hidden;
 }
-
 .bar {
 	width: 100%;
-	height: 100px;
+	height: 80px;
 	position: fixed;
 	top: 0px;
 	left: 0px;
@@ -46,10 +34,9 @@ html.open {
 	color: white;
 	z-index: 5;
 }
-
 .logo {
-	width: 100px;
-	height: 100px;
+	width: 80px;
+	height: 80px;
 	position: fixed;
 	left: 10px;
 	top: 0px;
@@ -62,9 +49,9 @@ html.open {
 	margin-left: 20px;
 }
 
-.btn {
-	width: 70px;
-	height: 70px;
+.btnn {
+	width: 80px;
+	height: 80px;
 	position: fixed;
 	right: 0px;
 	top: 0px;
@@ -74,10 +61,8 @@ html.open {
 	background-repeat: no-repeat;
 	background-position: center;
 	cursor: pointer;
-	margin-top: 15px;
 	margin-right: 20px;
 }
-
 .profile {
 	width: 350px;
 	height: 100%;
@@ -154,41 +139,50 @@ li {
 	margin: 0px auto;
 	margin-bottom: 20px;
 }
+.contain{
+	width: 80%;
+	margin: 0px auto;
+}
+.searchKeyword{
+	font-size: 2.2em;
+    font-weight: 900;
+    color: #506369;
+    text-align: left;
+    margin: 0.8em 0 0.8em;
+}
+#world{
+	width: 1200px;
+	margin: 0px auto;
+	background-color: black;
+	margin-top: 30px;
+}
+#lastOuter{
+	margin-top: 30px;
+}
+#worldmap{
+	width: 1200px; 
+	margin: 0px auto;
+	display: block;
+}
 </style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<!---- start-smoth-scrolling---->
-<script type="text/javascript" src="resources/js/move-top.js"></script>
-<script type="text/javascript" src="resources/js/easing.js"></script>
-
-<!---- start-smoth-scrolling---->
-<!-- Custom Theme files -->
-<link href="resources/css/theme-style.css" rel='stylesheet'
-	type='text/css' />
-<!-- Custom Theme files -->
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<!----font-Awesome----->
-<link rel="stylesheet" href="resources/fonts/css/font-awesome.min.css">
-<!----font-Awesome----->
-<!----webfonts---->
-<link
-	href='http://fonts.googleapis.com/css?family=Raleway:400,100,300,500,600,200,700,800,900'
-	rel='stylesheet' type='text/css'>
-<!----//webfonts---->
-
 <link rel="stylesheet" type="text/css" href="./resources/css/util.css">
 <link rel="stylesheet" type="text/css" href="./resources/css/main.css">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 	$(function(){
 		$('.logo').click(function(){
 			window.location.href="<c:url value='/main'/>";
 		});
-		$('.btn').click(function(){
+		$('.btnn').click(function(){
 			$(".profile,.page_cover,html").addClass("open");
 		    window.location.hash = "#open";
 		});
 		$('.profileImage').css('background-image', 'url("./resources/images/t3.jpg")'); 
+		
+		var offset = $(".searchForm").offset().top;
+		$('html, body').animate({scrollTop: offset}, 400);
 	});
 	window.onhashchange = function() {
 	    if(location.hash != "#open"){
@@ -196,7 +190,6 @@ li {
 	    }	    
 	};
 </script>
-
 </head>
 <body>
 	<div id="main">
@@ -212,18 +205,13 @@ li {
 					<li><a class="loginli" href="login">로그인</a></li>
 					<li><a class="loginli" href="join">회원가입</a></li>
 				</c:if>
-
-				<li><a class="loginli" href="board/list">게시판</a></li>
-
-				<li><a class="loginli" href="main">메인으로</a></li>
 			</ul>
 		</div>
-
 		<!----start-container------>
 		<!----start-header---->
 		<div class="bar">
 			<div class="logo"></div>
-			<div class="btn"></div>
+			<div class="btnn"></div>
 		</div>
 		<div onclick="history.back();" class="page_cover"></div>
 		<div class="profile">
@@ -231,8 +219,10 @@ li {
 			<c:if test="${loginId != null}">
 				<div class="loginName">${sessionScope.loginName}</div>
 				<ul>
+					<li><a class="loginli" href="board/list">게시판</a></li>
 					<li><a class="loginli" href="members/update">회원정보수정</a></li>
 					<li><a class="loginli" href="members/logout">로그아웃</a></li>
+					<li><a class="loginli" href="main">메인으로</a></li>
 				</ul>
 			</c:if>
 			<c:if test="${loginId == null}">
@@ -245,158 +235,106 @@ li {
 		<!----start-search_bar----->
 		<form id="searchForm" class="searchForm" action="world" method="get">
 			<div class="wrap-input100" id="search">
-				<input class="input100" type="text" name="searchWord"
-					id="input_keyword" placeholder="Enter a keyword!" value="${search}">
+				<input class="input100" type="text" name="searchWord" id="input_keyword" placeholder="Enter a keyword!" value="${search}">
 				<span class="focus-input100"></span>
 			</div>
 		</form>
 		<!----//End-search_bar----->
-
-		<h1 style="background: white;">Searched for "${search}"</h1>
-
-		<div id="world" style="background-color: black">
-			<img src="./resources/worldmap/img/worldmap.png" id="worldmap"
-				style="width: 1200px; margin-left: auto; margin-right: auto; display: block;"
-				onclick="newweb('${search}')" />
-		</div>
-
-		<input type="hidden" id="continent_input" value="">
-
-		<!-- 위에 띄우는 대륙별 그래프!!!!!!!!! -->
-		<!-- NA -->
-		<div
-			style="height: 80px; width: 80px; position: absolute; left: 280px; top: 465px;">
-			<canvas id="pieChart_NA" height="10px" width="10px">This browser doesn't support canvas</canvas>
-		</div>
-		<!-- SA -->
-		<div
-			style="height: 80px; width: 80px; position: absolute; left: 438px; top: 660px;">
-			<canvas id="pieChart_SA" height="10px" width="10px">This browser doesn't support canvas</canvas>
-		</div>
-		<!-- Europe -->
-		<div
-			style="height: 80px; width: 80px; position: absolute; left: 680px; top: 435px;">
-			<canvas id="pieChart_Euro" height="10px" width="10px">This browser doesn't support canvas</canvas>
-		</div>
-		<!-- Asia -->
-		<div
-			style="height: 80px; width: 80px; position: absolute; left: 877px; top: 472px;">
-			<canvas id="pieChart_Asia" height="10px" width="10px">This browser doesn't support canvas</canvas>
-		</div>
-		<!-- Oceania -->
-		<div
-			style="height: 80px; width: 80px; position: absolute; left: 900px; top: 707px;">
-			<canvas id="pieChart_Ocea" height="10px" width="10px">This browser doesn't support canvas</canvas>
-		</div>
-		<!-- Aprica -->
-		<div
-			style="height: 80px; width: 80px; position: absolute; left: 636px; top: 641px;">
-			<canvas id="pieChart_Apri" height="10px" width="10px">This browser doesn't support canvas</canvas>
-		</div>
-
-		<!-- Aprica click! -->
-		<div id="apri_div_out">
-			<div id="apri_div"
-				style="height: 300px; width: 300px; position: absolute; left: 635px; top: 232px;">
-				<img src="" width="170px">
+		
+		<div class="contain">
+			<span class="searchKeyword">Searched for "${search}"</span>
+			<div id="world">
+				<img src="./resources/worldmap/img/worldmap.png" id="worldmap" onclick="newweb('${search}')" />
+			</div>	
+			<input type="hidden" id="continent_input" value="">	
+			<!-- 위에 띄우는 대륙별 그래프!!!!!!!!! -->
+			<!-- NA -->
+			<div style="height: 80px; width: 80px; position: absolute; left: 280px; top: 465px;">
+				<canvas id="pieChart_NA" height="10px" width="10px">This browser doesn't support canvas</canvas>
 			</div>
-		</div>
-		<!-- Oceania click! -->
-		<div id="ocea_div_out">
-			<div id="ocea_div"
-				style="height: 300px; width: 300px; position: absolute; left: 930px; top: 337px;">
-				<img src="" width="174px">
+			<!-- SA -->
+			<div style="height: 80px; width: 80px; position: absolute; left: 438px; top: 660px;">
+				<canvas id="pieChart_SA" height="10px" width="10px">This browser doesn't support canvas</canvas>
 			</div>
-		</div>
-		<!-- SA click! -->
-		<div id="SA_div_out">
-			<div id="ocea_div"
-				style="height: 300px; width: 300px; position: absolute; left: 930px; top: 337px;">
-				<img src="" width="174px">
+			<!-- Europe -->
+			<div style="height: 80px; width: 80px; position: absolute; left: 680px; top: 435px;">
+				<canvas id="pieChart_Euro" height="10px" width="10px">This browser doesn't support canvas</canvas>
 			</div>
-		</div>
-		<div id="result" style="color: white;"></div>
-
-
-		<div id="lastOuter">
-			<div id="chartContainer"
-				style="height: 500px; width: 50%; float: left;"></div>
-
-			<div id="out" style="height: 500px; width: 50%; float: right;">
-				<div id="outer1" style="width: 50%; float: left;">
-					<div id="gender" style="height: 500px; width: 50%; float: left;"></div>
-					<div id="age" style="height: 500px; width: 50%; float: right;"></div>
-				</div>
-				<div id="outer2" style="width: 50%; height: 500px; float: right;">
-					<div id="stackedColumn" style="height: 500px;"></div>
+			<!-- Asia -->
+			<div style="height: 80px; width: 80px; position: absolute; left: 877px; top: 472px;">
+				<canvas id="pieChart_Asia" height="10px" width="10px">This browser doesn't support canvas</canvas>
+			</div>
+			<!-- Oceania -->
+			<div style="height: 80px; width: 80px; position: absolute; left: 900px; top: 707px;">
+				<canvas id="pieChart_Ocea" height="10px" width="10px">This browser doesn't support canvas</canvas>
+			</div>
+			<!-- Aprica -->
+			<div style="height: 80px; width: 80px; position: absolute; left: 636px; top: 641px;">
+				<canvas id="pieChart_Apri" height="10px" width="10px">This browser doesn't support canvas</canvas>
+			</div>
+	
+			<!-- Aprica click! -->
+			<div id="apri_div_out">
+				<div id="apri_div" style="height: 300px; width: 300px; position: absolute; left: 635px; top: 232px;">
+					<img src="" width="170px">
 				</div>
 			</div>
-		</div>
-
-		<!-- 여기 다시 고치기★★★★★★★★★★★★★★★★★★★★★★★★★★ -->	
-			
-			 <input type="hidden" id="sent_Africa" value="${sentimentList[0]}">
-	         <input type="hidden" id="sent_Asia" value="${sentimentList[1]}">
-	         <input type="hidden" id="sent_SA" value="${sentimentList[2]}">
-	         <input type="hidden" id="sent_NA" value="${sentimentList[3]}">
-	         <input type="hidden" id="sent_Oceania" value="${sentimentList[4]}">
-	         <input type="hidden" id="sent_Europe" value="${sentimentList[5]}">
-	
-	         <input type="hidden" id="gender_w" value="${genderList[0]}">
-	         <input type="hidden" id="gender_m" value="${genderList[1]}">
-	
-	         <input type="hidden" id="age_under19" value="${ageList[0]}">
-	         <input type="hidden" id="age_up20under29" value="${ageList[1]}">
-	         <input type="hidden" id="age_up30under39" value="${ageList[2]}">
-	         <input type="hidden" id="age_up40under49" value="${ageList[3]}">
-	         <input type="hidden" id="age_up50" value="${ageList[4]}">
-
-
-		<!----start-copy-right--->
-		<div class="copy-right">
-			<div class="container">
-				<p>
-					Template by <a href="#">W3layouts</a>
-				</p>
-				<script type="text/javascript">
-					$(document).ready(function() {
-						/*
-						var defaults = {
-							containerID: 'toTop', // fading element id
-							containerHoverID: 'toTopHover', // fading element hover id
-							scrollSpeed: 1200,
-							easingType: 'linear' 
-						};
-						 */
-
-						$().UItoTop({
-							easingType : 'easeOutQuart'
-						});
-
-					});
-				</script>
-				<a href="#" id="toTop" style="display: block;"> <span
-					id="toTopHover" style="opacity: 1;"> </span></a>
+			<!-- Oceania click! -->
+			<div id="ocea_div_out">
+				<div id="ocea_div" style="height: 300px; width: 300px; position: absolute; left: 930px; top: 337px;">
+					<img src="" width="174px">
+				</div>
 			</div>
-		</div>
-		<!----//End-copy-right--->
-		<!----//End-container------>
+			<!-- SA click! -->
+			<div id="SA_div_out">
+				<div id="ocea_div" style="height: 300px; width: 300px; position: absolute; left: 930px; top: 337px;">
+					<img src="" width="174px">
+				</div>
+			</div>
+			<div id="result" style="color: white;"></div>
+	
+			<div id="lastOuter">
+				<div id="chartContainer" style="height: 500px; width: 50%; float: left;"></div>
+	
+				<div id="out" style="height: 500px; width: 50%; float: right;">
+					<div id="outer1" style="width: 50%; float: left;">
+						<div id="gender" style="height: 500px; width: 50%; float: left;"></div>
+						<div id="age" style="height: 500px; width: 50%; float: right;"></div>
+					</div>
+					<div id="outer2" style="width: 50%; height: 500px; float: right;">
+						<div id="stackedColumn" style="height: 500px;"></div>
+					</div>
+				</div>
+			</div>
+	
+			<!-- 여기 다시 고치기★★★★★★★★★★★★★★★★★★★★★★★★★★ -->	
+				
+				 <input type="hidden" id="sent_Africa" value="${sentimentList[0]}">
+		         <input type="hidden" id="sent_Asia" value="${sentimentList[1]}">
+		         <input type="hidden" id="sent_SA" value="${sentimentList[2]}">
+		         <input type="hidden" id="sent_NA" value="${sentimentList[3]}">
+		         <input type="hidden" id="sent_Oceania" value="${sentimentList[4]}">
+		         <input type="hidden" id="sent_Europe" value="${sentimentList[5]}">
+		
+		         <input type="hidden" id="gender_w" value="${genderList[0]}">
+		         <input type="hidden" id="gender_m" value="${genderList[1]}">
+		
+		         <input type="hidden" id="age_under19" value="${ageList[0]}">
+		         <input type="hidden" id="age_up20under29" value="${ageList[1]}">
+		         <input type="hidden" id="age_up30under39" value="${ageList[2]}">
+		         <input type="hidden" id="age_up40under49" value="${ageList[3]}">
+		         <input type="hidden" id="age_up50" value="${ageList[4]}">
+			<!----//End-container------>
+		</div>		
 	</div>
 </body>
 
 <script src="./resources/worldmap/js/worldGraph.js?ver=2"></script>
 <script src="./resources/worldmap/js/Chart.bundle.min.js"></script>
-
-<script type="text/javascript"
-	src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 <!-- pieOptions와 각 대륙별 데이터 뽑아오기 -->
 <!-- 각 대륙별 차트 생성-->
-<script type="text/javascript"
-	src="./resources/worldmap/js/continent_chart.js">
-	
-</script>
-
+<script type="text/javascript" src="./resources/worldmap/js/continent_chart.js"></script>
 <!-- 버블그래프 차트 생성 -->
 <script type="text/javascript">
 	$(function() {

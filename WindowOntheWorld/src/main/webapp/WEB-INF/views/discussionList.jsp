@@ -17,45 +17,46 @@ body{
 }
 html.open {overflow: hidden;}
 .bar {
-    width : 100%;
-    height : 100px;
-    position : inherit;
-    top : 0px;
-    left : 0px;
-    text-align : center;
-    font-size : 20px;
-    font-weight : bold;
-    background-color: #222730;
-    color:white;
-}	
-.logo{
-	width: 100px;
-    height: 100px;
-    position: inherit;
-    left: 10px;
-    top: 0px;
-    z-index: 1;
-    background-image: url('./resources/images/wow_logo.png');
-    background-size: 80%;
-    background-repeat: no-repeat;
-    background-position: center;
-    cursor: pointer;
-    margin-left: 20px;
+	width: 100%;
+	height: 80px;
+	position: inherit;
+	top: 0px;
+	left: 0px;
+	text-align: center;
+	font-size: 20px;
+	font-weight: bold;
+	background-color: #222730;
+	color: white;
+	z-index: 5;
 }
+.logo {
+	width: 80px;
+	height: 80px;
+	position: fixed;
+	left: 10px;
+	top: 0px;
+	z-index: 1;
+	background-image: url('./resources/images/wow_logo.png');
+	background-size: 80%;
+	background-repeat: no-repeat;
+	background-position: center;
+	cursor: pointer;
+	margin-left: 20px;
+}
+
 .btnn {
-    width: 70px;
-    height: 70px;
-    position: absolute;
-    right: 0px;
-    top: 0px;
-    z-index: 1;
-    background-image: url('./resources/images/menu.png');
-    background-size: 50%;
-    background-repeat: no-repeat;
-    background-position: center;
-    cursor: pointer;
-    margin-top: 15px;
-    margin-right: 20px;
+	width: 80px;
+	height: 80px;
+	position: fixed;
+	right: 0px;
+	top: 0px;
+	z-index: 10;
+	background-image: url('./resources/images/menu.png');
+	background-size: 50%;
+	background-repeat: no-repeat;
+	background-position: center;
+	cursor: pointer;
+	margin-right: 20px;
 }
 .profile{
 	width: 350px;
@@ -223,11 +224,14 @@ li{
 			}
 			con += "<td class='articlenum'>"+data[i].articlenum+"</td>";
 			con += "<td class='dis_regdate'>"+data[i].dis_regdate+"</td>";
-			if(data[i].dis_grade != -1){
-				con += "<td class='dis_grade'>"+data[i].dis_grade+"</td>";
+			if(data[i].dis_grade == -1){
+				con += "<td class='dis_grade'>-</td>";
+			}
+			else if(data[i].dis_grade == -2){
+				con += "<td class='dis_grade'>-</td>";
 			}
 			else{
-				con += "<td class='dis_grade'>-</td>";
+				con += "<td class='dis_grade'>"+data[i].dis_grade+"</td>";				
 			}			
 			con += "</tr>";
 			$('#tb > tbody:last').append(con);
@@ -240,7 +244,10 @@ li{
 		$.ajax({
 			url : "member_state",
 			type: "post",
-			data: {"idno" : "${sessionScope.loginIdno}"},
+			data: {
+				"idno" : "${sessionScope.loginIdno}",
+				"roomnum" : roomnum
+			},
 			headers: {
 				Accept: 'application/text; charset=UTF-8'
 			},

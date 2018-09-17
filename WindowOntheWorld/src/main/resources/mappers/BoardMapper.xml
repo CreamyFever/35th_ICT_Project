@@ -15,7 +15,7 @@
 			BOARDS B, MEMBERS M
         WHERE
             M.IDNO=B.IDNO
-       <!-- ORDER BY STARS DESC	 --> 
+       ORDER BY B.HITCOUNT DESC
 	</select>
 	
  	<select id="printDiscussionList" resultType="Discussion">

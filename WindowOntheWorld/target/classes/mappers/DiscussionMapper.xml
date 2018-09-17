@@ -37,7 +37,7 @@
 	<insert id="insert_dis_room_members" parameterType="Discussion_member">
 		insert into discussion_members values(#{dis_no}, #{idno}, #{id_status})
 	</insert>
-	<select id="select_dis_room_members_state" parameterType="int" resultType="string">
-		select id_status from discussion_members where idno = #{idno}
+	<select id="select_dis_room_members_state" parameterType="Discussion_member" resultType="string">
+		select id_status from discussion_members where idno = #{idno} and dis_no = #{dis_no}
 	</select>
 </mapper>

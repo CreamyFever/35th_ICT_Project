@@ -30,5 +30,7 @@ public interface DiscussionMapper {
 
 	public int insert_dis_room_members(Discussion_member dis_mem);
 
-	public String select_dis_room_members_state(int idno);
+	public String dis_mem(Discussion_member dis_mem);
+
+	public String select_dis_room_members_state(Discussion_member dis_mem);
 }

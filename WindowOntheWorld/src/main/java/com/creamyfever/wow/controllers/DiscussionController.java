@@ -29,18 +29,21 @@ public class DiscussionController {
 	}
 
 	@RequestMapping(value = "/insertroom", method = RequestMethod.POST)
-	public String insertroom(String status, String loginId, String roomnum, String room_state, String userState,
-			HttpSession hsession, Model model) {
+	public String insertroom(String status, String loginId, String roomnum, String room_state, HttpSession hsession, Model model) {
 		DiscussionMapper mapper = session.getMapper(DiscussionMapper.class);
 		Members user = mapper.loginmember(loginId);
-		
+
 		hsession.setAttribute("idno", user.getIdno());
 		hsession.setAttribute("loginId", user.getId());
 		hsession.setAttribute("loginName", user.getNickname());
-		
+
 		if (room_state.equals("new")) {
 			return "enterDiscussionRoom";
 		} else {
+			Discussion_member dis_mem = new Discussion_member();
+			dis_mem.setDis_no(Integer.parseInt(roomnum));
+			dis_mem.setIdno(user.getIdno());
+			String userState = mapper.select_dis_room_members_state(dis_mem);
 			hsession.setAttribute("userState", userState);
 			hsession.setAttribute("roomnum", Integer.parseInt(roomnum));
 			return "websocket-echo";
@@ -54,9 +57,6 @@ public class DiscussionController {
 		disroom.setDis_title(dis_title);
 		disroom.setArticlenum(Integer.parseInt(articlenum));
 		mapper.insert_dis_room(disroom);
-		System.out.println(hsession.getAttribute("loginIdno"));
-		System.out.println(hsession.getAttribute("loginName"));
-		//model.addAttribute("loginIdno", );
 		return "discussionList";
 	}
 
@@ -92,9 +92,12 @@ public class DiscussionController {
 	}
 
 	@RequestMapping(value = "/member_state", method = RequestMethod.POST)
-	public @ResponseBody String member_state(int idno) {
+	public @ResponseBody String member_state(int idno, int roomnum) {
 		DiscussionMapper mapper = session.getMapper(DiscussionMapper.class);
-		String state = mapper.select_dis_room_members_state(idno);
+		Discussion_member dis_mem = new Discussion_member();
+		dis_mem.setDis_no(roomnum);
+		dis_mem.setIdno(idno);
+		String state = mapper.select_dis_room_members_state(dis_mem);
 		return state;
 	}
 }

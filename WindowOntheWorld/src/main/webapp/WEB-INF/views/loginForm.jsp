@@ -40,6 +40,9 @@ function formCheck() {
 	}
 	return true;
 }
+$(function(){
+	console.log('${errorMsg}');
+});
 </script>
 </head>
 <body style="background-color: #666666;">	

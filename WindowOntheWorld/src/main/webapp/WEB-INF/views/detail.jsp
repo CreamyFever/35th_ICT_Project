@@ -6,6 +6,15 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>DETAIL</title>
+	<style type="text/css">
+		span.searchKeyword{
+			font-size: 2.2em;
+		    font-weight: 900;
+		    color: #506369;
+		    text-align: left;
+		    margin: 0.8em 0 0.8em;
+		}
+	</style>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		 
 	 <!---- start-smoth-scrolling---->
@@ -14,7 +23,7 @@
 	
 	<!---- start-smoth-scrolling---->
 	 <!-- Custom Theme files -->
-	<link href="resources/css/theme-style.css?ver=1" rel='stylesheet' type='text/css' />
+	<link href="resources/css/theme-style.css?ver=2.1" rel='stylesheet' type='text/css' />
   		 <!-- Custom Theme files -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
@@ -239,7 +248,7 @@ var data = {
 		s += '<div class="artical-info">';
 		s += '	<div class="post-head">';
 		s += '		<div class="post-head-left">';
-		s += '			<h4><a href="#">' +resp[0].articlename + '</a></h4>';
+		s += '			<h4><a href=read?articleid='+ resp[0].articleid +'>' +resp[0].articlename + '</a></h4>';
 		s += '			<p class="author">By <a href="#"> '+ resp[0].presscompany +'</a></p>';
 		s += '		</div>';
 		s += '		<div class="post-head-right">';
@@ -253,7 +262,7 @@ var data = {
 		s += '			<p><a href="#">0 Comments</a> | <i class="fa fa-heart"> </i> 0</p>';
 		s += '		</div>';
 		s += '		<div class="post-bottom-right">';
-		s += '			<a class="artbtn" href="'+ resp[0].url +'">Read More</a>';
+		s += '			<a class="artbtn" href=read?articleid='+ resp[0].articleid +'>Read More</a>';
 		s += '		</div>';
 		s += '		<div class="clearfix"> </div>';
 		s += '	</div>';
@@ -268,7 +277,7 @@ var data = {
 				s += '<div class="artical-info">';
 				s += '<div class="post-head post-head1">';
 				s += '	<div class="post-head-left">';
-				s += '		<h4><a href="#">' +resp[2*i + (j+1)].articlename + '</a></h4>';
+				s += '		<h4><a href=read?articleid='+ resp[2*i + (j+1)].articleid +'>' +resp[2*i + (j+1)].articlename + '</a></h4>';
 				s += '		<p class="author">By <a href="#">' +resp[2*i + (j+1)].presscompany + '</a></p>';
 				s += '	</div>';
 				s += '	<div class="post-head-right post-head-right-C">';
@@ -282,7 +291,7 @@ var data = {
 				s += '		<p><a href="#">0 Comments</a> | <i class="fa fa-heart"> </i> 0</p>';
 				s += '	</div>';
 				s += '	<div class="post-bottom-right">';
-				s += '		<a class="artbtn artbtn1" href="'+ resp[2*i + (j+1)].url +'">Read More</a>';
+				s += '		<a class="artbtn artbtn1" href=read?articleid='+ resp[2*i + (j+1)].articleid +'>Read More</a>';
 				s += '	</div>';
 				s += '	<div class="clearfix"> </div>';
 				s += '</div>';
@@ -459,10 +468,13 @@ var pieChart = new Chart(pieChartCanvas, {
 				<canvas id="pieChart_detail" height="10px" width="10px">This browser doesn't support canvas</canvas>
 			</div>
 		</div>
-		<div>
-			<h1>Searched for "${keyword}" in ${continent}</h1>
-		</div>
 	</div>
+	
+	<div id="detail_head" class="articles">
+			<div class="container">
+				<span class="searchKeyword">Searched for "${keyword}" in ${continent}</span>
+			</div>
+		</div>
 	
 	<hr color="skyblue" size="5px">
 		<div id="hash_tags" class="articles">

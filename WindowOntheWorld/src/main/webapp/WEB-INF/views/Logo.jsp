@@ -26,12 +26,12 @@ div#introLogo img{
 <body>
 	<c:if test="${sessionScope.loginName == null}">
 		<div id="introLogo">
-			<a href="login"><img src="resources/images/WOWLogo.png" /></a>
+			<a href="login"><img src="resources/images/wow_logo.png" /></a>
 		</div>
 	</c:if>
 	<c:if test="${sessionScope.loginName != null}">
 		<div id="introLogo">
-			<a href="main"><img src="resources/images/WOWLogo.png" /></a>
+			<a href="main"><img src="resources/images/wow_logo.png" /></a>
 		</div>
 	</c:if>
 

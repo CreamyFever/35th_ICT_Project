@@ -344,7 +344,14 @@ sock.onmessage = function(msg){
 	}
 	else if(data.indexOf('Timer!@#$') != -1){
 		var dataArr = data.split('!@#$');
-		if(dataArr[2] == 'first'){				
+		if(dataArr[2] == 'ready'){
+			if('${sessionScope.userState}' != '관전'){
+				$('#message').attr("disabled", false);
+				$('#sendBtn').attr("disabled", false);
+			}	
+			$('#time').html(dataArr[1]);
+		}
+		else if(dataArr[2] == 'first'){				
 			if('${sessionScope.userState}' != '찬성'){
 				$('#message').attr("disabled", true);
 				$('#sendBtn').attr("disabled", true);

@@ -2,12 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<!--
-Author: W3layouts
-Author URL: http://w3layouts.com
-License: Creative Commons Attribution 3.0 Unported
-License URL: http://creativecommons.org/licenses/by/3.0/
--->
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -26,45 +20,45 @@ body{
 }
 html.open {overflow: hidden;}
 .bar {
-    width : 100%;
-    height : 100px;
-    position : fixed;
-    top : 0px;
-    left : 0px;
-    text-align : center;
-    font-size : 20px;
-    font-weight : bold;
-    background-color: #222730;
-    color:white;
-}	
-.logo{
-	width: 100px;
-    height: 100px;
-    position: fixed;
-    left: 10px;
-    top: 0px;
-    z-index: 1;
-    background-image: url('./resources/images/wow_logo.png');
-    background-size: 80%;
-    background-repeat: no-repeat;
-    background-position: center;
-    cursor: pointer;
-    margin-left: 20px;
+	width: 100%;
+	height: 80px;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	text-align: center;
+	font-size: 20px;
+	font-weight: bold;
+	background-color: #222730;
+	color: white;
+	z-index: 5;
 }
-.btn {
-    width: 70px;
-    height: 70px;
-    position: fixed;
-    right: 0px;
-    top: 0px;
-    z-index: 1;
-    background-image: url('./resources/images/menu.png');
-    background-size: 50%;
-    background-repeat: no-repeat;
-    background-position: center;
-    cursor: pointer;
-    margin-top: 15px;
-    margin-right: 20px;
+.logo {
+	width: 80px;
+	height: 80px;
+	position: fixed;
+	left: 10px;
+	top: 0px;
+	z-index: 1;
+	background-image: url('./resources/images/wow_logo.png');
+	background-size: 80%;
+	background-repeat: no-repeat;
+	background-position: center;
+	cursor: pointer;
+	margin-left: 20px;
+}
+.btnn {
+	width: 80px;
+	height: 80px;
+	position: fixed;
+	right: 0px;
+	top: 0px;
+	z-index: 10;
+	background-image: url('./resources/images/menu.png');
+	background-size: 50%;
+	background-repeat: no-repeat;
+	background-position: center;
+	cursor: pointer;
+	margin-right: 20px;
 }
 .profile{
 	width: 350px;
@@ -128,18 +122,17 @@ li{
 	margin: 0px auto;
 	margin-bottom: 20px;
 }
-.container{
-	width: 100%;
+.contain{
+	margin : 0px auto;
+	width: 80%;
 	height: 100%;
 	display: flex;
 }
 .leftmain{
 	flex: 1;
-	padding: 30px;
 }
 .rightmain{
 	flex: 1;
-	padding: 30px;
 }
 .boardList{
 	width: 100%;
@@ -169,14 +162,19 @@ table{
 .moreList{
 	float: right;
 }
+.table_title{
+	font-weight: bold;
+}
 </style>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 	$(function(){
 		$('.logo').click(function(){
 			window.location.href="<c:url value='/main'/>";
 		});
-		$('.btn').click(function(){
+		$('.btnn').click(function(){
 			$(".profile,.page_cover,html").addClass("open");
 		    window.location.hash = "#open";
 		});
@@ -190,7 +188,7 @@ table{
 </script>
 </head>
 <body>
-	<div class="bar"><div class="logo"></div><div class="btn"></div></div>	
+	<div class="bar"><div class="logo"></div><div class="btnn"></div></div>	
 	<div onclick="history.back();" class="page_cover"></div>
 	<div class="profile">
 		<div class="profileImage"></div>
@@ -214,16 +212,16 @@ table{
 			<span class="focus-input100"></span>
 		</div>	
 	</form>
-	<div class="container">
+	<div class="contain">
 		<div class="leftmain">인기 키워드
 		</div>
 		<div class="rightmain">
 			<div class="boardList">
 				<div class="title">
-					인기 게시글
+					<span class="table_title">인기 게시글</span>
 					<a class="moreList" href="board/list">더보기</a>
 				</div>
-				<table>
+				<table class="table table-hover">
 					<tr>
 						<th class="table_title">제목</th>
 						<th class="table_hitcount">조회수</th>
@@ -240,10 +238,10 @@ table{
 			</div>
 			<div class="discussionList">
 				<div class="title">
-					인기 토론방
+					<span class="table_title">인기 토론방</span>					
 					<a class="moreList" href="discussionList?loginId=${sessionScope.loginId}">더보기</a>
 				</div>				
-				<table>
+				<table class="table table-hover">
 					<tr>
 						<th class="table_title">제목</th>
 						<th class="table_grade">평점</th>
