@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.creamyfever.wow.dao.ArticleMapper">
+	
+	<resultMap id="getArticle" type="Article">
+		<result property="articlenum" column="ARTICLENUM" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+		<result property="articleid" column="ARTICLEID" javaType="java.lang.String" jdbcType="VARCHAR"/>
+		<result property="articlename" column="ARTICLENAME" javaType="java.lang.String" jdbcType="VARCHAR"/>
+		<result property="articlecontent" column="ARTICLECONTENT" javaType="java.lang.String" jdbcType="CLOB"/>
+		<result property="articledate" column="ARTICLEDATE" />
+		<result property="presscompany" column="PRESSCOMPANY" javaType="java.lang.String" jdbcType="VARCHAR"/>
+		<result property="continent" column="CONTINENT" javaType="java.lang.String" jdbcType="VARCHAR"/>
+		<result property="url" column="URL" javaType="java.lang.String" jdbcType="VARCHAR"/>
+		<result property="sentiment" column="SENTIMENT" javaType="java.lang.Double" jdbcType="DOUBLE"/>
+	</resultMap>
+	
+	<resultMap id="getArticleHtml" type="ArticleHtml">
+		<result property="articleid" column="ARTICLEID" javaType="java.lang.String" jdbcType="VARCHAR"/>
+		<result property="articlehtml" column="ARTICLEHTML" javaType="java.lang.String" jdbcType="CLOB"/>
+	</resultMap>
+
+	<insert id="insert" parameterType="Article">
+		insert into articles (
+			articlenum
+			, articleid
+			, articlename
+			, articlecontent
+			, articledate
+			, presscompany
+			, url
+			<if test="continent != null">
+			, continent
+			</if>
+		)
+		values (
+			articlenum.nextVal
+			, #{articleid}
+			, #{articlename}
+			, #{articlecontent}
+			, TO_DATE(#{articledate}, 'YYYY/MM/DD')
+			, #{presscompany}
+			, #{url}
+			<if test="continent != null">
+			, #{continent, jdbcType=VARCHAR}
+			</if>
+		) 
+	</insert>
+	
+	<insert id="insertHtml" parameterType="ArticleHtml">
+		insert into article_html (
+			articleid
+			, articlehtml
+		)
+		values (
+			#{articleid}
+			, #{articlehtml}
+		) 
+	</insert>
+	
+	<select id="selectArticleHtml" parameterType="String" resultMap="getArticle">
+		select
+			 a.articlenum
+		    , a.articleid
+		    , a.articlename
+		    , h.articlehtml as articlecontent
+		    , TO_CHAR(a.articledate, 'yyyymmdd') as articledate
+		    , a.presscompany
+		    , a.url
+		    , a.continent
+		    , a.sentiment
+		from articles a, article_html h
+		where 
+			a.articleid=h.articleid
+			and a.articleid = #{id}
+	</select>
+	
+	<insert id="insertFromList" parameterType="java.util.List">
+		insert all
+		<foreach collection="list" item="element" index="index">
+	        into articles (
+				articleid
+				, articlename
+				, articlecontent
+				, articledate
+				, presscompany
+				, url
+				, continent
+			)
+			values (
+				#{element.articleid}
+				, #{element.articlename}
+				, #{element.articlecontent}
+				, TO_DATE(#{element.articledate}, 'YYYY/MM/DD')
+				, #{element.presscompany}
+				, #{element.url}
+				, #{element.continent, jdbcType=VARCHAR}
+			) 
+	    </foreach>
+		select * from dual
+	</insert>
+
+	<select id="selectAll" resultMap="getArticle">
+		select
+		    articlenum
+		    , articleid
+		    , articlename
+		    , articlecontent
+		    , TO_CHAR(articledate, 'yyyymmdd') as articledate
+		    , presscompany
+		    , url
+		    , continent
+		    , sentiment
+		from articles
+	</select>
+	
+	<select id="selectOne" parameterType="String" resultMap="getArticle">
+		select
+		     articlenum
+		    , articleid
+		    , articlename
+		    , articlecontent
+		    , TO_CHAR(articledate, 'yyyymmdd') as articledate
+		    , presscompany
+		    , url
+		    , continent
+		    , sentiment
+		from articles
+		where articleid = #{id}
+	</select>
+		
+	<select id="showArticleByKeyword" parameterType="Map" resultMap="getArticle">
+		select
+		     articlenum
+		    , articleid
+		    , articlename
+		    , articlecontent
+		    , TO_CHAR(articledate, 'yyyymmdd') as articledate
+		    , presscompany
+		    , url
+		    , continent
+		    , sentiment
+		from articles
+		where continent = #{continent}
+		and articlecontent like '%' || #{keyword} || '%'
+		order by articledate desc
+	</select>
+	
+	<select id="listArticle" parameterType="Map" resultMap="getArticle">
+		select 
+			 articlenum
+			, articleid
+		    , articlename
+		    , TO_CHAR(articledate, 'yyyymmdd') as articledate
+		    , presscompany
+		from articles
+		where continent = #{continent}
+		and articlecontent like '%' || #{keyword} || '%'
+		order by articledate desc
+	</select>
+	
+	<!-- 현재 기사의 리플 목록 -->
+	<select id="listArticleReply" parameterType="Integer" resultType="ArticleReply">
+	select 
+			replynum
+			, articlenum
+			, idno
+			, content
+			, to_char(regdate, 'YYYY-MM-DD') regdate
+			, stars
+		from 
+			articlereply
+		where
+			articlenum = #{articlenum}
+		order by replynum desc
+	</select>
+	
+	<!-- 리플 저장 -->
+	<insert id="insertArticleReply" parameterType="ArticleReply">
+		insert into articlereply (
+			replynum
+			, articlenum
+			, idno
+			, content
+			, stars
+		)
+		values (
+			articlereply_seq.nextval
+			, #{articlenum}
+			, #{idno}
+			, #{content}
+			, #{stars}
+		)
+	</insert>
+	
+	<!-- 리플 삭제 -->
+	<delete id="deleteArticleReply" parameterType="ArticleReply">
+		delete
+		from
+			articlereply
+		where
+			replynum = #{replynum}
+			and idno = #{idno}
+	</delete>
+	
+	<!-- 리플 수정 -->
+	<update id="updateArticleReply" parameterType="ArticleReply">
+		update
+			articlereply
+		set
+			content = #{content}
+			,stars  = #{stars}
+		where
+			replynum = #{replynum}
+			and idno = #{idno}
+	</update>
+	
+	<select id="selectOneByNum" parameterType="int" resultType="Article">
+		select
+		     articlenum
+		    , articleid
+		    , articlename
+		    , articlecontent
+		    , TO_CHAR(articledate, 'yyyymmdd') as articledate
+		    , presscompany
+		    , url
+		    , continent
+		    , sentiment
+		from articles
+		where articlenum = #{articlenum}
+	</select>
+</mapper>

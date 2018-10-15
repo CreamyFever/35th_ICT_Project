@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.creamyfever.wow.dao.DiscussionMapper">	
+	<select id="loginmember" parameterType="string" resultType="Members">
+		select * from members where id = #{loginId}
+	</select>
+	<insert id="insert_dis_room" parameterType="Discussion_rooms">
+		insert into discussion_rooms values (dis_seq.nextval, #{dis_title}, #{articlenum}, sysdate, -1)
+	</insert>
+	<select id="printAll_dis_room" parameterType="string" resultType="Discussion_rooms">
+		select dis_no, dis_title, articlenum, to_char(dis_regdate, 'yyyy/mm/dd hh24:mi') dis_regdate, dis_grade from discussion_rooms 
+		<if test="_parameter != null">
+		where
+			dis_title like '%' || #{searchText} || '%'
+		</if>
+		order by dis_no desc
+	</select>
+	<select id="select_dis_room" parameterType="int" resultType="Discussion_rooms">
+		select * from discussion_rooms where dis_no = #{dis_no}
+	</select>
+	<insert id="insert_dis_member" parameterType="Discussion_member">
+		insert into discussion_members values(#{dis_no}, #{idno}, #{id_status})
+	</insert>
+	<insert id="insert_dis_log" parameterType="Discussion_log">
+		insert into discussion_log values(#{dis_no}, dis_log_seq.nextval, #{idno}, #{dis_log})
+	</insert>
+	<select id="printall_dis_log" parameterType="int" resultType="Discussion_log">
+		select * from discussion_log where dis_no = #{dis_no} order by dis_log_seq
+	</select>
+	<update id="update_dis_grade" parameterType="Discussion_rooms">
+		update discussion_rooms set dis_grade = #{dis_grade} where dis_no = #{dis_no}
+	</update>
+	<select id="select_dis_room_num" resultType="int">
+		select max(dis_no) from discussion_rooms
+	</select>
+	<select id="select_dis_room_grade" parameterType="int" resultType="double">
+		select dis_grade from discussion_rooms where dis_no = #{dis_no}
+	</select>
+	<insert id="insert_dis_room_members" parameterType="Discussion_member">
+		insert into discussion_members values(#{dis_no}, #{idno}, #{id_status})
+	</insert>
+	<select id="select_dis_room_members_state" parameterType="Discussion_member" resultType="string">
+		select id_status from discussion_members where idno = #{idno} and dis_no = #{dis_no}
+	</select>
+	<select id="select_best_dis_rooms" resultType="Discussion_rooms">
+		select * from discussion_rooms order by dis_grade desc
+	</select>
+	<select id="printAllArticles" resultType="Article">
+		select * from articles order by articlenum
+	</select>
+	<select id="selectArticle" parameterType="int" resultType="Article">
+		select * from articles where articlenum = #{articlenum}
+	</select>
+	<select id="getTotal" parameterType="string" resultType="int">
+		select count(*) from discussion_rooms 
+		<if test="_parameter != null">
+			where
+				dis_title like '%' || #{searchText} || '%'
+		</if>
+	</select>
+</mapper>
