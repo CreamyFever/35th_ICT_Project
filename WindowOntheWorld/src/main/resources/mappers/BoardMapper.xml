@@ -7,6 +7,8 @@
 	
 	<select id="printBoardList" resultType="Board">
 		SELECT
+			B.BOARDNUM,
+			B.IDNO,
 			B.TITLE,
 			M.NICKNAME as WRITER,
 			B.REGDATE,
@@ -15,6 +17,7 @@
 			BOARDS B, MEMBERS M
         WHERE
             M.IDNO=B.IDNO
+        ORDER BY B.HITCOUNT DESC
        <!-- ORDER BY STARS DESC	 --> 
 	</select>
 	
@@ -49,9 +52,10 @@
 	
 	<select id="printKeyword" resultType="Topkeyword">
 		SELECT
-			*
+			KEYWORD, COUNT, AGE, GENDER
 		FROM
 			TOPKEYWORD
+		ORDER BY COUNT DESC
 	</select>
 	
 	
@@ -119,7 +123,8 @@
 			boards 
 		<if test="_parameter != null">
 		where 
-			title like '%' || #{searchText} || '%'
+			title like '%' || #{searchText} || '%' 
+		or  subject = #{subject}
 		</if>
 	</select>
 	
@@ -146,17 +151,20 @@
 <!-- 카테고리 필터링 게시판 목록(subject 필터링 후) -->
 	<select id="subjectListBoard" parameterType="Board" resultType="Board">
 		select 
-			boardnum
-			, idno
-			, title
-			, to_char(regdate, 'YYYY-MM-DD') regdate
-			, hitcount
-			, subject
+			B.boardnum
+			, B.title
+			, B.idno
+			, M.NICKNAME as WRITER
+			, B.content
+			, to_char(B.regdate, 'YYYY-MM-DD') regdate
+			, to_char(B.moddate, 'YYYY-MM-DD') moddate
+			, B.hitcount
+			, B.subject
 		from 
-			boards
-		
+			BOARDS B, MEMBERS M
 		where
-			subject = #{subject}
+			M.IDNO=B.IDNO
+			and subject = #{subject}
 		order by boardnum desc
 	</select>
 

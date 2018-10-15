@@ -7,14 +7,14 @@ public class Reply {
 	int replynum;				//댓글번호
 	int boardnum;				//원문 게시판글번호
 	String content;				//내용
-	String idno;				//작성자 고유번호
+	int idno;				//작성자 고유번호
 	String regdate;				//댓글 등록날짜
 	String moddate;				//댓글 수정날짜
 	int stars;						//별점수
 	public Reply() {
 		super();
 	}
-	public Reply(int replynum, int boardnum, String content, String idno, String regdate, String moddate, int stars) {
+	public Reply(int replynum, int boardnum, String content, int idno, String regdate, String moddate, int stars) {
 		super();
 		this.replynum = replynum;
 		this.boardnum = boardnum;
@@ -42,10 +42,10 @@ public class Reply {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getIdno() {
+	public int getIdno() {
 		return idno;
 	}
-	public void setIdno(String idno) {
+	public void setIdno(int idno) {
 		this.idno = idno;
 	}
 	public String getRegdate() {
@@ -71,6 +71,7 @@ public class Reply {
 		return "Reply [replynum=" + replynum + ", boardnum=" + boardnum + ", content=" + content + ", idno=" + idno
 				+ ", regdate=" + regdate + ", moddate=" + moddate + ", stars=" + stars + "]";
 	}
-	
 
+	
+	
 }

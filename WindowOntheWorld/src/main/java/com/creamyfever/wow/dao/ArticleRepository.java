@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.creamyfever.wow.vo.Article;
 import com.creamyfever.wow.vo.ArticleHtml;
+import com.creamyfever.wow.vo.ArticleReply;
 
 @Repository
 public class ArticleRepository {
@@ -129,5 +130,35 @@ public class ArticleRepository {
 		//검색어와 읽을 범위를 전달
 		List<Article> list = mapper.listArticle(map, rb);
 		return list;
+	}
+	
+	public List<ArticleReply> listArticleReply(int Articlenum) {
+		ArticleMapper mapper = session.getMapper(ArticleMapper.class);
+		List<ArticleReply> replyList = mapper.listArticleReply(Articlenum);
+		return replyList;
+	}
+
+	public int insertArticleReply(ArticleReply reply) {
+		ArticleMapper mapper = session.getMapper(ArticleMapper.class);
+		int result = mapper.insertArticleReply(reply);
+		return result;
+	}
+
+	public int deleteReply(ArticleReply reply) {
+		ArticleMapper mapper = session.getMapper(ArticleMapper.class);
+		int result = mapper.deleteArticleReply(reply);
+		return result;
+	}
+
+	public int updateArticleReply(ArticleReply reply) {
+		ArticleMapper mapper = session.getMapper(ArticleMapper.class);
+		int result = mapper.updateArticleReply(reply);
+		return result;
+	}
+
+	public Article selectOneByNum(int articlenum) {
+		ArticleMapper mapper = session.getMapper(ArticleMapper.class);
+		Article result = mapper.selectOneByNum(articlenum);
+		return result;
 	}
 }

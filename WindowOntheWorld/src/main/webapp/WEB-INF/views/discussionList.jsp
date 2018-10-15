@@ -17,45 +17,46 @@ body{
 }
 html.open {overflow: hidden;}
 .bar {
-    width : 100%;
-    height : 100px;
-    position : inherit;
-    top : 0px;
-    left : 0px;
-    text-align : center;
-    font-size : 20px;
-    font-weight : bold;
-    background-color: #222730;
-    color:white;
-}	
-.logo{
-	width: 100px;
-    height: 100px;
-    position: inherit;
-    left: 10px;
-    top: 0px;
-    z-index: 1;
-    background-image: url('./resources/images/wow_logo.png');
-    background-size: 80%;
-    background-repeat: no-repeat;
-    background-position: center;
-    cursor: pointer;
-    margin-left: 20px;
+	width: 100%;
+	height: 80px;
+	position: inherit;
+	top: 0px;
+	left: 0px;
+	text-align: center;
+	font-size: 20px;
+	font-weight: bold;
+	background-color: #222730;
+	color: white;
+	z-index: 5;
 }
+.logo {
+	width: 80px;
+	height: 80px;
+	position: absolute;
+	left: 10px;
+	top: 0px;
+	z-index: 1;
+	background-image: url('./resources/images/wow_logo.png');
+	background-size: 80%;
+	background-repeat: no-repeat;
+	background-position: center;
+	cursor: pointer;
+	margin-left: 20px;
+}
+
 .btnn {
-    width: 70px;
-    height: 70px;
-    position: absolute;
-    right: 0px;
-    top: 0px;
-    z-index: 1;
-    background-image: url('./resources/images/menu.png');
-    background-size: 50%;
-    background-repeat: no-repeat;
-    background-position: center;
-    cursor: pointer;
-    margin-top: 15px;
-    margin-right: 20px;
+	width: 80px;
+	height: 80px;
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	z-index: 10;
+	background-image: url('./resources/images/menu.png');
+	background-size: 50%;
+	background-repeat: no-repeat;
+	background-position: center;
+	cursor: pointer;
+	margin-right: 20px;
 }
 .profile{
 	width: 350px;
@@ -138,7 +139,7 @@ li{
 	text-align: center;
 }
 .dis_title{
-	width: 250px;
+	width: 150px;
 	text-align: left;
 }
 .articlenum{
@@ -167,6 +168,12 @@ li{
 	margin: 0px auto;
 	position: static;
 }
+.nn{
+	width: 80%;
+	font-size: 1.5em;
+	font-weight: bold;
+	margin-top: 50px;
+}
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -175,20 +182,12 @@ li{
 	var openGrade;
 	$(function(){
 		$('#loginId').val('${loginId}');
-		$.ajax({
+		/* $.ajax({
 			url : "roomList",
 			type: "post",
 			dataType: "json",
 			success: ajax_func
-		});
-	 	setInterval(function(){
-			$.ajax({
-				url : "roomList",
-				type: "post",
-				dataType: "json",
-				success: ajax_func
-			});
-		},5000); 
+		}); */
 	 	$('.logo').click(function(){
 			window.location.href="<c:url value='/main'/>";
 		});
@@ -196,41 +195,47 @@ li{
 			$(".profile,.page_cover,html").addClass("open");
 		    window.location.hash = "#open";
 		});
-		$('.profileImage').css('background-image', 'url("./resources/images/t3.jpg")'); 
+		$('.profileImage').css('background-image', 'url("./resources/images/wow_logo.png")'); 
 	});
 	function ajax_func(data){
 		var def = "<tr>";
 			def += "<th class='dis_no'>번호</th>";
 			def += "<th class='dis_title'>제목</th>";
-			def += "<th class='articlenum'>기사</th>";
+			def += "<th class='articlenum'>기사 제목</th>";
 			def += "<th class='dis_regdate'>생성날짜</th>";
 			def += "<th class='dis_grade'>평점</th>";
-			def += "</tr>";
-			
+			def += "</tr>";			
 		$('#tb > tbody:last').html(def);
 		
-		for(var i in data){
-			var con = "<tr>";
-			con += "<td class='dis_no'>"+data[i].dis_no+"</td>";
-			if(data[i].dis_grade == -1){
-				con += "<td class='dis_title'><span class='namecursor' onclick='clickenter("+data[i].dis_no+")'><span style='color: gray;'>[시작대기] </span> "+data[i].dis_title+"</span></td>";
+		for(var i in data){					
+			for(var j in data[i]){				
+				var con = "<tr>";
+				con += "<td class='dis_no'>"+data[i][j].dis_no+"</td>";
+				if(data[i][j].dis_grade == -1){
+					con += "<td class='dis_title'><span class='namecursor' onclick='clickenter("+data[i][j].dis_no+")'><span style='color: gray;'>[시작대기] </span> "+data[i][j].dis_title+"</span></td>";
+				}
+				else if(data[i][j].dis_grade == -2){
+					con += "<td class='dis_title'><span class='namecursor' onclick='clickenter("+data[i][j].dis_no+")'><span style='color: gray;'>[진행중] </span> "+data[i][j].dis_title+"</span></td>";
+				}
+				else{
+					con += "<td class='dis_title'><span class='namecursor' onclick='clickenter("+data[i][j].dis_no+")'><span style='color: gray;'>[완료] </span>"+data[i][j].dis_title+"</span></td>";
+				}
+				
+				con += "<td class='articlenum'>"+ j +"</td>";		
+				
+				con += "<td class='dis_regdate'>"+data[i][j].dis_regdate+"</td>";
+				if(data[i][j].dis_grade == -1){
+					con += "<td class='dis_grade'>-</td>";
+				}
+				else if(data[i][j].dis_grade == -2){
+					con += "<td class='dis_grade'>-</td>";
+				}
+				else{
+					con += "<td class='dis_grade'>"+data[i][j].dis_grade+"</td>";				
+				}			
+				con += "</tr>";
+				$('#tb > tbody:last').append(con);
 			}
-			else if(data[i].dis_grade == -2){
-				con += "<td class='dis_title'><span class='namecursor' onclick='clickenter("+data[i].dis_no+")'><span style='color: gray;'>[진행중] </span> "+data[i].dis_title+"</span></td>";
-			}
-			else{
-				con += "<td class='dis_title'><span class='namecursor' onclick='clickenter("+data[i].dis_no+")'><span style='color: gray;'>[완료] </span>"+data[i].dis_title+"</span></td>";
-			}
-			con += "<td class='articlenum'>"+data[i].articlenum+"</td>";
-			con += "<td class='dis_regdate'>"+data[i].dis_regdate+"</td>";
-			if(data[i].dis_grade != -1){
-				con += "<td class='dis_grade'>"+data[i].dis_grade+"</td>";
-			}
-			else{
-				con += "<td class='dis_grade'>-</td>";
-			}			
-			con += "</tr>";
-			$('#tb > tbody:last').append(con);
 		}
 	}
 	function clickenter(roomnum){
@@ -240,17 +245,30 @@ li{
 		$.ajax({
 			url : "member_state",
 			type: "post",
-			data: {"idno" : "${sessionScope.loginIdno}"},
+			data: {
+				"idno" : "${sessionScope.loginIdno}",
+				"roomnum" : roomnum
+			},
 			headers: {
 				Accept: 'application/text; charset=UTF-8'
 			},
 			success: function(data){
-				if(data == ''){
-					openGrade = window.open("discussionMemberState", '_blank', 'toolbar=no, location=no, status=no, menubar=no, scrollbars=auto, resizable=no, directories=no, width=450, height=270, top=100, left=100');
-				}
-				else{
-					$('#insertroomForm').submit();
-				}
+				var state = data;
+				var grade;
+				$.ajax({
+					url : "room_grade",
+					type: "post",
+					data: {"roomnum" : roomnum},
+					success : function(data2){
+						grade = data2;;
+						if(state == '' && (grade == -1 || grade == -2)){
+							openGrade = window.open("discussionMemberState", '_blank', 'toolbar=no, location=no, status=no, menubar=no, scrollbars=auto, resizable=no, directories=no, width=450, height=270, top=100, left=100');
+						}
+						else{
+							$('#insertroomForm').submit();
+						}
+					}
+				});				
 			}
 		});
 	} 
@@ -283,34 +301,115 @@ li{
 			</ul>
 		</c:if>
 	</div>
+	
 	<div class="container">
+		
 		<form id="insertroomForm" action="insertroom" method="post">
 			<input type="hidden" id="loginId" name="loginId">
 			<input type="hidden" id="room_state" name="room_state" value="new">
 			<input type="hidden" id="roomnum" name="roomnum">
 			<input type="hidden" id="userState" name="userState">
 			<div id="content">	
+				<div class="nn">토론방 목록</div>
 				<table class="table table-hover" id="tb">
 					<tr>
-						<th>번호</th>
-						<th>제목</th>
-						<th>기사</th>
-						<th>생성날짜</th>
-						<th>평점</th>		
+						<th class='dis_no'>번호</th>
+						<th class='dis_title'>제목</th>
+						<th class='articlenum'>기사 제목</th>
+						<th class='dis_regdate'>생성날짜</th>
+						<th class='dis_grade'>평점</th>	
 					</tr>
+					
+<!-- 					
+					
+					
+					con += "";
+				if(data[i][j].dis_grade == -1){
+					con += "";
+				}
+				else if(data[i][j].dis_grade == -2){
+					con += "<td class='dis_title'><span class='namecursor' onclick='clickenter("+data[i][j].dis_no+")'><span style='color: gray;'>[] </span> "+data[i][j].dis_title+"</span></td>";
+				}
+				else{
+					con += "<td class='dis_title'><span class='namecursor' onclick='clickenter("+data[i][j].dis_no+")'><span style='color: gray;'>[완료] </span>"+data[i][j].dis_title+"</span></td>";
+				}
+				
+						
+				
+				con += ";
+				if(data[i][j].dis_grade == -1){
+					con += "";
+				}
+				else if(data[i][j].dis_grade == -2){
+					con += "<td class='dis_grade'>-</td>";
+				}
+				else{
+					con += "";	 -->
+					
+					
+					
+					
+					
+					
+					
+					
+					<c:forEach var="roomList" items="${roomList}" >
+						<tr>
+							<td class='dis_no'>${roomList.dis_no}</td>
+							<c:choose>							 
+							    <c:when test="${roomList.dis_grade == -1}">
+							       	<td class='dis_title'><span class='namecursor' onclick='clickenter(${roomList.dis_no})'><span style='color: gray;'>[시작대기] </span>${roomList.dis_title}</span></td>
+							    </c:when>							 
+							    <c:when test="${roomList.dis_grade == -2}">
+							       	<td class='dis_title'><span class='namecursor' onclick='clickenter(${roomList.dis_no})'><span style='color: gray;'>[진행중] </span>${roomList.dis_title}</span></td>
+							    </c:when>							 
+							    <c:otherwise>
+							       	<td class='dis_title'><span class='namecursor' onclick='clickenter(${roomList.dis_no})'><span style='color: gray;'>[완료] </span>${roomList.dis_title}</span></td>
+							    </c:otherwise>							 
+							</c:choose>
+							<td class='articlenum'>${roomList.articlename}</td>
+							<td class='dis_regdate'>${roomList.dis_regdate}</td>
+							<c:choose>							 
+							    <c:when test="${roomList.dis_grade == -1}">
+							       	<td class='dis_grade'>-</td>
+							    </c:when>							 
+							    <c:when test="${roomList.dis_grade == -2}">
+							       	<td class='dis_grade'>-</td>
+							    </c:when>							 
+							    <c:otherwise>
+							       	<td class='dis_grade'>${roomList.dis_grade}</td>
+							    </c:otherwise>							 
+							</c:choose>
+						</tr>						
+					</c:forEach>
 				</table>
 				<div class="text-center">
 					<ul class="pagination">
-						<li><a href="#">＜</a></li>
-						<li><a href="#">1</a></li>
-						<li><a href="#">2</a></li>
-						<li><a href="#">3</a></li>
-						<li><a href="#">4</a></li>
-						<li><a href="#">5</a></li>
-						<li><a href="#">＞</a></li>
+						<li><a href="roomList?page=1&searchText=${searchText}">≪</a></li>
+						<li><a href="roomList?page=${navi.currentPage-1}&searchText=${search}">＜</a></li>
+						<c:if test="${navi.endPageGroup == 0}">
+							<c:if test="${search != null}">
+								<li><a href="roomList?page=1&searchText=${search}">1</a></li>								
+							</c:if>
+							<c:if test="${search == null}">
+								<li><a href="roomList?page=1">1</a></li>								
+							</c:if>
+						</c:if>
+						<c:if test="${navi.endPageGroup != 0}">
+							<c:forEach var="i" begin="${navi.startPageGroup}" end="${navi.endPageGroup}">
+								<c:if test="${i == navi.currentPage}">
+									<li><a href="roomList?page=${i}&searchText=${search}"><b>${i}</b></a></li>
+								</c:if>
+								<c:if test="${i != navi.currentPage}">
+									<li><a href="roomList?page=${i}&searchText=${search}">${i}</a></li>									
+								</c:if>
+							</c:forEach>
+						</c:if> 
+						<li><a href="roomList?page=${navi.currentPage+1}&searchText=${search}">＞</a></li>
+						<li><a href="roomList?page=${navi.totalPageCount}&searchText=${search}">≫</a></li>
 					</ul>
 				</div>
-				<input type="submit" class="btn btn-default pull-right" id="new" onclick="clicknew()" value="새로 만들기"><br/>
+				<input type="submit" class="btn btn-default" id="new" onclick="clicknew()" value="새로 만들기"><br/>
 			</div>		
 		</form>
 	</div>

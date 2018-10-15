@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.creamyfever.wow.dao.TopKeywordMapper">
+	
+	<select id="selectOneTopKeyword" parameterType="String" resultType="TopKeyword">
+		SELECT
+			KEYWORD, COUNT, AGE, GENDER
+		FROM
+			TOPKEYWORD
+		WHERE
+			KEYWORD=#{keyword}
+	</select>
+	
+	<insert id="insertTopKeyword" parameterType="Topkeyword">
+		INSERT INTO TOPKEYWORD
+			(KEYWORD, AGE, GENDER)
+		VALUES
+			(#{keyword},#{age},#{gender})
+	</insert>
+	
+	<update id="updateTopKeyword" parameterType="String">
+		UPDATE 
+			TOPKEYWORD
+		SET
+			count=count+1
+		WHERE
+			KEYWORD = #{keyword}
+	</update>	
+	
+	<select id="printAllTopKeyword" resultType="Topkeyword">
+		SELECT
+			KEYWORD, COUNT, AGE, GENDER
+		FROM
+			TOPKEYWORD
+	</select>
+	
+</mapper>

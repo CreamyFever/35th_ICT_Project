@@ -1,6 +1,7 @@
 package com.creamyfever.wow.controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.creamyfever.wow.dao.DiscussionMapper;
 import com.creamyfever.wow.dao.KeywordMapper;
+import com.creamyfever.wow.vo.Article;
 import com.creamyfever.wow.vo.Keyword;
 
 @Controller
@@ -37,9 +40,13 @@ public class KeywordController {
 		return result;
 	}
 	@RequestMapping(value = "/selectKeyword", method = RequestMethod.POST)
-	public @ResponseBody ArrayList<String> selectKeyword(int articlenum) {
+	public @ResponseBody HashMap<String, ArrayList<String>> selectKeyword(int articlenum) {
 		KeywordMapper mapper = session.getMapper(KeywordMapper.class);
-		ArrayList<String> result = mapper.selectKeyword(articlenum);
+		ArrayList<String> re = mapper.selectKeyword(articlenum);
+		HashMap<String, ArrayList<String>> result = new HashMap<>(); 
+		DiscussionMapper ma = session.getMapper(DiscussionMapper.class);
+		Article ar = ma.selectArticle(articlenum);
+		result.put(ar.getArticlename(), re);
 		return result;
 	}
 }
