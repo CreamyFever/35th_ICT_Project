@@ -1,23 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
-<!--
-Author: W3layouts
-Author URL: http://w3layouts.com
-License: Creative Commons Attribution 3.0 Unported
-License URL: http://creativecommons.org/licenses/by/3.0/
--->
 <!DOCTYPE HTML>
 <html>
 <head>
 <title>Window On the World</title>
-<link href="resources/css/bootstrap.css" rel='stylesheet'
-	type='text/css' />
-<link rel="stylesheet" href="resources/fonts/css/font-awesome.min.css">
-<link
-	href='http://fonts.googleapis.com/css?family=Raleway:400,100,300,500,600,200,700,800,900'
-	rel='stylesheet' type='text/css'>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href='http://fonts.googleapis.com/css?family=Raleway:400,100,300,500,600,200,700,800,900' rel='stylesheet' type='text/css'>
 <style>
 * {
 	margin: 0;
@@ -32,10 +21,9 @@ body {
 html.open {
 	overflow: hidden;
 }
-
 .bar {
 	width: 100%;
-	height: 100px;
+	height: 80px;
 	position: fixed;
 	top: 0px;
 	left: 0px;
@@ -46,10 +34,9 @@ html.open {
 	color: white;
 	z-index: 5;
 }
-
 .logo {
-	width: 100px;
-	height: 100px;
+	width: 80px;
+	height: 80px;
 	position: fixed;
 	left: 10px;
 	top: 0px;
@@ -62,9 +49,9 @@ html.open {
 	margin-left: 20px;
 }
 
-.btn {
-	width: 70px;
-	height: 70px;
+.btnn {
+	width: 80px;
+	height: 80px;
 	position: fixed;
 	right: 0px;
 	top: 0px;
@@ -74,10 +61,8 @@ html.open {
 	background-repeat: no-repeat;
 	background-position: center;
 	cursor: pointer;
-	margin-top: 15px;
 	margin-right: 20px;
 }
-
 .profile {
 	width: 350px;
 	height: 100%;
@@ -154,41 +139,54 @@ li {
 	margin: 0px auto;
 	margin-bottom: 20px;
 }
+.contain{
+	width: 80%;
+	margin: 0px auto;
+}
+.searchKeyword{
+	font-size: 2.2em;
+    font-weight: 900;
+    color: #506369;
+    text-align: left;
+    margin: 0.8em 0 0.8em;
+}
+#world{
+	width: 1200px;
+	margin: 0px auto;
+	background-color: black;
+	margin-top: 30px;
+}
+#lastOuter{
+	margin-top: 30px;
+}
+#worldmap{
+	width: 1200px; 
+	margin: 0px auto;
+	display: block;
+}
 </style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<!---- start-smoth-scrolling---->
-<script type="text/javascript" src="resources/js/move-top.js"></script>
-<script type="text/javascript" src="resources/js/easing.js"></script>
-
-<!---- start-smoth-scrolling---->
-<!-- Custom Theme files -->
-<link href="resources/css/theme-style.css" rel='stylesheet'
-	type='text/css' />
-<!-- Custom Theme files -->
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<!----font-Awesome----->
-<link rel="stylesheet" href="resources/fonts/css/font-awesome.min.css">
-<!----font-Awesome----->
-<!----webfonts---->
-<link
-	href='http://fonts.googleapis.com/css?family=Raleway:400,100,300,500,600,200,700,800,900'
-	rel='stylesheet' type='text/css'>
-<!----//webfonts---->
-
 <link rel="stylesheet" type="text/css" href="./resources/css/util.css">
 <link rel="stylesheet" type="text/css" href="./resources/css/main.css">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 	$(function(){
+		var gender_m = document.getElementById("gender_m").value;
+		var gender_w = document.getElementById("gender_w").value;
+		
+		
 		$('.logo').click(function(){
 			window.location.href="<c:url value='/main'/>";
 		});
-		$('.btn').click(function(){
+		$('.btnn').click(function(){
 			$(".profile,.page_cover,html").addClass("open");
 		    window.location.hash = "#open";
 		});
-		$('.profileImage').css('background-image', 'url("./resources/images/t3.jpg")'); 
+		$('.profileImage').css('background-image', 'url("./resources/images/wow_logo.png")'); 
+		
+		var offset = $(".searchForm").offset().top;
+		$('html, body').animate({scrollTop: offset}, 400);
 	});
 	window.onhashchange = function() {
 	    if(location.hash != "#open"){
@@ -196,7 +194,6 @@ li {
 	    }	    
 	};
 </script>
-
 </head>
 <body>
 	<div id="main">
@@ -212,18 +209,13 @@ li {
 					<li><a class="loginli" href="login">로그인</a></li>
 					<li><a class="loginli" href="join">회원가입</a></li>
 				</c:if>
-
-				<li><a class="loginli" href="board/list">게시판</a></li>
-
-				<li><a class="loginli" href="main">메인으로</a></li>
 			</ul>
 		</div>
-
 		<!----start-container------>
 		<!----start-header---->
 		<div class="bar">
 			<div class="logo"></div>
-			<div class="btn"></div>
+			<div class="btnn"></div>
 		</div>
 		<div onclick="history.back();" class="page_cover"></div>
 		<div class="profile">
@@ -231,8 +223,10 @@ li {
 			<c:if test="${loginId != null}">
 				<div class="loginName">${sessionScope.loginName}</div>
 				<ul>
+					<li><a class="loginli" href="board/list">게시판</a></li>
 					<li><a class="loginli" href="members/update">회원정보수정</a></li>
 					<li><a class="loginli" href="members/logout">로그아웃</a></li>
+					<li><a class="loginli" href="main">메인으로</a></li>
 				</ul>
 			</c:if>
 			<c:if test="${loginId == null}">
@@ -243,174 +237,187 @@ li {
 			</c:if>
 		</div>
 		<!----start-search_bar----->
-		<form id="searchForm" class="searchForm" action="world" method="get">
+		<form id="searchForm" class="searchForm" action="goToWorldMap" method="get">
 			<div class="wrap-input100" id="search">
-				<input class="input100" type="text" name="searchWord"
-					id="input_keyword" placeholder="Enter a keyword!" value="${search}">
+				<input class="input100" type="text" name="search" id="input_keyword" placeholder="Enter a keyword!" value="${search}">
 				<span class="focus-input100"></span>
 			</div>
 		</form>
 		<!----//End-search_bar----->
-
-		<h1 style="background: white;">Searched for "${search}"</h1>
-
-		<div id="world" style="background-color: black">
-			<img src="./resources/worldmap/img/worldmap.png" id="worldmap"
-				style="width: 1200px; margin-left: auto; margin-right: auto; display: block;"
-				onclick="newweb('${search}')" />
-		</div>
-
-		<input type="hidden" id="continent_input" value="">
-
-		<!-- 위에 띄우는 대륙별 그래프!!!!!!!!! -->
-		<!-- NA -->
-		<div
-			style="height: 80px; width: 80px; position: absolute; left: 280px; top: 465px;">
-			<canvas id="pieChart_NA" height="10px" width="10px">This browser doesn't support canvas</canvas>
-		</div>
-		<!-- SA -->
-		<div
-			style="height: 80px; width: 80px; position: absolute; left: 438px; top: 660px;">
-			<canvas id="pieChart_SA" height="10px" width="10px">This browser doesn't support canvas</canvas>
-		</div>
-		<!-- Europe -->
-		<div
-			style="height: 80px; width: 80px; position: absolute; left: 680px; top: 435px;">
-			<canvas id="pieChart_Euro" height="10px" width="10px">This browser doesn't support canvas</canvas>
-		</div>
-		<!-- Asia -->
-		<div
-			style="height: 80px; width: 80px; position: absolute; left: 877px; top: 472px;">
-			<canvas id="pieChart_Asia" height="10px" width="10px">This browser doesn't support canvas</canvas>
-		</div>
-		<!-- Oceania -->
-		<div
-			style="height: 80px; width: 80px; position: absolute; left: 900px; top: 707px;">
-			<canvas id="pieChart_Ocea" height="10px" width="10px">This browser doesn't support canvas</canvas>
-		</div>
-		<!-- Aprica -->
-		<div
-			style="height: 80px; width: 80px; position: absolute; left: 636px; top: 641px;">
-			<canvas id="pieChart_Apri" height="10px" width="10px">This browser doesn't support canvas</canvas>
-		</div>
-
-		<!-- Aprica click! -->
-		<div id="apri_div_out">
-			<div id="apri_div"
-				style="height: 300px; width: 300px; position: absolute; left: 635px; top: 232px;">
-				<img src="" width="170px">
+		
+		<div class="contain">
+			<span class="searchKeyword">Searched for "${search}"</span>
+			<div id="world" onclick="newweb('${search}')"> <!-- newweb('${search}') pos(event) -->
+				<img src="./resources/worldmap/img/worldmap.png" id="worldmap" onclick="" />
+			</div>	
+			<input type="hidden" id="continent_input" value="">	
+			<!-- 위에 띄우는 대륙별 그래프!!!!!!!!! -->
+			<!-- NA -->
+			<div style="height: 80px; width: 80px; position: absolute; left: 280px; top: 465px;">
+				<canvas id="pieChart_NA" height="10px" width="10px">This browser doesn't support canvas</canvas>
 			</div>
-		</div>
-		<!-- Oceania click! -->
-		<div id="ocea_div_out">
-			<div id="ocea_div"
-				style="height: 300px; width: 300px; position: absolute; left: 930px; top: 337px;">
-				<img src="" width="174px">
+			<!-- SA -->
+			<div style="height: 80px; width: 80px; position: absolute; left: 438px; top: 660px;">
+				<canvas id="pieChart_SA" height="10px" width="10px">This browser doesn't support canvas</canvas>
 			</div>
-		</div>
-		<!-- SA click! -->
-		<div id="SA_div_out">
-			<div id="ocea_div"
-				style="height: 300px; width: 300px; position: absolute; left: 930px; top: 337px;">
-				<img src="" width="174px">
+			<!-- Europe -->
+			<div style="height: 80px; width: 80px; position: absolute; left: 680px; top: 435px;">
+				<canvas id="pieChart_Euro" height="10px" width="10px">This browser doesn't support canvas</canvas>
 			</div>
-		</div>
-		<div id="result" style="color: white;"></div>
-
-
-		<div id="lastOuter">
-			<div id="chartContainer"
-				style="height: 500px; width: 50%; float: left;"></div>
-
-			<div id="out" style="height: 500px; width: 50%; float: right;">
-				<div id="outer1" style="width: 50%; float: left;">
-					<div id="gender" style="height: 500px; width: 50%; float: left;"></div>
-					<div id="age" style="height: 500px; width: 50%; float: right;"></div>
-				</div>
-				<div id="outer2" style="width: 50%; height: 500px; float: right;">
-					<div id="stackedColumn" style="height: 500px;"></div>
+			<!-- Asia -->
+			<div style="height: 80px; width: 80px; position: absolute; left: 877px; top: 472px;">
+				<canvas id="pieChart_Asia" height="10px" width="10px">This browser doesn't support canvas</canvas>
+			</div>
+			<!-- Oceania -->
+			<div style="height: 80px; width: 80px; position: absolute; left: 900px; top: 707px;">
+				<canvas id="pieChart_Ocea" height="10px" width="10px">This browser doesn't support canvas</canvas>
+			</div>
+			<!-- Aprica -->
+			<div style="height: 80px; width: 80px; position: absolute; left: 636px; top: 641px;">
+				<canvas id="pieChart_Apri" height="10px" width="10px">This browser doesn't support canvas</canvas>
+			</div>
+	
+			<!-- Aprica click! -->
+			<div id="apri_div_out">
+				<div id="apri_div" style="height: 300px; width: 300px; position: absolute; left: 635px; top: 232px;">
+					<img src="" width="170px">
 				</div>
 			</div>
-		</div>
-
-		<!-- 여기 다시 고치기★★★★★★★★★★★★★★★★★★★★★★★★★★ -->	
+			<!-- Oceania click! -->
+			<div id="ocea_div_out">
+				<div id="ocea_div" style="height: 300px; width: 300px; position: absolute; left: 930px; top: 337px;">
+					<img src="" width="174px">
+				</div>
+			</div>
+			<!-- SA click! -->
+			<div id="SA_div_out">
+				<div id="ocea_div" style="height: 300px; width: 300px; position: absolute; left: 930px; top: 337px;">
+					<img src="" width="174px">
+				</div>
+			</div>
+			<div id="result" style="color: white;"></div>
+	
+			<div id="lastOuter">
+				<div id="chartContainer" style="height: 500px; width: 50%; float: left;"></div>
+	
+				<div id="out" style="height: 500px; width: 50%; float: right;">
+					<div id="outer1" style="width: 50%; float: left;">
+						<div id="gender" style="height: 500px; width: 50%; float: left;"></div>
+						<div id="age" style="height: 500px; width: 50%; float: right;"></div>
+					</div>
+					<div id="outer2" style="width: 50%; height: 500px; float: right;">
+						<div id="stackedColumn" style="height: 500px;"></div>
+					</div>
+				</div>
+			</div>
+	
+			<!-- 여기 다시 고치기★★★★★★★★★★★★★★★★★★★★★★★★★★ -->	
+				
+				 <input type="hidden" id="sent_Africa" value="${sentimentList[0]}">
+		         <input type="hidden" id="sent_Asia" value="${sentimentList[1]}">
+		         <input type="hidden" id="sent_SA" value="${sentimentList[2]}">
+		         <input type="hidden" id="sent_NA" value="${sentimentList[3]}">
+		         <input type="hidden" id="sent_Oceania" value="${sentimentList[4]}">
+		         <input type="hidden" id="sent_Europe" value="${sentimentList[5]}">
 			
-			 <input type="hidden" id="sent_Africa" value="${sentimentList[0]}">
-	         <input type="hidden" id="sent_Asia" value="${sentimentList[1]}">
-	         <input type="hidden" id="sent_SA" value="${sentimentList[2]}">
-	         <input type="hidden" id="sent_NA" value="${sentimentList[3]}">
-	         <input type="hidden" id="sent_Oceania" value="${sentimentList[4]}">
-	         <input type="hidden" id="sent_Europe" value="${sentimentList[5]}">
-	
-	         <input type="hidden" id="gender_w" value="${genderList[0]}">
-	         <input type="hidden" id="gender_m" value="${genderList[1]}">
-	
-	         <input type="hidden" id="age_under19" value="${ageList[0]}">
-	         <input type="hidden" id="age_up20under29" value="${ageList[1]}">
-	         <input type="hidden" id="age_up30under39" value="${ageList[2]}">
-	         <input type="hidden" id="age_up40under49" value="${ageList[3]}">
-	         <input type="hidden" id="age_up50" value="${ageList[4]}">
-
-
-		<!----start-copy-right--->
-		<div class="copy-right">
-			<div class="container">
-				<p>
-					Template by <a href="#">W3layouts</a>
-				</p>
-				<script type="text/javascript">
-					$(document).ready(function() {
-						/*
-						var defaults = {
-							containerID: 'toTop', // fading element id
-							containerHoverID: 'toTopHover', // fading element hover id
-							scrollSpeed: 1200,
-							easingType: 'linear' 
-						};
-						 */
-
-						$().UItoTop({
-							easingType : 'easeOutQuart'
-						});
-
-					});
-				</script>
-				<a href="#" id="toTop" style="display: block;"> <span
-					id="toTopHover" style="opacity: 1;"> </span></a>
-			</div>
-		</div>
-		<!----//End-copy-right--->
-		<!----//End-container------>
+		         <input type="hidden" id="gender_w" value="${genderList[0]}">
+		         <input type="hidden" id="gender_m" value="${genderList[1]}">
+		
+		         <input type="hidden" id="age_under19" value="${ageList_m[0]+ageList_w[0]}">
+		         <input type="hidden" id="age_up20under29" value="${ageList_m[1]+ageList_w[1]}">
+		         <input type="hidden" id="age_up30under39" value="${ageList_m[2]+ageList_w[2]}">
+		         <input type="hidden" id="age_up40under49" value="${ageList_m[3]+ageList_w[3]}">
+		         <input type="hidden" id="age_up50" value="${ageList_m[4]+ageList_w[4]}">
+		         
+		         <input type="hidden" id="age_under19_w" value="${ageList_w[0]}">
+               	 <input type="hidden" id="age_up20under29_w" value="${ageList_w[1]}">
+               	 <input type="hidden" id="age_up30under39_w" value="${ageList_w[2]}">
+               	 <input type="hidden" id="age_up40under49_w" value="${ageList_w[3]}">
+               	 <input type="hidden" id="age_up50_w" value="${ageList_w[4]}">
+               	 <input type="hidden" id="age_under19_m" value="${ageList_m[0]}">
+               	 <input type="hidden" id="age_up20under29_m" value="${ageList_m[1]}">
+               	 <input type="hidden" id="age_up30under39_m" value="${ageList_m[2]}">
+               	 <input type="hidden" id="age_up40under49_m" value="${ageList_m[3]}">
+               	 <input type="hidden" id="age_up50_m" value="${ageList_m[4]}">
+		         
+		         <input type="hidden" id="userSentiment_Africa" value="${userSentiment[0]}">
+		         <input type="hidden" id="userSentiment_Europe" value="${userSentiment[1]}">
+		         <input type="hidden" id="userSentiment_Oceania" value="${userSentiment[2]}">
+		         <input type="hidden" id="userSentiment_NA" value="${userSentiment[3]}">
+		         <input type="hidden" id="userSentiment_SA" value="${userSentiment[4]}">
+		         <input type="hidden" id="userSentiment_Asia" value="${userSentiment[5]}">
+		         
+		         <input type="hidden" id="bubValue_Africa" value="${bubValue[0]}">
+		         <input type="hidden" id="bubValue_Asia" value="${bubValue[1]}">
+		         <input type="hidden" id="bubValue_SA" value="${bubValue[2]}">
+		         <input type="hidden" id="bubValue_NA" value="${bubValue[3]}">
+		         <input type="hidden" id="bubValue_Oceania" value="${bubValue[4]}">
+		         <input type="hidden" id="bubValue_Europe" value="${bubValue[5]}">
+			<!----//End-container------>
+		</div>		
 	</div>
+	
+	<div id="result">좌표가 나올 부분</div>
 </body>
 
 <script src="./resources/worldmap/js/worldGraph.js?ver=2"></script>
 <script src="./resources/worldmap/js/Chart.bundle.min.js"></script>
-
-<script type="text/javascript"
-	src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-
+<script src="./resources/worldmap/js/jquery.canvasjs.min.js"></script>
+<!-- <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script> -->
 <!-- pieOptions와 각 대륙별 데이터 뽑아오기 -->
 <!-- 각 대륙별 차트 생성-->
-<script type="text/javascript"
-	src="./resources/worldmap/js/continent_chart.js">
-	
-</script>
+<script type="text/javascript" src="./resources/worldmap/js/continent_chart.js"></script>
 
 <!-- 버블그래프 차트 생성 -->
 <script type="text/javascript">
+
+	CanvasJS.addColorSet("blueShades",
+        [
+        "#4286f4",
+        "#2052a3",
+        "#89bcff",
+        "#2547dd",
+        "#bce2ff"                
+        ]);
+
 	$(function() {
+		
+		var userSentiment_Africa = document.getElementById("userSentiment_Africa").value;
+		var userSentiment_Europe = document.getElementById("userSentiment_Europe").value;
+		var userSentiment_Oceania = document.getElementById("userSentiment_Oceania").value;
+		var userSentiment_NA = document.getElementById("userSentiment_NA").value;
+		var userSentiment_SA = document.getElementById("userSentiment_SA").value;
+		var userSentiment_Asia = document.getElementById("userSentiment_Asia").value;
+		
+		var bubValue_Africa = document.getElementById("bubValue_Africa").value;
+		var bubValue_Asia = document.getElementById("bubValue_Asia").value;
+		var bubValue_SA = document.getElementById("bubValue_SA").value;
+		var bubValue_NA = document.getElementById("bubValue_NA").value;
+		var bubValue_Oceania = document.getElementById("bubValue_Oceania").value;
+		var bubValue_Europe = document.getElementById("bubValue_Europe").value;
+		
+		
 		var chart = new CanvasJS.Chart("chartContainer", {
 			legendText : "Size of Bubble Represents Population",
 			showInLegend : true,
-			theme : "dark2",
+			theme : "light2",
 			legendMarkerType : "circle",
+			colorSet : "blueShades",
 			title : {
 				text : "BUBBLE GRAPH"
+
 			},
+			subtitles:[
+				{
+					text: "100% ▶ 10 / 0% ▶ -10",
+					//Uncomment properties below to see how they behave
+					//fontColor: "red",
+					//fontSize: 30
+				}
+			],
 
 			axisX : {
-				title : "大陸",
+				title : "Continent",
 				gridThickness : 0,
 				viewportMinimum : -10,
 				viewportMaximum : 10,
@@ -423,7 +430,7 @@ li {
 
 			},
 			axisY : {
-				title : "使用者",
+				title : "User",
 				gridThickness : 0,
 				viewportMinimum : -10,
 				viewportMaximum : 10,
@@ -436,35 +443,36 @@ li {
 			},
 			data : [ {
 				type : "bubble",
+				toolTipContent: "<b>{name}</b><br/>대륙별 긍정도: {x} <br/> WOW사용자 긍정도: {y}<br/> 자료의 양: {z}",
 				dataPoints : [ {
-					x : 1.0,
-					y : -1.0,
-					z : 900,
-					name : "South_America"
+					name : "South_America",
+					x : (sent_SA-50)*0.2,
+					y : (2.5-userSentiment_SA)*4,
+					z : 100*bubValue_SA
 				}, {
-					x : 2.5,
-					y : -2.5,
-					z : 800,
-					name : "Norti_America"
+					x : (sent_NA-50)*0.2,
+					y : (2.5-userSentiment_NA)*4,
+					z : 100*bubValue_NA,
+					name : "North_America"
 				}, {
-					x : 3.5,
-					y : 9.0,
-					z : 300,
+					x : (sent_Asia-50)*0.2,
+					y : (2.5-userSentiment_Asia)*4,
+					z : 100*bubValue_Asia,
 					name : "Asia"
 				}, {
-					x : -5.0,
-					y : -10.0,
-					z : 400,
+					x : (sent_Oceania-50)*0.2,
+					y : (2.5-userSentiment_Oceania)*4,
+					z : 100*bubValue_Oceania,
 					name : "Oceania"
 				}, {
-					x : 6.5,
-					y : 7.5,
-					z : 500,
+					x : (sent_Europe-50)*0.2,
+					y : (2.5-userSentiment_Europe)*4,
+					z : 100*bubValue_Europe,
 					name : "Europe"
 				}, {
-					x : 9.0,
-					y : -10.5,
-					z : 1000,
+					x : (sent_Africa-50)*0.2,
+					y : (2.5-userSentiment_Africa)*4,
+					z : 100*bubValue_Africa,
 					name : "Africa"
 				},
 				// { x: 64.8, y: 2.66, z:12074.4 , name: "India"},
@@ -513,14 +521,35 @@ li {
 
 <!-- 나이, 성별 그래프 -->
 <script type="text/javascript">
+	
+CanvasJS.addColorSet("gender",
+        [//colorSet Array
+        "#ffcf23",
+        "#4286f4"                
+        ]);
+        
+
+	
 	$(function() {
+		var gender_m = document.getElementById("gender_m").value;
+		var gender_w = document.getElementById("gender_w").value;
+		var age_under19 = document.getElementById("age_under19").value;
+		var age_up20under29 = document.getElementById("age_up20under29").value;
+		var age_up30under39 = document.getElementById("age_up30under39").value;
+		var age_up40under49 = document.getElementById("age_up40under49").value;
+		var age_up50 = document.getElementById("age_up50").value;
 
 		/*
 		http://yeahvely.tistory.com/6
 		차트 연습하는 사이트 목록
+		
+
+		
+		
 		 */
 
 		var chart_gender = new CanvasJS.Chart("gender", {
+			colorSet : "gender",
 			title : {
 				text : "By Gender"
 			},
@@ -529,11 +558,11 @@ li {
 			{
 				dataPoints : [ {
 					x : 1,
-					y : 297571,
+					y : 1*gender_w, //
 					label : "W"
 				}, {
 					x : 2,
-					y : 267017,
+					y : 1*gender_m,
 					label : "M"
 				}, ]
 			} ]
@@ -542,31 +571,32 @@ li {
 		chart_gender.render();
 
 		var chart_age = new CanvasJS.Chart("age", {
+			colorSet : "blueShades",
 			title : {
-				text : "Top Oil Reserves"
+				text : "By Age"
 			},
 			data : [
 
 			{
 				dataPoints : [ {
 					x : 1,
-					y : 297571,
+					y : 1*age_under19,
 					label : "~19"
 				}, {
 					x : 2,
-					y : 267017,
+					y : 1*age_up20under29,
 					label : "20~29"
 				}, {
 					x : 3,
-					y : 175200,
+					y : 1*age_up30under39,
 					label : "30~39"
 				}, {
 					x : 4,
-					y : 154580,
+					y : 1*age_up40under49,
 					label : "40~49"
 				}, {
 					x : 5,
-					y : 116000,
+					y : 1*age_up50,
 					label : "50~"
 				}, ]
 			} ]
@@ -580,62 +610,70 @@ li {
 <!-- stacked age, gender -->
 <script type="text/javascript">
 	$(function() {
+		
+		var age_under19_w = document.getElementById("age_under19_w").value;
+		var age_up20under29_w = document.getElementById("age_up20under29_w").value;
+		var age_up30under39_w = document.getElementById("age_up30under39_w").value;
+		var age_up40under49_w = document.getElementById("age_up40under49_w").value;
+		var age_up50_w = document.getElementById("age_up50_w").value;
+		var age_under19_m = document.getElementById("age_under19_m").value;
+		var age_up20under29_m = document.getElementById("age_up20under29_m").value;
+		var age_up30under39_m = document.getElementById("age_up30under39_m").value;
+		var age_up40under49_m = document.getElementById("age_up40under49_m").value;
+		var age_up50_m = document.getElementById("age_up50_m").value;
+		
+		
 		var chart = new CanvasJS.Chart("stackedColumn", {
+			colorSet : "gender",
 			title : {
-				text : "Coal Reserves of Countries"
+				text : "By Gender and Age"
 			},
 			axisY : {
-				title : "Coal (bn tonnes)",
-				valueFormatString : "#0.#,.",
+				title : "검색 인원 수"
+//				valueFormatString : "#0.#,.",
 			},
 			data : [ {
 				type : "stackedColumn",
-				legendText : "Anthracite & Bituminous",
-				showInLegend : "true",
+				legendText : "나이별 여성 회원 수",
+				showInLegend : "false",
 				dataPoints : [ {
-					y : 111338,
-					label : "USA"
+					y : 1*age_under19_w,
+					label : "~19"
 				}, {
-					y : 49088,
-					label : "Russia"
+					y : 1*age_up20under29_w,
+					label : "20~29"
 				}, {
-					y : 62200,
-					label : "China"
+					y : 1*age_up30under39_w,
+					label : "30~39"
 				}, {
-					y : 90085,
-					label : "India"
+					y : 1*age_up40under49_w,
+					label : "40~49"
 				}, {
-					y : 38600,
-					label : "Australia"
-				}, {
-					y : 48750,
-					label : "SA"
+					y : 1*age_up50_w,
+					label : "50~"
 				} ]
 			}, {
 				type : "stackedColumn",
-				legendText : "SubBituminous & Lignite",
+				legendText : "나이별 남성 회원 수",
 				showInLegend : "true",
 				indexLabel : "#total bn",
-				yValueFormatString : "#0.#,.",
+	//			yValueFormatString : "#0.#,.",
 				indexLabelPlacement : "outside",
 				dataPoints : [ {
-					y : 135305,
-					label : "USA"
+					y : 1*age_under19_m,
+					label : "~19"
 				}, {
-					y : 107922,
-					label : "Russia"
+					y : 1*age_up20under29_m,
+					label : "20~29"
 				}, {
-					y : 52300,
-					label : "China"
+					y : 1*age_up30under39_m,
+					label : "30~39"
 				}, {
-					y : 3360,
-					label : "India"
+					y : 1*age_up40under49_m,
+					label : "40~49"
 				}, {
-					y : 39900,
-					label : "Australia"
-				}, {
-					y : 0,
-					label : "SA"
+					y : 1*age_up50_m,
+					label : "50~"
 				} ]
 			} ]
 		});

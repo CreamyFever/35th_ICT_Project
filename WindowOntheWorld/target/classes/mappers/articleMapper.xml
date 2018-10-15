@@ -160,4 +160,75 @@
 		and articlecontent like '%' || #{keyword} || '%'
 		order by articledate desc
 	</select>
+	
+	<!-- 현재 기사의 리플 목록 -->
+	<select id="listArticleReply" parameterType="Integer" resultType="ArticleReply">
+	select 
+			replynum
+			, articlenum
+			, idno
+			, content
+			, to_char(regdate, 'YYYY-MM-DD') regdate
+			, stars
+		from 
+			articlereply
+		where
+			articlenum = #{articlenum}
+		order by replynum desc
+	</select>
+	
+	<!-- 리플 저장 -->
+	<insert id="insertArticleReply" parameterType="ArticleReply">
+		insert into articlereply (
+			replynum
+			, articlenum
+			, idno
+			, content
+			, stars
+		)
+		values (
+			articlereply_seq.nextval
+			, #{articlenum}
+			, #{idno}
+			, #{content}
+			, #{stars}
+		)
+	</insert>
+	
+	<!-- 리플 삭제 -->
+	<delete id="deleteArticleReply" parameterType="ArticleReply">
+		delete
+		from
+			articlereply
+		where
+			replynum = #{replynum}
+			and idno = #{idno}
+	</delete>
+	
+	<!-- 리플 수정 -->
+	<update id="updateArticleReply" parameterType="ArticleReply">
+		update
+			articlereply
+		set
+			content = #{content}
+			,stars  = #{stars}
+		where
+			replynum = #{replynum}
+			and idno = #{idno}
+	</update>
+	
+	<select id="selectOneByNum" parameterType="int" resultType="Article">
+		select
+		     articlenum
+		    , articleid
+		    , articlename
+		    , articlecontent
+		    , TO_CHAR(articledate, 'yyyymmdd') as articledate
+		    , presscompany
+		    , url
+		    , continent
+		    , sentiment
+		from articles
+		where articlenum = #{articlenum}
+	</select>
 </mapper>

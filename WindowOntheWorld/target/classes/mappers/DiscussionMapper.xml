@@ -10,8 +10,13 @@
 	<insert id="insert_dis_room" parameterType="Discussion_rooms">
 		insert into discussion_rooms values (dis_seq.nextval, #{dis_title}, #{articlenum}, sysdate, -1)
 	</insert>
-	<select id="printAll_dis_room" resultType="Discussion_rooms">
-		select dis_no, dis_title, articlenum, to_char(dis_regdate, 'yyyy/mm/dd hh24:mi') dis_regdate, dis_grade from discussion_rooms order by dis_no
+	<select id="printAll_dis_room" parameterType="string" resultType="Discussion_rooms">
+		select dis_no, dis_title, articlenum, to_char(dis_regdate, 'yyyy/mm/dd hh24:mi') dis_regdate, dis_grade from discussion_rooms 
+		<if test="_parameter != null">
+		where
+			dis_title like '%' || #{searchText} || '%'
+		</if>
+		order by dis_no desc
 	</select>
 	<select id="select_dis_room" parameterType="int" resultType="Discussion_rooms">
 		select * from discussion_rooms where dis_no = #{dis_no}
@@ -37,7 +42,23 @@
 	<insert id="insert_dis_room_members" parameterType="Discussion_member">
 		insert into discussion_members values(#{dis_no}, #{idno}, #{id_status})
 	</insert>
-	<select id="select_dis_room_members_state" parameterType="int" resultType="string">
-		select id_status from discussion_members where idno = #{idno}
+	<select id="select_dis_room_members_state" parameterType="Discussion_member" resultType="string">
+		select id_status from discussion_members where idno = #{idno} and dis_no = #{dis_no}
+	</select>
+	<select id="select_best_dis_rooms" resultType="Discussion_rooms">
+		select * from discussion_rooms order by dis_grade desc
+	</select>
+	<select id="printAllArticles" resultType="Article">
+		select * from articles order by articlenum
+	</select>
+	<select id="selectArticle" parameterType="int" resultType="Article">
+		select * from articles where articlenum = #{articlenum}
+	</select>
+	<select id="getTotal" parameterType="string" resultType="int">
+		select count(*) from discussion_rooms 
+		<if test="_parameter != null">
+			where
+				dis_title like '%' || #{searchText} || '%'
+		</if>
 	</select>
 </mapper>

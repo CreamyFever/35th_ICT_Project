@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,7 @@ import com.creamyfever.wow.dao.ArticleRepository;
 import com.creamyfever.wow.util.PageNavigator;
 import com.creamyfever.wow.vo.Article;
 import com.creamyfever.wow.vo.ArticleHtml;
+import com.creamyfever.wow.vo.ArticleReply;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -196,24 +199,96 @@ public class ArticleController {
 	
 	/**
 	 * 글 읽기
-	 * @param boardnum 읽을 글번호
+	 * @param articlenum
 	 * @return 해당 글 정보
 	 */
 	@RequestMapping (value="read", method=RequestMethod.GET)
-	public String read(String articleid, Model model) {
+	public String read(String articleid, int articlenum, Model model) {
 		//전달된 글 번호로 해당 글정보 읽기
 		Article article = repository.selectArticleHtml(articleid);
 		if (article == null) {
 			return "redirect:/main";
 		}
 		
+		System.out.println(articlenum);
+		
 		//해당 글에 달린 리플목록 읽기
-		//ArrayList<Reply> replylist = repository.listReply(articleid);
+		List<ArticleReply> replylist = repository.listArticleReply(articlenum);
 		
 		//본문글정보와 리플목록을 모델에 저장
 		model.addAttribute("article", article);
-		//model.addAttribute("replylist", replylist);
+		model.addAttribute("replylist", replylist);
 		
 		return "About";
+	}
+	
+	
+	/**
+	 * 리플 저장 처리
+	 * @param reply 사용자가 입력한 글 내용
+	 */
+	@RequestMapping (value="articlelReplyWrite", method=RequestMethod.POST)
+	public String replyWrite(
+			ArticleReply reply, 
+			HttpSession session, 
+			Model model) {
+		
+		//세션에서 로그인한 사용자의 아이디no를 읽어서 Reply객체의 작성자 정보에 세팅
+		String idno = (String) ""+session.getAttribute("loginIdno")+"";
+		reply.setIdno(idno);
+		System.out.println("Re: " + reply);
+		//리플 정보를 DB에 저장
+		repository.insertArticleReply(reply);
+		System.out.println("저장완료...");
+		int articlenum = reply.getArticlenum();
+		Article art = new Article();
+		art = repository.selectOneByNum(articlenum);
+		
+		//읽던 게시글로 되돌아 감
+		return "redirect:read?articlenum=" + articlenum +"&articleid="+ art.getArticleid();
+	}
+	
+	/**
+	 * 리플 삭제
+	 * @param reply 삭제할 리플 번호와 본문 글번호가 전달
+	 */
+	@RequestMapping (value="articleReplyDelete", method=RequestMethod.GET)
+	public String deleteReply(ArticleReply reply, HttpSession session) {
+		String idno = (String) ""+session.getAttribute("loginIdno");
+		
+		//삭제할 글 번호와 본인 글인지 확인할 로그인아이디no
+		reply.setIdno(idno);
+		
+		repository.deleteReply(reply);
+		
+		int articlenum = reply.getArticlenum();
+		Article art = new Article();
+		art = repository.selectOneByNum(articlenum);
+		
+		return "redirect:read?articlenum=" + articlenum +"&articleid="+ art.getArticleid();
+	}
+	
+	/**
+	 * 리플 수정 처리
+	 * @param reply 수정할 리플 정보
+	 */
+	@RequestMapping (value="articleReplyEdit", method=RequestMethod.POST)
+	public String replyEdit(
+			ArticleReply reply, 
+			HttpSession session) {
+		
+		//삭제할 리플 정보와 본인 글인지 확인할 로그인아이디no
+		String idno = (String) ""+session.getAttribute("loginIdno");
+		reply.setIdno(idno);
+		
+		//리플  수정 처리
+		repository.updateArticleReply(reply);
+		//원래의 글읽기 화면으로 이동 
+		int articlenum = reply.getArticlenum();
+		Article art = new Article();
+		art = repository.selectOneByNum(articlenum);
+		
+		return "redirect:read?articlenum=" + articlenum +"&articleid="+ art.getArticleid();
+
 	}
 }

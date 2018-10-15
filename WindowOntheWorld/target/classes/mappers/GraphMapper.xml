@@ -21,4 +21,26 @@
 		KEYWORD LIKE '%'||#{keyword}||'%'
 	</select>
 	
+	<select id="getAverageByContinent"  parameterType="String" resultType="double">
+	SELECT 
+		AVG(RE.STARS)
+	FROM
+		ARTICLES AR, ARTICLEREPLY RE
+	WHERE
+		AR.ARTICLENUM=RE.ARTICLENUM AND AR.CONTINENT=#{continent}
+	GROUP BY
+		AR.CONTINENT
+	</select>
+	
+	<select id="getNumberByContinent" parameterType="String" resultType="int">
+	SELECT
+		count(RE.STARS)
+	FROM
+		ARTICLES AR, ARTICLEREPLY RE
+	WHERE
+		AR.ARTICLENUM=RE.ARTICLENUM AND AR.CONTINENT=#{continent}
+	<!-- GROUP BY
+		AR.CONTINENT -->
+	</select>
+	
 </mapper>

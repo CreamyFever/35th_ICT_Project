@@ -1,5 +1,6 @@
 package com.creamyfever.wow.controllers;
 
+import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
@@ -31,10 +32,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.creamyfever.wow.dao.GraphMapper;
 import com.creamyfever.wow.dao.MembersDAO;
+import com.creamyfever.wow.dao.TopKeywordMapper;
 import com.creamyfever.wow.dao.WorldmapMapper;
 import com.creamyfever.wow.vo.AgeGender;
 import com.creamyfever.wow.vo.Article;
+import com.creamyfever.wow.vo.ArticleReply;
 import com.creamyfever.wow.vo.Members;
+import com.creamyfever.wow.vo.Reply;
+import com.creamyfever.wow.vo.Topkeyword;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -135,94 +140,209 @@ public class WorldMapController {
 			return ave;
 		}
 		
+		public int getArtiCount(ArrayList<Article> articleList, String continent) {
+			int i = 0;
+			for(Article a : articleList) {
+				if(a.getContinent().equals(continent)) {
+					i++;
+				}
+			}
+			return i;
+		}
+		
 		
 		
 		@Autowired
 		SqlSession session;
 				
 		
+		
+		
+		public ArrayList<Integer> AgeListByGender(String search, String gender){
+			int under19w=0;
+            int up20under29w=0;
+            int up30under39w=0;
+            int up40under49w=0;
+            int up50w=0;
+            GraphMapper gMapper = session.getMapper(GraphMapper.class);
+            ArrayList<AgeGender> agList = gMapper.selectAgeGender(search);
+            
+            for(AgeGender data : agList) {
+                if(data.getAge()<20&&data.getGender().equals(gender)) {
+                   under19w++;
+                } else if(data.getAge()>=20&&data.getAge()<30&&data.getGender().equals(gender)) {
+                   up20under29w++;
+                } else if(data.getAge()>=30&&data.getAge()<40&&data.getGender().equals(gender)) {
+                   up30under39w++;
+                } else if(data.getAge()>=40&&data.getAge()<50&&data.getGender().equals(gender)) {
+                   up40under49w++;
+                } else if(data.getAge()>=50&&data.getGender().equals(gender)) {
+                   up50w++;
+                }
+             }
+            ArrayList<Integer> ageList = new ArrayList<>();
+            
+             ageList.add(under19w);
+             ageList.add(up20under29w);
+             ageList.add(up30under39w);
+             ageList.add(up40under49w);
+             ageList.add(up50w);
+            
+             return ageList;
+		}
+		
+		
+		
+		
+		
 		//월드맵으로 가기
-				@RequestMapping(value = "/goToWorldMap", method = RequestMethod.GET)
-				public String goToWorldMap(HttpSession httpsession, Locale locale, Model model, String search) {
-					/*
-					 * session에 로그인한 사용자 정보 받아오기
-					 * 이후 변수 처리해서 삽입
-					 * */
-					
-					//dd
-					GraphMapper gMapper = session.getMapper(GraphMapper.class);
-					
-					String loginId = (String)httpsession.getAttribute("loginId");
-					Members members = mDao.get(loginId);
-					
-					AgeGender ag = new AgeGender(members.getId(), members.getAge(), members.getGender(), search);
-					System.out.println(ag);
-					gMapper.insertAgeGender(ag);
-					System.out.println("INSERT");
-					ArrayList<AgeGender> agList = gMapper.selectAgeGender(search);
-					ArrayList<Integer> ageList = new ArrayList<>();
-					ArrayList<Integer> genderList = new ArrayList<>();
-					int woman = 0;
-					int man = 0;
-					int under19=0;
-					int up20under29=0;
-					int up30under39=0;
-					int up40under49=0;
-					int up50=0;
-					
-					for(AgeGender data : agList) {
-						if(data.getGender().equals("female")) {
-							woman++;
-						}else {
-							man++;
-						}
-						
-						if(data.getAge()<20) {
-							under19++;
-						} else if(data.getAge()>=20||data.getAge()<30) {
-							up20under29++;
-						} else if(data.getAge()>=30||data.getAge()<40) {
-							up30under39++;
-						} else if(data.getAge()>=40||data.getAge()<50) {
-							up40under49++;
-						} else {
-							up50++;
-						}
-					}
-					
-					genderList.add(woman);
-					genderList.add(man);
-					ageList.add(under19);
-					ageList.add(up20under29);
-					ageList.add(up30under39);
-					ageList.add(up40under49);
-					ageList.add(up50);
-					
-					WorldmapMapper mapMapper = session.getMapper(WorldmapMapper.class);
-					ArrayList<Article> articleList = mapMapper.printArticleList(search);
-					System.out.println(articleList.size());
-					
-					double sentiment_Africa = (double) 100 * getSenAve(articleList, "Africa");
-					double sentiment_Asia = (double) 100 * getSenAve(articleList, "Asia");
-					double sentiment_SA = (double) 100 * getSenAve(articleList, "South_America");
-					double sentiment_NA = (double) 100 * getSenAve(articleList, "North_America");
-					double sentiment_Oceania = (double) 100 * getSenAve(articleList, "Oceania");
-					double sentiment_Europe = (double) 100 * getSenAve(articleList, "Europe");
-					ArrayList<Double> sentimentList = new ArrayList<>();
-					sentimentList.add(sentiment_Africa);
-					sentimentList.add(sentiment_Asia);
-					sentimentList.add(sentiment_SA);
-					sentimentList.add(sentiment_NA);
-					sentimentList.add(sentiment_Oceania);
-					sentimentList.add(sentiment_Europe);
-					
-					model.addAttribute("ageList", ageList);
-					model.addAttribute("genderList", genderList);
-					model.addAttribute("sentimentList", sentimentList);
-					model.addAttribute("search", search);
-					
-					return "ArticleView";
-				}
+		 @RequestMapping(value = "/goToWorldMap", method = RequestMethod.GET)
+         public String goToWorldMap(HttpSession httpsession, Locale locale, Model model, String search) {
+            /*
+             * session에 로그인한 사용자 정보 받아오기
+             * 이후 변수 처리해서 삽입
+             * */
+            
+            
+            //dd
+            GraphMapper gMapper = session.getMapper(GraphMapper.class);
+            
+            String loginId = (String)httpsession.getAttribute("loginId");
+            Members members = mDao.get(loginId);
+            TopKeywordMapper tkmapper = session.getMapper(TopKeywordMapper.class);
+            Topkeyword test = tkmapper.selectOneTopKeyword(search);
+            if(test!=null) {
+            	//Topkeyword topKeyword = new Topkeyword(search, members.getAge(), members.getGender());
+               int result = tkmapper.updateTopKeyword(search);
+               System.out.println(result+" 수정성공 "); //
+            } else {
+               Topkeyword topKeyword = new Topkeyword(search, 1, members.getAge(), members.getGender());
+               int result = tkmapper.insertTopKeyword(topKeyword);
+               System.out.println(result+" 삽입성공 ");
+            }
+            
+            
+            
+            
+            
+            AgeGender ag = new AgeGender(members.getId(), members.getAge(), members.getGender(), search);
+            gMapper.insertAgeGender(ag); //키워드에 넣기......
+            ArrayList<AgeGender> agList = gMapper.selectAgeGender(search);
+            System.out.println("agList"+agList);
+            
+            Double userSentiment_Asia = gMapper.getAverageByContinent("Asia");
+            Double userSentiment_SA = gMapper.getAverageByContinent("South America");
+            Double userSentiment_NA = gMapper.getAverageByContinent("North America");
+            Double userSentiment_Oceania = gMapper.getAverageByContinent("Oceania");
+            Double userSentiment_Europe = gMapper.getAverageByContinent("Europe");
+            Double userSentiment_Africa = gMapper.getAverageByContinent("Africa");
+            
+            ArrayList<Double> userSentiment = new ArrayList<>();
+            userSentiment.add(userSentiment_Africa);
+            userSentiment.add(userSentiment_Europe);
+            userSentiment.add(userSentiment_Oceania);
+            userSentiment.add(userSentiment_NA);
+            userSentiment.add(userSentiment_SA);
+            userSentiment.add(userSentiment_Asia);
+            
+            int countStars_Asia = gMapper.getNumberByContinent("Asia");
+            int countStars_SA = gMapper.getNumberByContinent("South America");
+            int countStars_NA = gMapper.getNumberByContinent("North America");
+            int countStars_Oceania = gMapper.getNumberByContinent("Oceania");
+            int countStars_Europe = gMapper.getNumberByContinent("Europe");
+            int countStars_Africa = gMapper.getNumberByContinent("Africa");
+            
+            
+            
+            //jsp에 보낼 값 설정
+            ArrayList<Integer> genderList = new ArrayList<>();
+            int woman = 0;
+            int man = 0;
+            
+            for(AgeGender data : agList) {
+               if(data.getGender().equals("female")) {
+                  woman++;
+               }else {
+                  man++;
+               }
+            }
+            		
+            genderList.add(woman);
+            genderList.add(man);
+            ArrayList<Integer> ageList_w = AgeListByGender(search,"female");
+            ArrayList<Integer> ageList_m = AgeListByGender(search,"male");
+            WorldmapMapper mapMapper = session.getMapper(WorldmapMapper.class);
+            ArrayList<Article> articleList = mapMapper.printArticleList(search);
+            
+            double sentiment_Africa = (double) 100 * getSenAve(articleList, "Africa");
+            double sentiment_Asia = (double) 100 * getSenAve(articleList, "Asia");
+            double sentiment_SA = (double) 100 * getSenAve(articleList, "South_America");
+            double sentiment_NA = (double) 100 * getSenAve(articleList, "North_America");
+            double sentiment_Oceania = (double) 100 * getSenAve(articleList, "Oceania");
+            double sentiment_Europe = (double) 100 * getSenAve(articleList, "Europe");
+            
+            if(Double.isNaN(sentiment_Africa)) {
+            	sentiment_Africa=0;
+        	}
+            if(Double.isNaN(sentiment_Asia)) {
+            	sentiment_Asia=0;
+            }
+            if(Double.isNaN(sentiment_SA)) {
+            	sentiment_SA=0;
+            }
+            if(Double.isNaN(sentiment_NA)) {
+            	sentiment_NA=0;
+            }
+            if(Double.isNaN(sentiment_Oceania)) {
+            	sentiment_Oceania=0;
+            }
+            if(Double.isNaN(sentiment_Europe)) {
+            	sentiment_Europe=0;
+            }
+            
+            ArrayList<Double> sentimentList = new ArrayList<>();
+            sentimentList.add(sentiment_Africa);
+            sentimentList.add(sentiment_Asia);
+            sentimentList.add(sentiment_SA);
+            sentimentList.add(sentiment_NA);
+            sentimentList.add(sentiment_Oceania);
+            sentimentList.add(sentiment_Europe);
+            
+            int artiCount_Africa = getArtiCount(articleList, "Africa");
+            int artiCount_Asia =  getArtiCount(articleList, "Asia");
+            int artiCount_SA =  getArtiCount(articleList, "South_America");
+            int artiCount_NA =  getArtiCount(articleList, "North_America");
+            int artiCount_Oceania =  getArtiCount(articleList, "Oceania");
+            int artiCount_Europe = getArtiCount(articleList, "Europe");
+            
+            //가중치
+            double value_Africa = (double)(50*countStars_Africa+50*artiCount_Africa)/100;
+            double value_Asia = (double)(50*countStars_Asia+50*artiCount_Asia)/100;
+            double value_SA = (double)(50*countStars_SA+50*artiCount_SA)/100;
+            double value_NA = (double)(50*countStars_NA+50*artiCount_NA)/100;
+            double value_Oceania = (double)(50*countStars_Oceania+50*artiCount_Oceania)/100;
+            double value_Europe = (double)(50*countStars_Europe+50*artiCount_Europe)/100;
+            
+            ArrayList<Double> bubValue = new ArrayList<>();
+            bubValue.add(value_Africa);
+            bubValue.add(value_Asia);
+            bubValue.add(value_SA);
+            bubValue.add(value_NA);
+            bubValue.add(value_Oceania);
+            bubValue.add(value_Europe);
+            
+            System.out.println(bubValue);
+            
+            model.addAttribute("userSentiment", userSentiment);
+            model.addAttribute("bubValue", bubValue);
+            model.addAttribute("ageList_m", ageList_m);
+            model.addAttribute("ageList_w", ageList_w);
+            model.addAttribute("genderList", genderList);
+            model.addAttribute("sentimentList", sentimentList);
+            model.addAttribute("search", search);
+            
+            return "ArticleView";
+         }
 		
 		//디테일로 가기
 		@RequestMapping(value = "/goToDetail", method = RequestMethod.GET)

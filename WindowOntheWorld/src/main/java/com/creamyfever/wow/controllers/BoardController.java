@@ -16,14 +16,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.creamyfever.wow.dao.BoardDAO;
+import com.creamyfever.wow.dao.MembersDAO;
+import com.creamyfever.wow.util.FileService;
 import com.creamyfever.wow.util.PageNavigator;
 import com.creamyfever.wow.vo.Board;
+import com.creamyfever.wow.vo.Members;
 import com.creamyfever.wow.vo.Reply;
 
 /**
@@ -33,9 +37,13 @@ import com.creamyfever.wow.vo.Reply;
 @Controller
 public class BoardController {
 	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
+	private static final String UPLOADPATH = "./resources/images";
 	
 	@Autowired
 	BoardDAO dao;		//회원 관련 데이터 처리 객체
+	@Autowired
+	MembersDAO daos;
+	
 	
 	//게시판 관련 상수값들
 	final int countPerPage = 10;			//페이지 당 글 수
@@ -55,8 +63,8 @@ public class BoardController {
 	 */
 	
 	@RequestMapping (value="board/returnpage", method=RequestMethod.GET)
-	public String returnpate() {
-		return "redirect:/";
+	public String returnpage() {
+		return "redirect:/main";
 	}
 	/**
 	 * 글 저장 처리
@@ -68,10 +76,11 @@ public class BoardController {
 		/*	MultipartFile upload,*/
 			HttpSession session, 
 			Model model) {
-		System.out.println(board);
+		System.out.println("Written Board = " + board);
 		//세션에서 로그인한 사용자의 아이디no를 읽어서 Board객체의 작성자 정보에 세팅
-		String idno = (String) session.getAttribute("loginIdno");
+		int idno =  (int) session.getAttribute("loginIdno");
 		board.setIdno(idno);
+		System.out.println("Written Board = " + board);
 		
 	/*	//첨부파일이 있는 경우 지정된 경로에 저장하고, 원본 파일명과 저장된 파일명을 Board객체에 세팅
 		if (!upload.isEmpty()) {
@@ -104,9 +113,9 @@ public class BoardController {
 		//검색어와 시작 위치, 페이지당 글 수를 전달하여 목록 읽기
 		ArrayList<Board> boardlist = dao.listBoard(searchText, navi.getStartRecord(), navi.getCountPerPage());	
 		
-		for(Board b : boardlist) {
-			System.out.println(b.toString());
-		}
+//		for(Board b : boardlist) {
+//			System.out.println(b.toString());
+//		}
 		
 		//페이지 정보 객체와 글 목록, 검색어를 모델에 저장
 		model.addAttribute("boardlist", boardlist);
@@ -216,7 +225,7 @@ public class BoardController {
 	 */
 	@RequestMapping (value="board/delete", method=RequestMethod.GET)
 	public String delete(int boardnum, HttpSession session) {
-		String idno = (String) session.getAttribute("loginIdno");
+		int idno = (int) session.getAttribute("loginIdno");
 		
 		//삭제할 글 번호와 본인 글인지 확인할 로그인아이디
 		Board board = new Board();
@@ -260,9 +269,9 @@ public class BoardController {
 			HttpSession session) {
 		
 		//수정할 글이 로그인한 본인 글인지 확인
-		String idno = (String) session.getAttribute("loginIdno");
+		int idno = (int) session.getAttribute("loginIdno");
 		Board oldBoard = dao.get(board.getBoardnum());
-		if (oldBoard == null || !oldBoard.getIdno().equals(idno)) {
+		if (oldBoard == null || oldBoard.getIdno() != idno) {
 			return "redirect:list";
 		}
 		
@@ -303,7 +312,7 @@ public class BoardController {
 			Model model) {
 		
 		//세션에서 로그인한 사용자의 아이디no를 읽어서 Reply객체의 작성자 정보에 세팅
-		String idno = (String) session.getAttribute("loginIdno");
+		int idno = (int) session.getAttribute("loginIdno");
 		reply.setIdno(idno);
 		System.out.println("Re: " + reply);
 		//리플 정보를 DB에 저장
@@ -319,7 +328,7 @@ public class BoardController {
 	 */
 	@RequestMapping (value="board/replyDelete", method=RequestMethod.GET)
 	public String deleteReply(Reply reply, HttpSession session) {
-		String idno = (String) session.getAttribute("loginIdno");
+		int idno = (int) session.getAttribute("loginIdno");
 		
 		//삭제할 글 번호와 본인 글인지 확인할 로그인아이디no
 		reply.setIdno(idno);
@@ -338,7 +347,7 @@ public class BoardController {
 			HttpSession session) {
 		
 		//삭제할 리플 정보와 본인 글인지 확인할 로그인아이디no
-		String idno = (String) session.getAttribute("loginIdno");
+		int idno = (int) session.getAttribute("loginIdno");
 		reply.setIdno(idno);
 		
 		//리플  수정 처리
@@ -352,7 +361,7 @@ public class BoardController {
 			Model model, Board board,String subject) {
 		logger.debug("page: {}, searchText: {}", page, searchText);
 		
-		int total = dao.getTotal(searchText);			//전체 글 개수
+		int total = dao.getTotal(subject);			//전체 글 개수
 		
 		//페이지 계산을 위한 객체 생성
 		PageNavigator navi = new PageNavigator(countPerPage, pagePerGroup, page, total); 
@@ -370,6 +379,100 @@ public class BoardController {
 		return "board/list";
 	}
 	
+
+	/*리스트페이지 햄버거 메뉴 로그아웃*/
+	@RequestMapping (value="board/logout", method=RequestMethod.GET)
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "redirect:/main";
+	}
+	/*리스트페이지 햄버거 메뉴 회원정보 수정*/
+	@RequestMapping (value="board/update", method=RequestMethod.GET)
+	public String updateForm(HttpSession session, Model model,Members mebers) {
+		//세션의 로그인ID로 개인정보를 검색하여 모델에 저장
+		System.out.println("수정시작 페이지로 들어 갑니다.");
+		
+		
+		
+		String id = (String) session.getAttribute("loginId");
+		Members members = daos.get(id);
+		
+		model.addAttribute("members", members);
+		model.addAttribute("filename", members.getFilename());
+		return "members/updateForm";
+	} 
+	
+	@RequestMapping (value="boards/update", method=RequestMethod.POST)
+	public String update(
+			@ModelAttribute("members")Members members,
+			MultipartFile cma_file,
+			HttpSession session,
+			Model model) {
+		
+		System.out.println(members+"들어온값은??");
+		System.out.println("업데이트 컨트롤러 작동");	
+		System.out.println(members.toString()+"===========");
+		
+		
+		
+		
+			//수정 시 새로 첨부한 파일이 있으면 기존 파일을 삭제하고 새로 업로드
+		if (!cma_file.isEmpty()) {
+			//기존 글에 첨부된 파일의 실제 저장된 이름
+			String savedfile = members.getFilename();
+			//기존 파일이 있으면 삭제
+			if (savedfile != null) {
+				FileService.deleteFile(UPLOADPATH + "/" + savedfile);
+			}
+			
+			//새로 업로드한 파일 저장
+			savedfile = FileService.saveFile(cma_file, UPLOADPATH);
+			
+			//수정 정보에 새로 저장된 파일명과 원래의 파일명 저장
+			members.setFilename(savedfile);
+		}
+		
+		
+		//Mapper에 where 조건인 idno를 불러오는 구문
+		int idno=(int)session.getAttribute("loginIdno");
+		System.out.println(idno+"idno값");
+		members.setIdno(idno);
+        
+		
+		int result = daos.update(members);
+		System.out.println("업데이트 컨트롤러 dao 실행");
+	
+		
+		if (result != 1) {
+			//DB update에 실패한 경우 alert() 출력용 메시지를 모델에 저장
+			model.addAttribute("errorMsg", "수정 실패");
+			return "boards/updateForm";
+		}
+		System.out.println(result);
+		System.out.println(members+"마지막 멤버스");
+		
+		
+		
+		model.addAttribute("result", members);
+		return "members/updateComplete";
+	}
+	
+	/*리스트페이지 햄버거 메뉴 회원가입*/
+	@RequestMapping(value = "board/join", method = RequestMethod.GET)
+	public String joinForm(Model model) {
+		// 빈 VO객체를 만들어 세션에 저장
+		Members members = new Members();
+		model.addAttribute("members", members);
+		return "redirect:/joinForm";
+	}
+	/*리스트페이지 햄버거 메뉴 로그인*/
+	/**
+	 * 로그인 폼 보기
+	 */
+	@RequestMapping (value="board/login", method=RequestMethod.GET)
+	public String loginForm() {
+		return "redirect:/loginForm";
+	}
 
 
 }
